@@ -908,7 +908,7 @@ button{cursor:pointer}
       <span class="sub">14 choses à prendre ou à trouver, en ce moment sur l'île</span>
     </div>
 
-    <div class="filters" role="group" aria-label="Filtrer" data-multi>
+    <div class="filters" role="group" aria-label="Filtrer">
       <button class="chip" aria-pressed="false">Je donne</button>
       <button class="chip" aria-pressed="false">Je cherche</button>
       <button class="chip" aria-pressed="false">J'échange</button>
@@ -1911,14 +1911,14 @@ button{cursor:pointer}
     var chip = e.target.closest ? e.target.closest('.chip, .atab') : null;
     if(chip){
       var group = chip.parentElement;
-      if(group.hasAttribute('data-multi')){
-        var on = chip.getAttribute('aria-pressed') === 'true';
-        chip.setAttribute('aria-pressed', on ? 'false' : 'true');
-      } else {
-        Array.prototype.forEach.call(group.querySelectorAll('[aria-pressed]'), function(c){
-          c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
-        });
-      }
+      var dejaActif = chip.getAttribute('aria-pressed') === 'true';
+      var aTout = !!Array.prototype.filter.call(group.querySelectorAll('.chip'), function(c){
+        return c.textContent.trim() === 'Tout';
+      })[0];
+      Array.prototype.forEach.call(group.querySelectorAll('[aria-pressed]'), function(c){
+        c.setAttribute('aria-pressed', 'false');
+      });
+      if(!(dejaActif && !aTout)){ chip.setAttribute('aria-pressed','true'); }
     }
   });
 
@@ -2693,6 +2693,22 @@ button{cursor:pointer}
     if(!groupe || !fil) return;
 
     var cartes = Array.prototype.slice.call(fil.children);
+
+    var entete = document.createElement('div');
+    entete.className = 'feed-head';
+    var compteur = document.createElement('span');
+    compteur.className = 'eyebrow';
+    var remise = document.createElement('button');
+    remise.className = 'mini'; remise.textContent = '← Tout afficher'; remise.hidden = true;
+    remise.addEventListener('click', function(){
+      Array.prototype.forEach.call(groupe.querySelectorAll('[aria-pressed]'), function(c){
+        c.setAttribute('aria-pressed', c.textContent.trim() === 'Tout' ? 'true' : 'false');
+      });
+      appliquer();
+    });
+    entete.appendChild(compteur); entete.appendChild(remise);
+    fil.parentNode.insertBefore(entete, fil);
+
     var vide = document.createElement('p');
     vide.className = 'vide-min';
     vide.hidden = true;
@@ -2710,6 +2726,13 @@ button{cursor:pointer}
         c.hidden = !ok;
         if(ok){ vus++; }
       });
+      var mot = (idSection === 's-conseils')
+        ? (vus > 1 ? ' notes' : ' note')
+        : (vus > 1 ? ' annonces' : ' annonce');
+      compteur.textContent = actifs.length
+        ? vus + mot + ' · ' + actifs.join(', ')
+        : vus + mot + ' en tout';
+      remise.hidden = (actifs.length === 0);
       fil.hidden = (vus === 0);
       vide.hidden = (vus > 0);
       if(vus === 0){

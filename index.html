@@ -250,6 +250,52 @@ button,select,input,textarea{font:inherit; color:inherit}
 .isle-read .v{font-family:var(--serif); font-weight:700; font-size:20px}
 .isle-read .v.vide{font-family:var(--sans); font-weight:400; font-size:17px; color:var(--ink-soft)}
 
+/* ---------- accueil : étapes et portes ---------- */
+.etapes{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+.etapes li{
+  position:relative; overflow:hidden;
+  border:1px solid var(--line); border-radius:13px; background:var(--surface);
+  padding:16px 18px 18px 60px; display:flex; flex-direction:column; gap:4px;
+}
+.etapes .num{
+  position:absolute; left:16px; top:15px;
+  font-family:var(--display); font-weight:400; font-size:30px; line-height:1;
+  color:var(--leaf); opacity:.85;
+}
+.etapes .et-motif{position:absolute; right:-12px; bottom:-18px; width:86px; height:86px; opacity:.13; color:var(--leaf)}
+.etapes b{font-family:var(--serif); font-size:19px}
+.etapes span:not(.num){font-size:16.5px; color:var(--ink-soft); max-width:46ch}
+#device[data-view="desktop"] .etapes{grid-template-columns:repeat(3,1fr)}
+
+.portes{display:grid; gap:12px}
+#device[data-view="desktop"] .portes{grid-template-columns:repeat(3,1fr)}
+.porte{
+  position:relative; overflow:hidden; cursor:pointer; text-align:left;
+  border:1px solid var(--line); border-radius:14px; background:var(--surface);
+  padding:18px 46px 20px 18px; display:flex; align-items:flex-start; gap:12px;
+  transition:border-color .15s ease, transform .12s ease, box-shadow .15s ease;
+}
+.porte:hover{border-color:var(--leaf); transform:translateY(-2px); box-shadow:var(--shadow)}
+.porte:active{transform:translateY(0)}
+.porte-txt{display:flex; flex-direction:column; gap:3px; min-width:0; position:relative; z-index:1}
+.porte b{font-family:var(--display); font-weight:400; font-size:26px; letter-spacing:.01em; line-height:1.05}
+.porte-sous{font-size:16.5px; color:var(--ink)}
+.porte-gout{font-size:14.5px; color:var(--ink-soft)}
+.porte-motif{position:absolute; right:-16px; top:-14px; width:108px; height:108px; opacity:.15; transform:rotate(12deg); transition:transform .25s ease, opacity .2s ease}
+.porte:hover .porte-motif{opacity:.22; transform:rotate(4deg) scale(1.05)}
+.porte-fleche{
+  position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  font-size:24px; color:var(--leaf); z-index:1;
+}
+.p-echanges{--t:var(--mangue)} .p-jardin{--t:var(--leaf)} .p-saison{--t:var(--flam)}
+.porte .porte-motif{color:var(--t)}
+
+.bandeau-q{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  border:1px solid var(--line); border-left:5px solid var(--leaf); background:var(--leaf-soft);
+  border-radius:10px; padding:12px 15px; font-size:16.5px;
+}
+
 /* ---------- ludique ---------- */
 .card{position:relative}
 .card-motif{
@@ -727,7 +773,7 @@ button{cursor:pointer}
     <span class="ver" id="ver" title="Date du fichier que vous êtes en train de lire">…</span>
     <label for="screenpick" class="lbl-ecran">Écran</label>
     <select id="screenpick">
-      <option value="accueil">1 · Accueil (le fil)</option>
+      <option value="accueil">1 · Accueil (la porte d'entrée)</option>
       <option value="echanges">2 · Les échanges</option>
       <option value="annonce">3 · Fiche d'une annonce</option>
       <option value="connexion">4 · Créer un compte</option>
@@ -756,7 +802,7 @@ button{cursor:pointer}
       <option value="desktop">Ordinateur</option>
       <option value="phone">Téléphone</option>
     </select>
-    <span class="note"><span class="ver" id="ver2">…</span> · Données fictives. Le nom « Jaden » est un remplaçant provisoire.</span>
+    <span class="note"><span class="ver" id="ver2"></span>Données fictives. Le nom « Jaden » est un remplaçant provisoire.</span>
     </div>
   </div>
 </div>
@@ -828,77 +874,67 @@ button{cursor:pointer}
 
     <div class="feed-head">
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
-      <span class="eyebrow" id="feed-eyebrow">Ce qui se passe sur l'île</span>
-      <button class="mini" id="feed-reset" hidden>← Toute l'île</button>
+      <span class="eyebrow">Comment ça marche</span>
     </div>
 
-    <div class="vide" id="feed-vide" hidden>
-      <p class="vide-t">Rien à <strong id="vide-q">Colombier</strong> pour l'instant.</p>
-      <p class="vide-s">Ça donne par vagues. Revenez quand la saison tourne.</p>
-      <div class="vide-acts">
-        <button class="btn btn-primary" data-go="connexion">Me prévenir quand il y aura quelque chose ici</button>
-        <button class="btn btn-ghost" id="vide-tout">Faire le tour de toute l'île</button>
-      </div>
+    <ol class="etapes">
+      <li>
+        <span class="num">1</span>
+        <svg class="et-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-mangue" fill="currentColor"/></svg>
+        <b>Votre arbre déborde</b>
+        <span>Dix kilos de mangues, trois fruits à pain, un pied de basilic à diviser.</span>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <svg class="et-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-citron" fill="currentColor"/></svg>
+        <b>Vous le dites ici</b>
+        <span>Une photo, le quartier, deux mots. Deux minutes, et c'est en ligne.</span>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <svg class="et-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-feuille" fill="currentColor"/></svg>
+        <b>Un voisin passe le prendre</b>
+        <span>Il vous appelle, vous convenez d'une heure. Rien ne se vend, rien ne se paie.</span>
+      </li>
+    </ol>
+
+    <div class="feed-head">
+      <span class="filets" aria-hidden="true"><i></i><i></i></span>
+      <span class="eyebrow">Par où commencer</span>
     </div>
 
-    <div class="feed" id="feed-accueil">
-
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
-        <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
-        <span class="body">
-          <span class="kicker k-donne">Je donne</span>
-          <h3>Mangues Julie, environ 10 kg</h3>
-          <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
-          <span class="excerpt">L'arbre a donné d'un coup, ça ne tiendra pas la semaine. Venez avec un sac.</span>
+    <div class="portes">
+      <button class="porte p-echanges" data-go="echanges">
+        <svg class="porte-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-mangue" fill="currentColor"/></svg>
+        <span class="porte-txt">
+          <b>Les échanges</b>
+          <span class="porte-sous">14 choses à prendre ou à trouver</span>
+          <span class="porte-gout">Mangues à Lorient · Citrons verts à Colombier · Fruits à pain à Corossol</span>
         </span>
+        <span class="porte-fleche" aria-hidden="true">→</span>
       </button>
 
-      <button class="card" data-go="article" data-kind="note">
-        <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
-        <span class="body">
-          <span class="kicker k-conseil">Note du jardin</span>
-          <h3>L'eau de la clim, c'est un arrosoir toutes les deux heures</h3>
-          <span class="excerpt">Quatre splits sur une villa de Saint-Jean. Le tuyau dans un bidon fermé, une moustiquaire dessus, et c'est tout.</span>
-          <span class="byline">Le jardinier · 8 septembre</span>
+      <button class="porte p-jardin" data-go="conseils">
+        <svg class="porte-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-feuille" fill="currentColor"/></svg>
+        <span class="porte-txt">
+          <b>Le jardin</b>
+          <span class="porte-sous">Ce qui marche ici, et pas ailleurs</span>
+          <span class="porte-gout">L'eau de la clim · Le paillage · Les cochenilles sur les citronniers</span>
         </span>
+        <span class="porte-fleche" aria-hidden="true">→</span>
       </button>
 
-      <button class="card" data-go="annonce" data-q="Gustavia">
-        <span class="body">
-          <span class="kicker k-cherche">Je cherche</span>
-          <h3>Des boutures de ti-basilic</h3>
-          <span class="meta"><span>Gustavia</span><span>·</span><span>hier</span></span>
-          <span class="excerpt">Je repars de zéro après le passage de la sécheresse, si quelqu'un a des pieds à diviser.</span>
+      <button class="porte p-saison" data-go="saison">
+        <svg class="porte-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-citron" fill="currentColor"/></svg>
+        <span class="porte-txt">
+          <b>La saison</b>
+          <span class="porte-sous">Ce qui donne en septembre</span>
+          <span class="porte-gout">Mangue · Avocat · Fruit à pain · Citron vert</span>
         </span>
+        <span class="porte-fleche" aria-hidden="true">→</span>
       </button>
-
-      <button class="card" data-go="annonce" data-q="Colombier">
-        <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
-        <span class="body">
-          <span class="kicker k-donne">Je donne</span>
-          <h3>Un cageot de citrons verts</h3>
-          <span class="meta"><span>Colombier</span><span>·</span><span>il y a 3 jours</span><span>·</span><span>encore 9 jours</span></span>
-        </span>
-      </button>
-
-      <button class="card" data-go="annonce" data-q="Corossol">
-        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
-        <span class="body">
-          <span class="kicker k-donne">Je donne</span>
-          <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
-          <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
-        </span>
-      </button>
-
-      <button class="card" data-go="annonce" data-q="Saint-Jean">
-        <span class="body">
-          <span class="kicker k-echange">J'échange</span>
-          <h3>Plants de tomates cerises contre piments</h3>
-          <span class="meta"><span>Saint-Jean</span><span>·</span><span>il y a 5 jours</span></span>
-        </span>
-      </button>
-
     </div>
+
   </section>
 
   <!-- 2 ÉCHANGES -->
@@ -908,6 +944,11 @@ button{cursor:pointer}
       <span class="sub">14 choses à prendre ou à trouver, en ce moment sur l'île</span>
     </div>
 
+    <div class="bandeau-q" id="bandeau-q" hidden>
+      <span>Seulement à <strong id="bandeau-q-nom">Lorient</strong></span>
+      <button class="mini" id="bandeau-q-tout">← Toute l'île</button>
+    </div>
+
     <div class="filters" role="group" aria-label="Filtrer">
       <button class="chip" aria-pressed="false">Je donne</button>
       <button class="chip" aria-pressed="false">Je cherche</button>
@@ -915,7 +956,7 @@ button{cursor:pointer}
     </div>
 
     <div class="feed">
-      <button class="card" data-go="annonce">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
         <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -923,7 +964,7 @@ button{cursor:pointer}
           <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce">
+      <button class="card" data-go="annonce" data-q="Corossol">
         <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -931,7 +972,7 @@ button{cursor:pointer}
           <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce">
+      <button class="card" data-go="annonce" data-q="Colombier">
         <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -939,14 +980,14 @@ button{cursor:pointer}
           <span class="meta"><span>Colombier</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce">
+      <button class="card" data-go="annonce" data-q="Gustavia">
         <span class="body">
           <span class="kicker k-cherche">Je cherche</span>
           <h3>Des boutures de ti-basilic</h3>
           <span class="meta"><span>Gustavia</span><span>·</span><span>Armand</span><span>·</span><span>encore 13 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce">
+      <button class="card" data-go="annonce" data-q="Saint-Jean">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-echange">J'échange</span>
@@ -2251,7 +2292,7 @@ button{cursor:pointer}
   }
 
   var ver2 = document.getElementById('ver2');
-  if(ver2 && ver){ ver2.textContent = ver.textContent; }
+  if(ver2 && ver){ ver2.textContent = ver.textContent + ' · '; }
 
   var themepick = document.getElementById('themepick');
   function setTheme(t){
@@ -2278,49 +2319,50 @@ button{cursor:pointer}
   setView(window.innerWidth >= 900 ? 'desktop' : 'phone');
 
   var heromap  = document.getElementById('heromap');
-  var feed     = document.getElementById('feed-accueil');
-  var eyebrow  = document.getElementById('feed-eyebrow');
-  var reset    = document.getElementById('feed-reset');
-  var vide     = document.getElementById('feed-vide');
-  var videQ    = document.getElementById('vide-q');
-  var videTout = document.getElementById('vide-tout');
-  var cartes   = feed ? Array.prototype.slice.call(feed.children) : [];
+  var bandeauQ = document.getElementById('bandeau-q');
+  var bandeauQNom = document.getElementById('bandeau-q-nom');
+  var quartierActif = null;
 
-  function compte(q){
+  var cartesEch = Array.prototype.slice.call(
+    document.querySelectorAll('#s-echanges .feed > .card'));
+
+  function compteQ(q){
     var k = 0;
-    cartes.forEach(function(c){ if(c.getAttribute('data-q') === q){ k++; } });
+    cartesEch.forEach(function(c){ if(c.getAttribute('data-q') === q){ k++; } });
     return k;
   }
 
-  function filtrer(q){
-    var total = q ? compte(q) : 0;
-    cartes.forEach(function(c){
-      c.hidden = q ? (c.getAttribute('data-q') !== q) : false;
-    });
+  function appliquerQuartier(){
+    if(bandeauQ){
+      bandeauQ.hidden = !quartierActif;
+      if(quartierActif){ bandeauQNom.textContent = quartierActif; }
+    }
     if(heromap){
       Array.prototype.forEach.call(heromap.querySelectorAll('.ci-q'), function(z){
-        z.classList.toggle('on', !!q && z.getAttribute('data-q') === q);
+        z.classList.toggle('on', !!quartierActif && z.getAttribute('data-q') === quartierActif);
       });
     }
-    eyebrow.textContent = q
-      ? (total + (total > 1 ? ' annonces à ' : ' annonce à ') + q)
-      : "Ce qui se passe sur l'île";
-    if(q && total === 0){ eyebrow.textContent = 'À ' + q; }
-    reset.hidden = !q;
-    vide.hidden  = !(q && total === 0);
-    if(q && total === 0){ videQ.textContent = q; }
-    feed.hidden = !!(q && total === 0);
+  }
+
+  if(bandeauQ){
+    document.getElementById('bandeau-q-tout').addEventListener('click', function(){
+      quartierActif = null; appliquerQuartier();
+      if(window.__refiltrer){ window.__refiltrer(); }
+    });
   }
 
   if(heromap){
     Array.prototype.forEach.call(heromap.querySelectorAll('.ci-q'), function(z){
       var nom = z.getAttribute('data-q');
-      if(compte(nom) > 0){ z.classList.add('has'); }
+      if(compteQ(nom) > 0){ z.classList.add('has'); }
       z.setAttribute('tabindex','0');
       z.setAttribute('role','button');
-      z.setAttribute('aria-label', nom + ' — ' + compte(nom) + ' annonce(s)');
+      z.setAttribute('aria-label', nom + ' — ' + compteQ(nom) + ' annonce(s)');
       function activer(){
-        filtrer(z.classList.contains('on') ? null : nom);
+        quartierActif = nom;
+        appliquerQuartier();
+        allerA('echanges');
+        if(window.__refiltrer){ window.__refiltrer(); }
       }
       z.addEventListener('click', activer);
       z.addEventListener('keydown', function(e){
@@ -2328,349 +2370,8 @@ button{cursor:pointer}
       });
     });
   }
-  if(reset){ reset.addEventListener('click', function(){ filtrer(null); }); }
-  if(videTout){ videTout.addEventListener('click', function(){ filtrer(null); }); }
-  filtrer(null);
 
-  var isle = document.getElementById('isle');
-  var read = document.getElementById('isle-read');
-  var alt  = document.getElementById('isle-alt');
-  var sel  = document.getElementById('f-quartier');
-
-  function choisir(nom){
-    read.textContent = nom;
-    read.classList.remove('vide');
-    for(var i=0;i<sel.options.length;i++){
-      if(sel.options[i].text === nom){ sel.selectedIndex = i; break; }
-    }
-  }
-
-  if(isle){
-    Array.prototype.forEach.call(isle.querySelectorAll('.ci-q'), function(q){
-      q.style.pointerEvents = 'auto';
-      q.addEventListener('click', function(){
-        Array.prototype.forEach.call(isle.querySelectorAll('.ci-q'), function(o){ o.classList.remove('on'); });
-        q.classList.add('on');
-        choisir(q.getAttribute('data-q'));
-      });
-    });
-  }
-
-  if(alt){
-    alt.addEventListener('click', function(){
-      var liste = sel.hidden;
-      sel.hidden = !liste;
-      isle.hidden = liste;
-      alt.textContent = liste ? 'Revenir à la carte' : 'Je préfère choisir dans une liste';
-      if(liste){ sel.focus(); }
-    });
-  }
-  if(sel){ sel.addEventListener('change', function(){ choisir(sel.options[sel.selectedIndex].text); }); }
-
-  // --- les zones photo prennent vraiment une photo
-  function poids(o){
-    return o > 1048576 ? (o/1048576).toFixed(1).replace('.',',') + ' Mo'
-                       : Math.round(o/1024) + ' Ko';
-  }
-  function reduire(fichier, fait){
-    var url = URL.createObjectURL(fichier);
-    var img = new Image();
-    img.onload = function(){
-      var MAX = 1600;
-      var r = Math.min(1, MAX / Math.max(img.width, img.height));
-      var c = document.createElement('canvas');
-      c.width = Math.round(img.width * r);
-      c.height = Math.round(img.height * r);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url);
-      c.toBlob(function(b){
-        fait(c.toDataURL('image/jpeg', 0.82), b ? b.size : 0, c.width, c.height);
-      }, 'image/jpeg', 0.82);
-    };
-    img.onerror = function(){ URL.revokeObjectURL(url); fait(null, 0, 0, 0); };
-    img.src = url;
-  }
-
-  var MAX_PHOTOS = 4;
-
-  Array.prototype.forEach.call(document.querySelectorAll('.drop'), function(zone, i){
-    var entree = document.createElement('input');
-    entree.type = 'file'; entree.accept = 'image/*'; entree.multiple = true;
-    entree.id = 'photo-' + i; entree.hidden = true;
-
-    var apercu = document.createElement('div');
-    apercu.className = 'apercu';
-
-    var ajouter = document.createElement('button');
-    ajouter.type = 'button'; ajouter.className = 'ajouter'; ajouter.hidden = true;
-    ajouter.innerHTML = '<b>+</b><span>Ajouter<br>une photo</span>';
-
-    var plein = document.createElement('p');
-    plein.className = 'photo-max'; plein.hidden = true;
-    plein.textContent = 'Quatre photos au maximum.';
-
-    zone.parentNode.insertBefore(entree, zone.nextSibling);
-    zone.parentNode.insertBefore(apercu, entree.nextSibling);
-    zone.parentNode.insertBefore(plein, apercu.nextSibling);
-    apercu.appendChild(ajouter);
-
-    function compte(){ return apercu.querySelectorAll('.vignette').length; }
-    function majZone(){
-      var k = compte();
-      zone.hidden = (k > 0);
-      ajouter.hidden = (k === 0 || k >= MAX_PHOTOS);
-      plein.hidden = (k < MAX_PHOTOS);
-      apercu.style.display = k ? '' : 'none';
-    }
-
-    zone.setAttribute('role','button');
-    zone.setAttribute('tabindex','0');
-    zone.addEventListener('click', function(){ entree.click(); });
-    zone.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); entree.click(); }
-    });
-    ajouter.addEventListener('click', function(){ entree.click(); });
-
-    entree.addEventListener('change', function(){
-      var fichiers = Array.prototype.slice.call(entree.files);
-      fichiers.forEach(function(f){
-        if(f.type.indexOf('image/') !== 0) return;
-        if(compte() >= MAX_PHOTOS) return;
-        var avant = f.size;
-        var v = document.createElement('div');
-        v.className = 'vignette';
-        v.innerHTML = '<img alt="">'
-          + '<button class="oter" type="button" aria-label="Retirer cette photo">×</button>'
-          + '<span class="poids">traitement…</span>';
-        apercu.insertBefore(v, ajouter);
-        majZone();
-        v.querySelector('.oter').addEventListener('click', function(){
-          v.remove(); majZone();
-        });
-        reduire(f, function(src, apres, l, h){
-          if(!src){ v.remove(); majZone(); return; }
-          v.querySelector('img').src = src;
-          var gain = avant > 0 ? (avant - apres) / avant : 0;
-          v.querySelector('.poids').innerHTML = (gain > 0.15)
-            ? poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h
-            : '<b>' + poids(apres) + '</b><br>' + l + '×' + h;
-        });
-      });
-      entree.value = '';
-    });
-
-    majZone();
-  });
-
-  // --- publier une annonce mène à sa propre annonce
-  var pubAnnonce = document.getElementById('btn-publier-annonce');
-  if(pubAnnonce){
-    pubAnnonce.addEventListener('click', function(){
-      var quoi = (document.getElementById('p-quoi').value || '').trim();
-      var combien = (document.getElementById('p-combien').value || '').trim();
-      var ou = document.getElementById('p-ou');
-      var quartier = ou ? ou.options[ou.selectedIndex].text : 'Lorient · Camaruche';
-      var titre = quoi || 'Mangues Julie';
-      if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
-      document.getElementById('mienne-titre').textContent = titre;
-      document.getElementById('mienne-sub').textContent =
-        'Votre annonce · ' + quartier + ' · publiée à l\'instant · 14 jours en ligne';
-      var k = document.getElementById('mienne-kick');
-      k.textContent = 'Je donne'; k.className = 'kicker k-donne'; k.style.alignSelf = 'flex-start';
-      document.getElementById('mienne-active').hidden = false;
-      document.getElementById('mienne-close').hidden = true;
-      var ph2 = document.getElementById('mienne-photo');
-      ph2.classList.remove('donne');
-      var vieux = ph2.querySelector('.cachet-donne');
-      if(vieux){ vieux.remove(); }
-      allerA('mienne');
-      dire('Votre annonce est en ligne. Partagez-la dans le groupe si vous voulez aller plus vite.');
-    });
-  }
-
-  var prolonger = document.getElementById('btn-prolonger');
-  if(prolonger){
-    prolonger.addEventListener('click', function(){
-      var sous = document.getElementById('mienne-sub');
-      var m = sous.textContent.match(/(\d+) jours en ligne/);
-      var j = m ? parseInt(m[1],10) + 14 : 14;
-      sous.textContent = m
-        ? sous.textContent.replace(/\d+ jours en ligne/, j + ' jours en ligne')
-        : sous.textContent + ' · prolongée de 14 jours';
-      dire('Prolongée : ' + j + ' jours en ligne.');
-    });
-  }
-
-  var wa = document.getElementById('btn-wa'), tel = document.getElementById('btn-tel');
-  if(wa){ wa.addEventListener('click', function(){ dire('Ouvre WhatsApp sur la conversation avec Marie-Claude.'); }); }
-  if(tel){ tel.addEventListener('click', function(){ dire('Lance l\'appel depuis votre téléphone.'); }); }
-
-  var pubNote = document.getElementById('btn-pub-note'), brouillon = document.getElementById('btn-brouillon');
-  if(pubNote){ pubNote.addEventListener('click', function(){ dire('Note publiée, et épinglée en tête du fil pour trois jours.'); }); }
-  if(brouillon){ brouillon.addEventListener('click', function(){ dire('Gardée en brouillon — vous la retrouverez dans « Les notes ».'); }); }
-
-  // --- les boutons de la console agissent
-  function ligneDe(el){ return el.closest ? el.closest('.row') : null; }
-  function panneauDe(el){ return el.closest ? el.closest('.apanel') : null; }
-  function txtTitre(r){ return r.querySelector('.main .t'); }
-  function txtSous(r){ return r.querySelector('.main .s'); }
-  function boutonNomme(r, nom){
-    return Array.prototype.filter.call(r.querySelectorAll('.mini'), function(b){
-      return b.textContent.trim() === nom;
-    })[0];
-  }
-
-  function editerEnLigne(cible, apresSauvegarde){
-    if(cible.dataset.edition === '1') return;
-    cible.dataset.edition = '1';
-    var avant = cible.textContent;
-    var boite = document.createElement('span');
-    boite.className = 'edit-ligne';
-    var champ = document.createElement('input');
-    champ.type = 'text'; champ.value = avant;
-    var ok = document.createElement('button');
-    ok.type = 'button'; ok.className = 'mini solid'; ok.textContent = 'Enregistrer';
-    var non = document.createElement('button');
-    non.type = 'button'; non.className = 'mini'; non.textContent = 'Annuler';
-    boite.appendChild(champ); boite.appendChild(ok); boite.appendChild(non);
-    cible.textContent = ''; cible.appendChild(boite);
-    champ.focus(); champ.select();
-    function fermer(valeur){
-      cible.dataset.edition = '';
-      cible.textContent = valeur;
-      if(apresSauvegarde && valeur !== avant){ apresSauvegarde(valeur); }
-    }
-    ok.addEventListener('click', function(e){ e.stopPropagation(); fermer(champ.value.trim() || avant); });
-    non.addEventListener('click', function(e){ e.stopPropagation(); fermer(avant); });
-    champ.addEventListener('keydown', function(e){
-      if(e.key === 'Enter'){ e.preventDefault(); ok.click(); }
-      if(e.key === 'Escape'){ e.preventDefault(); non.click(); }
-    });
-  }
-
-  function direAvecRetour(msg, libelle, action){
-    toast.textContent = msg + ' ';
-    var a = document.createElement('b');
-    a.className = 'lien'; a.textContent = libelle;
-    a.addEventListener('click', function(){ action(); toast.classList.remove('vu'); });
-    toast.appendChild(a);
-    toast.classList.add('vu');
-    clearTimeout(minuteur);
-    minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 6000);
-  }
-
-  document.addEventListener('click', function(e){
-    var b = e.target.closest ? e.target.closest('#s-admin .mini, #s-admin .btn') : null;
-    if(!b || b.hasAttribute('data-go') || b.closest('.edit-ligne')) return;
-    var nom = b.textContent.trim();
-    var r = ligneDe(b);
-    var pan = panneauDe(b);
-    var quel = pan ? pan.getAttribute('data-panel') : '';
-
-    if(nom === 'Épingler' && r){
-      Array.prototype.forEach.call(pan.querySelectorAll('.row'), function(autre){
-        var d = boutonNomme(autre, 'Désépingler');
-        if(d){ d.textContent = 'Épingler';
-               txtSous(autre).textContent = txtSous(autre).textContent.replace(' · épinglée en une',''); }
-      });
-      b.textContent = 'Désépingler';
-      txtSous(r).textContent += ' · épinglée en une';
-      dire('Épinglée en tête du fil.'); return;
-    }
-    if(nom === 'Désépingler' && r){
-      b.textContent = 'Épingler';
-      txtSous(r).textContent = txtSous(r).textContent.replace(' · épinglée en une','');
-      dire('Retirée de la une.'); return;
-    }
-    if((nom === 'Masquer' || nom === 'Dépublier') && r){
-      r.classList.add('off');
-      b.textContent = (nom === 'Masquer') ? 'Afficher' : 'Republier';
-      dire(nom === 'Masquer' ? 'Masquée : plus visible sur le site.' : 'Dépubliée.'); return;
-    }
-    if((nom === 'Afficher' || nom === 'Republier') && r){
-      r.classList.remove('off');
-      b.textContent = (nom === 'Afficher') ? 'Masquer' : 'Dépublier';
-      dire('De nouveau en ligne.'); return;
-    }
-    if((nom === 'Suspendre' || nom === 'Réactiver') && r){
-      var sus = (nom === 'Suspendre');
-      r.classList.toggle('off', sus);
-      b.textContent = sus ? 'Réactiver' : 'Suspendre';
-      txtSous(r).textContent = sus
-        ? txtSous(r).textContent.replace(/ · suspendu.?$/,'') + ' · suspendu'
-        : txtSous(r).textContent.replace(/ · suspendu.?$/,'');
-      dire(sus ? 'Compte suspendu.' : 'Compte réactivé.'); return;
-    }
-    if(nom === 'Prolonger' && r){
-      txtSous(r).textContent = txtSous(r).textContent.replace(/expire dans .*/,'expire dans 16 jours');
-      dire('Prolongée de quatorze jours.'); return;
-    }
-    if((nom === 'Supprimer' || nom === 'Jeter' || nom === 'Retirer') && r){
-      var parent = r.parentNode, suivant = r.nextSibling;
-      r.remove();
-      direAvecRetour('Supprimé.', 'Annuler', function(){ parent.insertBefore(r, suivant); });
-      return;
-    }
-    if(nom === 'Publier' && r){
-      txtSous(r).innerHTML = txtSous(r).innerHTML.replace('<strong>en attente</strong>', 'en ligne depuis aujourd\'hui');
-      b.remove();
-      dire('Astuce publiée dans « Le jardin ».'); return;
-    }
-    if(nom === 'Refuser' && r){
-      var par = r.parentNode, suiv = r.nextSibling;
-      r.remove();
-      direAvecRetour('Astuce refusée. L\'auteur en est prévenu.', 'Annuler', function(){ par.insertBefore(r, suiv); });
-      return;
-    }
-    if(nom === 'Remettre' && r){
-      txtSous(r).textContent = 'En ligne · s\'efface dans 14 jours';
-      b.textContent = 'Retirer';
-      dire('Remise en une.'); return;
-    }
-    if(nom === 'Reprendre' || (nom === 'Modifier' && quel === 'notes')){
-      allerA('note'); return;
-    }
-    if(nom === 'Modifier' && quel === 'saison' && r){
-      editerEnLigne(txtSous(r), function(){ dire('Mois enregistré. La page « La saison » est à jour.'); });
-      return;
-    }
-    if(nom === 'Changer l\'adresse' && r){
-      editerEnLigne(txtSous(r), function(){ dire('Adresse changée. La personne peut se reconnecter.'); });
-      return;
-    }
-    if((nom === 'Modifier' || nom === 'Renommer' || nom === 'Modifier le texte') && r){
-      var cible = (quel === 'site') ? txtSous(r) : txtTitre(r);
-      editerEnLigne(cible, function(){ dire('Enregistré.'); });
-      return;
-    }
-    if(nom === 'Ajouter' || nom === 'Ajouter un fruit à la liste'){
-      var pile = (pan || document.querySelector('#s-admin .apanel[data-panel=saison]')).querySelector('.stack');
-      var nouvelle = document.createElement('div');
-      nouvelle.className = 'row';
-      nouvelle.innerHTML = '<span class="main"><span class="t">Nouvel élément</span><span class="s">à nommer</span></span>'
-        + '<span class="acts"><button class="mini">Modifier</button><button class="mini danger">Supprimer</button></span>';
-      pile.appendChild(nouvelle);
-      editerEnLigne(nouvelle.querySelector('.t'), function(v){ dire('« ' + v +' » ajouté.'); });
-      return;
-    }
-    if(nom === 'Écrire une nouvelle'){
-      var pileN = pan.querySelector('.stack');
-      var ligneN = document.createElement('div');
-      ligneN.className = 'row';
-      ligneN.innerHTML = '<span class="main"><span class="t">Votre ti-mot</span><span class="s">Brouillon · pas encore en ligne</span></span>'
-        + '<span class="acts"><button class="mini">Modifier</button><button class="mini danger">Retirer</button></span>';
-      pileN.insertBefore(ligneN, pileN.firstChild);
-      editerEnLigne(ligneN.querySelector('.t'), function(){
-        ligneN.querySelector('.s').textContent = 'En ligne · s\'efface dans 14 jours';
-        dire('Ti-mot publié en tête du fil.');
-      });
-      return;
-    }
-    if(nom === 'Réordonner'){ dire('Glisser-déposer les quartiers — à construire.'); return; }
-    if(nom === 'Écrire' || nom === 'Écrire à l\'auteur'){
-      dire('Ouvre votre messagerie avec l\'adresse de la personne.'); return;
-    }
-  });
+  window.__quartierActif = function(){ return quartierActif; };
 
   // --- les onglets de la console montrent leur contenu
   var atabs = document.querySelectorAll('#s-admin .atab');
@@ -2720,18 +2421,22 @@ button{cursor:pointer}
         var t = c.textContent.trim();
         if(t !== 'Tout'){ actifs.push(t); }
       });
+      var q = (idSection === 's-echanges' && window.__quartierActif) ? window.__quartierActif() : null;
       var vus = 0;
       cartes.forEach(function(c){
-        var ok = actifs.length === 0 || actifs.indexOf(lire(c)) !== -1;
+        var ok = (actifs.length === 0 || actifs.indexOf(lire(c)) !== -1)
+              && (!q || c.getAttribute('data-q') === q);
         c.hidden = !ok;
         if(ok){ vus++; }
       });
       var mot = (idSection === 's-conseils')
         ? (vus > 1 ? ' notes' : ' note')
         : (vus > 1 ? ' annonces' : ' annonce');
-      compteur.textContent = actifs.length
-        ? vus + mot + ' · ' + actifs.join(', ')
-        : vus + mot + ' en tout';
+      var libelle = vus + mot;
+      if(q){ libelle += ' à ' + q; }
+      if(actifs.length){ libelle += ' · ' + actifs.join(', '); }
+      if(!q && !actifs.length){ libelle += ' en tout'; }
+      compteur.textContent = libelle;
       remise.hidden = (actifs.length === 0);
       fil.hidden = (vus === 0);
       vide.hidden = (vus > 0);
@@ -2744,6 +2449,7 @@ button{cursor:pointer}
       if(c && groupe.contains(c)){ appliquer(); }
     });
     appliquer();
+    if(idSection === 's-echanges'){ window.__refiltrer = appliquer; }
   }
 
   var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche','k-echange':"J'échange"};

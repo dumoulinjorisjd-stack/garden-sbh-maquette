@@ -82,6 +82,11 @@ button,select,input,textarea{font:inherit; color:inherit}
   border:1px solid var(--chrome-line); border-radius:8px;
   padding:8px 10px; font-size:15px; min-height:40px;
 }
+.scaffold .ver{
+  font-size:11.5px; letter-spacing:.06em; color:var(--chrome-ink); opacity:.55;
+  font-variant-numeric:tabular-nums; white-space:nowrap; flex:0 0 auto;
+}
+@media (max-width:760px){ .scaffold .ver{display:none} .scaffold-ctrl .ver{display:inline} }
 .scaffold .note{font-size:13.5px; opacity:.6; flex:1 1 220px; min-width:0}
 .scaffold-ctrl{display:contents}
 .scaffold-toggle{
@@ -678,6 +683,7 @@ button{cursor:pointer}
 <div class="scaffold">
   <div class="scaffold-in">
     <span class="tag">Maquette</span>
+    <span class="ver" id="ver" title="Date du fichier que vous êtes en train de lire">…</span>
     <label for="screenpick" class="lbl-ecran">Écran</label>
     <select id="screenpick">
       <option value="accueil">1 · Accueil (le fil)</option>
@@ -707,7 +713,7 @@ button{cursor:pointer}
       <option value="desktop">Ordinateur</option>
       <option value="phone">Téléphone</option>
     </select>
-    <span class="note">Données fictives. Le nom « Jaden » est un remplaçant provisoire.</span>
+    <span class="note"><span class="ver" id="ver2">…</span> · Données fictives. Le nom « Jaden » est un remplaçant provisoire.</span>
     </div>
   </div>
 </div>
@@ -1904,6 +1910,19 @@ button{cursor:pointer}
       dire('Mèsi ! Votre annonce est retirée.');
     });
   }
+
+  var ver = document.getElementById('ver');
+  if(ver){
+    var d = new Date(document.lastModified);
+    var deuxChiffres = function(x){ return (x < 10 ? '0' : '') + x; };
+    ver.textContent = isNaN(d.getTime())
+      ? 'version inconnue'
+      : 'maj ' + deuxChiffres(d.getDate()) + '/' + deuxChiffres(d.getMonth() + 1)
+        + ' ' + deuxChiffres(d.getHours()) + 'h' + deuxChiffres(d.getMinutes());
+  }
+
+  var ver2 = document.getElementById('ver2');
+  if(ver2 && ver){ ver2.textContent = ver.textContent; }
 
   var themepick = document.getElementById('themepick');
   function setTheme(t){

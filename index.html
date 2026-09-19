@@ -217,7 +217,6 @@ button,select,input,textarea{font:inherit; color:inherit}
   text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px}
 .k-donne{background:var(--leaf-soft); color:var(--leaf)}
 .k-cherche{background:var(--flam-soft); color:var(--flam)}
-.k-echange{background:var(--mangue-soft); color:var(--mangue)}
 .k-conseil{background:var(--surface-2); color:var(--ink-soft)}
 .k-astuce{background:var(--mangue-soft); color:var(--mangue)}
 .signe{display:inline-flex; align-items:center; gap:5px}
@@ -952,7 +951,6 @@ button{cursor:pointer}
     <div class="filters" role="group" aria-label="Filtrer">
       <button class="chip" aria-pressed="false">Je donne</button>
       <button class="chip" aria-pressed="false">Je cherche</button>
-      <button class="chip" aria-pressed="false">J'échange</button>
     </div>
 
     <div class="feed">
@@ -990,9 +988,10 @@ button{cursor:pointer}
       <button class="card" data-go="annonce" data-q="Saint-Jean">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
-          <span class="kicker k-echange">J'échange</span>
-          <h3>Plants de tomates cerises contre piments</h3>
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Six plants de tomates cerises</h3>
           <span class="meta"><span>Saint-Jean</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="excerpt">Si vous avez des piments végétariens à échanger je prends volontiers, sinon tant pis, c'est donné quand même.</span>
         </span>
       </button>
     </div>
@@ -1139,7 +1138,6 @@ button{cursor:pointer}
       <div class="seg">
         <button class="chip" aria-pressed="true">Je donne</button>
         <button class="chip" aria-pressed="false">Je cherche</button>
-        <button class="chip" aria-pressed="false">J'échange</button>
       </div>
     </div>
     <div class="field">
@@ -1853,7 +1851,7 @@ button{cursor:pointer}
       Accueil
     </button>
     <button class="tab" data-go="echanges">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z"/></svg>
       Échanges
     </button>
     <button class="tab" data-go="publier">
@@ -1966,13 +1964,11 @@ button{cursor:pointer}
   var PAR_TYPE = {
     'k-donne':   {motif:'f-mangue', teinte:'rgba(240,167,44,.10)', couleur:'var(--mangue)'},
     'k-cherche': {motif:'f-citron', teinte:'rgba(190,62,25,.08)',  couleur:'var(--flam)'},
-    'k-echange': {motif:'f-piment', teinte:'rgba(156,100,16,.09)', couleur:'var(--mangue)'},
     'k-conseil': {motif:'f-feuille',teinte:'rgba(31,93,60,.08)',   couleur:'var(--leaf)'}
   };
   var ICONES = {
     'k-donne':   'M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z',
     'k-cherche': 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 17-4.5-4.5',
-    'k-echange': 'M4 8h13l-3-3M20 16H7l3 3',
     'k-conseil': 'M12 21c0-7 4-11 9-12-1 7-5 11-9 12zM12 21c0-5-3-8-8-9 1 5 4 8 8 9z'
   };
   var ns = 'http://www.w3.org/2000/svg';
@@ -2452,7 +2448,7 @@ button{cursor:pointer}
     if(idSection === 's-echanges'){ window.__refiltrer = appliquer; }
   }
 
-  var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche','k-echange':"J'échange"};
+  var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche'};
   brancher('s-echanges', function(c){
     var k = c.querySelector('.kicker');
     if(!k) return '';

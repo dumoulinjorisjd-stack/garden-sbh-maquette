@@ -937,8 +937,8 @@ button{cursor:pointer}
       <div class="callout" id="contact-ouvert" hidden>
         <h3>Marie-Claude · Lorient</h3>
         <div class="vide-acts">
-          <button class="btn btn-primary">Écrire sur WhatsApp au 0690 12 34 56</button>
-          <button class="btn btn-ghost">Appeler le 0690 12 34 56</button>
+          <button class="btn btn-primary" id="btn-wa">Écrire sur WhatsApp au 0690 12 34 56</button>
+          <button class="btn btn-ghost" id="btn-tel">Appeler le 0690 12 34 56</button>
         </div>
         <p class="hint">Ce numéro est visible par tous les membres connectés qui ouvrent cette annonce. Dites-lui quand vous pouvez passer — et prévenez-la si vous ne venez plus.</p>
       </div>
@@ -1048,7 +1048,7 @@ button{cursor:pointer}
       <label for="p-mot">Un mot pour expliquer</label>
       <textarea id="p-mot" placeholder="C'est mûr, ça ne tiendra pas la semaine…"></textarea>
     </div>
-    <button class="btn btn-primary btn-block">Publier l'annonce</button>
+    <button class="btn btn-primary btn-block" id="btn-publier-annonce">Publier l'annonce</button>
     <p class="expiry">Dans trois jours, on vous demandera si c'est toujours là — un geste pour répondre. Sans réponse, l'annonce s'efface d'elle-même au bout de quatorze jours, pour que personne n'appelle pour rien.</p>
   </section>
 
@@ -1526,8 +1526,8 @@ button{cursor:pointer}
     </div>
 
     <div class="vide-acts">
-      <button class="btn btn-primary" data-go="admin">Publier la note</button>
-      <button class="btn btn-ghost" data-go="admin">Garder en brouillon</button>
+      <button class="btn btn-primary" data-go="admin" id="btn-pub-note">Publier la note</button>
+      <button class="btn btn-ghost" data-go="admin" id="btn-brouillon">Garder en brouillon</button>
     </div>
   </section>
 
@@ -1536,7 +1536,7 @@ button{cursor:pointer}
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
         <span class="kicker k-donne" id="mienne-kick" style="align-self:flex-start">Je donne</span>
-        <h1>Mangues Julie, environ 10 kg</h1>
+        <h1 id="mienne-titre">Mangues Julie, environ 10 kg</h1>
         <span class="sub" id="mienne-sub">Votre annonce · publiée il y a 2 jours · encore 12 jours en ligne</span>
       </div>
 
@@ -1545,8 +1545,8 @@ button{cursor:pointer}
         <p>Quand tout est parti, retirez-la : ça évite qu'on vous appelle pour rien, et c'est comme ça que les gens gardent confiance.</p>
         <div class="vide-acts">
           <button class="btn btn-primary" id="btn-parti">C'est parti, merci</button>
-          <button class="btn btn-ghost">Prolonger de 14 jours</button>
-          <button class="btn btn-ghost">Modifier</button>
+          <button class="btn btn-ghost" id="btn-prolonger">Prolonger de 14 jours</button>
+          <button class="btn btn-ghost" data-go="publier">Modifier</button>
         </div>
       </div>
 
@@ -2063,7 +2063,7 @@ button{cursor:pointer}
 
     var note = document.createElement('p');
     note.className = 'photo-note'; note.hidden = true;
-    note.textContent = 'Réduites à 1600 px et recompressées dans votre téléphone. Les coordonnées GPS enregistrées par l\'appareil sont effacées au passage : la photo ne dira jamais où vous habitez.';
+    note.textContent = 'Réduites si besoin à 1600 px et recompressées dans votre téléphone. Les coordonnées GPS enregistrées par l\'appareil sont effacées au passage : la photo ne dira jamais où vous habitez.';
 
     zone.parentNode.insertBefore(entree, zone.nextSibling);
     zone.parentNode.insertBefore(apercu, entree.nextSibling);
@@ -2108,7 +2108,10 @@ button{cursor:pointer}
         reduire(f, function(src, apres, l, h){
           if(!src){ v.remove(); majZone(); return; }
           v.querySelector('img').src = src;
-          v.querySelector('.poids').innerHTML = poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h;
+          var gain = avant > 0 ? (avant - apres) / avant : 0;
+          v.querySelector('.poids').innerHTML = (gain > 0.15)
+            ? poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h
+            : '<b>' + poids(apres) + '</b><br>' + l + '×' + h;
         });
       });
       entree.value = '';
@@ -2116,6 +2119,50 @@ button{cursor:pointer}
 
     majZone();
   });
+
+  // --- publier une annonce mène à sa propre annonce
+  var pubAnnonce = document.getElementById('btn-publier-annonce');
+  if(pubAnnonce){
+    pubAnnonce.addEventListener('click', function(){
+      var quoi = (document.getElementById('p-quoi').value || '').trim();
+      var combien = (document.getElementById('p-combien').value || '').trim();
+      var ou = document.getElementById('p-ou');
+      var quartier = ou ? ou.options[ou.selectedIndex].text : 'Lorient · Camaruche';
+      var titre = quoi || 'Mangues Julie';
+      if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
+      document.getElementById('mienne-titre').textContent = titre;
+      document.getElementById('mienne-sub').textContent =
+        'Votre annonce · ' + quartier + ' · publiée à l\'instant · 14 jours en ligne';
+      var k = document.getElementById('mienne-kick');
+      k.textContent = 'Je donne'; k.className = 'kicker k-donne'; k.style.alignSelf = 'flex-start';
+      document.getElementById('mienne-active').hidden = false;
+      document.getElementById('mienne-close').hidden = true;
+      document.getElementById('mienne-photo').classList.remove('donne');
+      allerA('mienne');
+      dire('Votre annonce est en ligne. Partagez-la dans le groupe si vous voulez aller plus vite.');
+    });
+  }
+
+  var prolonger = document.getElementById('btn-prolonger');
+  if(prolonger){
+    prolonger.addEventListener('click', function(){
+      var sous = document.getElementById('mienne-sub');
+      var m = sous.textContent.match(/(\d+) jours en ligne/);
+      var j = m ? parseInt(m[1],10) + 14 : 14;
+      sous.textContent = m
+        ? sous.textContent.replace(/\d+ jours en ligne/, j + ' jours en ligne')
+        : sous.textContent + ' · prolongée de 14 jours';
+      dire('Prolongée : ' + j + ' jours en ligne.');
+    });
+  }
+
+  var wa = document.getElementById('btn-wa'), tel = document.getElementById('btn-tel');
+  if(wa){ wa.addEventListener('click', function(){ dire('Ouvre WhatsApp sur la conversation avec Marie-Claude.'); }); }
+  if(tel){ tel.addEventListener('click', function(){ dire('Lance l\'appel depuis votre téléphone.'); }); }
+
+  var pubNote = document.getElementById('btn-pub-note'), brouillon = document.getElementById('btn-brouillon');
+  if(pubNote){ pubNote.addEventListener('click', function(){ dire('Note publiée, et épinglée en tête du fil pour trois jours.'); }); }
+  if(brouillon){ brouillon.addEventListener('click', function(){ dire('Gardée en brouillon — vous la retrouverez dans « Les notes ».'); }); }
 
   // --- les boutons de la console agissent
   function ligneDe(el){ return el.closest ? el.closest('.row') : null; }

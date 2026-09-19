@@ -421,6 +421,71 @@ button,select,input,textarea{font:inherit; color:inherit}
   border:2px dashed var(--line); border-radius:11px; padding:22px 16px; text-align:center;
   color:var(--ink-soft); font-size:16px; background:var(--surface-2);
 }
+.drop-grand{
+  padding:30px 16px; display:flex; flex-direction:column; align-items:center; gap:9px;
+  font-size:17.5px; color:var(--ink);
+}
+.drop-grand svg{width:38px; height:38px; color:var(--leaf)}
+.drop-grand .sous{font-size:14.5px; color:var(--ink-soft)}
+
+/* ---------- publier vite ---------- */
+.pre-rempli{
+  font-size:16px; color:var(--ink-soft); display:flex; flex-wrap:wrap;
+  align-items:baseline; gap:6px; margin:0;
+}
+.pre-rempli b{color:var(--ink)}
+.pret{
+  display:flex; align-items:center; gap:9px; font-size:16px; color:var(--leaf);
+  font-weight:600; opacity:0; transform:translateY(4px); transition:opacity .25s ease, transform .25s ease;
+}
+.pret.vu{opacity:1; transform:none}
+.pret svg{width:20px; height:20px; flex:0 0 20px}
+
+/* ---------- l'annonce qui vit ---------- */
+.vitals{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:14px 10px;
+}
+.vital{display:flex; flex-direction:column; align-items:center; gap:3px; text-align:center}
+.vital .n{
+  font-family:var(--display); font-weight:400; font-size:34px; line-height:1;
+  color:var(--leaf); font-variant-numeric:tabular-nums;
+}
+.vital .l{font-size:13.5px; color:var(--ink-soft); line-height:1.25}
+.vital+.vital{border-left:1px solid var(--line)}
+.vitals-quand{font-size:14.5px; color:var(--ink-soft); margin:0}
+
+/* ---------- les mèsi ---------- */
+.mercis{display:flex; flex-direction:column; gap:12px}
+.mercis h3{font-size:18px}
+.merci{
+  display:flex; flex-direction:column; gap:9px; padding:13px 14px;
+  border:1px solid var(--line); border-left:4px solid var(--mangue);
+  border-radius:11px; background:var(--surface);
+}
+.merci.neuf{animation:arrive .5s both}
+.merci-h{display:flex; align-items:center; gap:9px; font-size:15.5px}
+.merci-h b{font-size:16.5px}
+.merci-h .quand{margin-left:auto; color:var(--ink-soft); font-size:14px}
+.pastille{
+  width:30px; height:30px; flex:0 0 30px; border-radius:50%; display:flex;
+  align-items:center; justify-content:center; background:var(--mangue-soft);
+  color:var(--mangue); font-weight:700; font-size:15px;
+}
+.merci p{font-size:16.5px; margin:0}
+.merci-photo{
+  height:132px; border-radius:9px; overflow:hidden; position:relative;
+  background:linear-gradient(145deg,#F3A72C,#D0661A);
+}
+.merci-photo span{
+  position:absolute; left:9px; bottom:8px; color:#fff; font-size:13px;
+  background:rgba(17,21,14,.42); padding:3px 8px; border-radius:20px;
+}
+@keyframes arrive{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .merci.neuf{animation:none}
+  .pret{transition:none}
+}
 
 /* ---------- article ---------- */
 .prose{display:flex; flex-direction:column; gap:14px; max-width:62ch}
@@ -692,9 +757,7 @@ button,select,input,textarea{font:inherit; color:inherit}
   position:relative; width:118px; border:1px solid var(--line);
   border-radius:10px; overflow:hidden; background:var(--surface);
 }
-.vignette img{display:block; width:100%; height:92px; object-fit:cover}
-.vignette .poids{display:block; padding:6px 8px; font-size:12.5px; color:var(--ink-soft); line-height:1.35}
-.vignette .poids b{color:var(--leaf); font-variant-numeric:tabular-nums}
+.vignette img{display:block; width:100%; height:118px; object-fit:cover}
 .vignette .oter{
   position:absolute; top:5px; right:5px; width:28px; height:28px; border-radius:50%;
   border:0; background:rgba(17,21,14,.66); color:#fff; font-size:17px; line-height:1;
@@ -910,6 +973,7 @@ button{cursor:pointer}
       <option value="bienvenue">6 · Compte créé</option>
       <option value="publier">7 · Publier une annonce</option>
       <option value="mienne">8 · Mon annonce (vue du donneur)</option>
+      <option value="merci">8b · Dire mèsi</option>
       <option value="conseils">9 · Le jardin</option>
       <option value="article">10 · Une note</option>
       <option value="astuce">11 · Proposer une astuce</option>
@@ -1163,6 +1227,17 @@ button{cursor:pointer}
         <p class="hint">Visible par les membres inscrits. Prévenez-la si vous ne venez plus.</p>
       </div>
 
+      <div class="callout" id="bloc-merci" hidden>
+        <h3>Vous êtes passé&nbsp;?</h3>
+        <p>Marie-Claude ne saura jamais ce que ses mangues sont devenues si personne ne le lui dit.</p>
+        <button class="btn btn-primary" style="align-self:flex-start" data-go="merci">Dire mèsi</button>
+      </div>
+
+      <div class="callout" id="merci-fait" hidden>
+        <h3>Mèsi envoyé.</h3>
+        <p>Elle le verra sur son annonce.</p>
+      </div>
+
       <p class="expiry">Disparaît le 26 septembre si personne ne la prolonge.</p>
       <button class="linkish" id="btn-signaler" style="align-self:flex-start; padding-left:0">Signaler un problème</button>
 
@@ -1261,39 +1336,63 @@ button{cursor:pointer}
   <section class="screen" id="s-publier" hidden>
     <div class="page-h">
       <h1>Publier</h1>
-      <span class="sub">Six questions, deux minutes.</span>
+      <span class="sub">Une photo, deux mots. C'est parti.</span>
+    </div>
+
+    <div class="seg" id="p-type">
+      <button class="chip" aria-pressed="true">Je donne</button>
+      <button class="chip" aria-pressed="false">Je cherche</button>
     </div>
 
     <div class="field">
-      <span class="label" style="font-weight:600; font-size:16.5px">Il s'agit de…</span>
-      <div class="seg">
-        <button class="chip" aria-pressed="true">Je donne</button>
-        <button class="chip" aria-pressed="false">Je cherche</button>
+      <div class="drop drop-grand" id="p-photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.3-2h7.9l1.3 2h2.3A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/></svg>
+        Photographiez ce que vous donnez
+        <span class="sous">C'est ce qui fait partir une annonce</span>
       </div>
     </div>
+
     <div class="field">
-      <label for="p-quoi">De quoi&nbsp;?</label>
-      <input id="p-quoi" type="text" placeholder="Mangues, boutures de basilic, fruits à pain…">
+      <label for="p-quoi">C'est quoi&nbsp;?</label>
+      <input id="p-quoi" type="text" placeholder="Mangues, boutures, fruits à pain…">
+      <div class="seg" id="p-fruits">
+        <button class="chip" aria-pressed="false">Mangues</button>
+        <button class="chip" aria-pressed="false">Avocats</button>
+        <button class="chip" aria-pressed="false">Citrons verts</button>
+        <button class="chip" aria-pressed="false">Fruits à pain</button>
+        <button class="chip" aria-pressed="false">Quenettes</button>
+        <button class="chip" aria-pressed="false">Papayes</button>
+        <button class="chip" aria-pressed="false">Piments</button>
+        <button class="chip" aria-pressed="false">Boutures</button>
+      </div>
     </div>
+
     <div class="field">
-      <label for="p-combien">Combien, à peu près&nbsp;?</label>
-      <input id="p-combien" type="text" placeholder="Un cageot, une dizaine, deux sacs…">
-      <span class="hint">Pas besoin de peser. Une idée suffit.</span>
+      <span style="font-weight:600; font-size:16.5px">Combien&nbsp;?</span>
+      <div class="seg" id="p-quantite">
+        <button class="chip" aria-pressed="false">De quoi goûter</button>
+        <button class="chip" aria-pressed="false">Un plein sac</button>
+        <button class="chip" aria-pressed="false">Un cageot</button>
+        <button class="chip" aria-pressed="false">Tout un arbre</button>
+      </div>
+      <input id="p-combien" type="text" hidden aria-hidden="true" tabindex="-1">
     </div>
-    <div class="field">
-      <label for="p-ou">Dans quel quartier&nbsp;?</label>
-      <select id="p-ou"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
-      <span class="hint">Celui de votre compte.</span>
-    </div>
-    <div class="field">
-      <span style="font-weight:600; font-size:16.5px">Une photo</span>
-      <div class="drop">Prendre une photo ou en choisir une<br><span style="font-size:14px">Une annonce avec photo part bien plus vite.</span></div>
-    </div>
-    <div class="field">
-      <label for="p-mot">Un mot pour expliquer</label>
+
+    <p class="pre-rempli">Dans le quartier de <b id="p-ou-txt">Lorient · Camaruche</b>
+      <button class="linkish" id="p-ou-chg" style="padding:2px 4px">Ce n'est pas là</button></p>
+    <select id="p-ou" hidden aria-label="Le quartier de l'annonce"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
+
+    <button class="linkish" id="p-plus" style="align-self:flex-start; padding-left:0" aria-expanded="false">Ajouter un mot</button>
+    <div class="field" id="p-mot-bloc" hidden>
+      <label for="p-mot" class="sr">Un mot pour expliquer</label>
       <textarea id="p-mot" placeholder="C'est mûr, ça ne tiendra pas la semaine…"></textarea>
     </div>
-    <button class="btn btn-primary btn-block" id="btn-publier-annonce">Publier l'annonce</button>
+
+    <p class="pret" id="p-pret">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5 5L20 6.5"/></svg>
+      Elle est prête.
+    </p>
+    <button class="btn btn-primary btn-block" id="btn-publier-annonce">Publier</button>
     <p class="expiry">On vous demandera dans trois jours si c'est toujours là. Sans réponse, l'annonce s'efface au bout de quatorze.</p>
   </section>
 
@@ -1833,11 +1932,18 @@ button{cursor:pointer}
         <span class="sub" id="mienne-sub">Votre annonce · publiée il y a 2 jours · encore 12 jours en ligne</span>
       </div>
 
+      <div class="vitals" id="mienne-vitals">
+        <div class="vital"><span class="n" id="v-vues" data-fin="23">0</span><span class="l">l'ont ouverte</span></div>
+        <div class="vital"><span class="n" id="v-appels" data-fin="4">0</span><span class="l">appels reçus</span></div>
+        <div class="vital"><span class="n" id="v-quartiers" data-fin="5">0</span><span class="l">quartiers</span></div>
+      </div>
+      <p class="vitals-quand" id="mienne-quand">Depuis sa mise en ligne.</p>
+
       <div class="callout" id="mienne-active">
-        <h3>Sept personnes ont ouvert votre annonce</h3>
-        <p>Retirez-la quand tout est parti : personne n'appellera pour rien.</p>
+        <h3>Elle tourne bien</h3>
+        <p>Retirez-la quand tout est parti&nbsp;: personne n'appellera pour rien.</p>
         <div class="vide-acts">
-          <button class="btn btn-primary" id="btn-parti">C'est parti, merci</button>
+          <button class="btn btn-primary" id="btn-parti">C'est parti, mèsi</button>
           <button class="btn btn-ghost" id="btn-prolonger">Prolonger de 14 jours</button>
           <button class="btn btn-ghost" data-go="publier">Modifier</button>
         </div>
@@ -1849,8 +1955,52 @@ button{cursor:pointer}
         <button class="btn btn-ghost" style="align-self:flex-start" data-go="publier">Republier</button>
       </div>
 
+      <div class="mercis" id="mienne-mercis">
+        <h3>Les mèsi</h3>
+        <article class="merci">
+          <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
+          <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
+        </article>
+        <article class="merci">
+          <div class="merci-photo"><span>Sa photo</span></div>
+          <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
+          <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
+        </article>
+      </div>
+
       <p class="expiry">On vous demandera dans trois jours si c'est toujours là. Sans réponse, elle s'efface au bout de quatorze.</p>
     </div>
+  </section>
+
+  <section class="screen" id="s-merci" hidden>
+    <div class="page-h">
+      <span class="kicker k-donne" style="align-self:flex-start">Dire mèsi</span>
+      <h1>À Marie-Claude, pour les mangues</h1>
+      <span class="sub">Elle verra votre mot sur son annonce. Elle n'apprend rien d'autre sur vous.</span>
+    </div>
+
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Une photo, si vous en avez une</span>
+      <div class="drop drop-grand" id="m-photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.3-2h7.9l1.3 2h2.3A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/></svg>
+        La tarte, les bocaux, le plat
+        <span class="sous">C'est ce qui fait le plus plaisir</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="m-mot">Un mot</label>
+      <div class="seg" id="m-vite">
+        <button class="chip" aria-pressed="false">Mèsi anpil&nbsp;!</button>
+        <button class="chip" aria-pressed="false">Tout est parti en confiture</button>
+        <button class="chip" aria-pressed="false">Les enfants se sont régalés</button>
+        <button class="chip" aria-pressed="false">J'en ai donné autour de moi</button>
+      </div>
+      <textarea id="m-mot" placeholder="Mèsi ! J'ai fait six pots de confiture."></textarea>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btn-merci-envoyer">Envoyer le mèsi</button>
+    <button class="linkish" id="btn-merci-annuler" style="align-self:flex-start; padding-left:0">Une autre fois</button>
   </section>
 
   <section class="screen" id="s-astuce" hidden>
@@ -2019,15 +2169,15 @@ button{cursor:pointer}
   var pick = document.getElementById('screenpick');
   var device = document.getElementById('device');
   var tabbar = document.getElementById('tabbar');
-  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer','astuce'];
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer','astuce','merci'];
   var consoles = ['admin','note','tiers'];
-  var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
+  var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', merci:'echanges', mienne:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
 
   var ecranCourant = null;
   var defilements = {};
   var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
                  publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil',
-                 mienne:'echanges', entrer:'accueil', astuce:'conseils'};
+                 mienne:'echanges', entrer:'accueil', astuce:'conseils', merci:'annonce'};
   var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
               saison:'La saison', admin:'La console'};
   var RACINES = ['accueil','echanges','conseils','saison'];
@@ -2059,6 +2209,7 @@ button{cursor:pointer}
       }
     }
     window.scrollTo({top: defilements[name] || 0, behavior:'auto'});
+    surEcran(name);
   }
 
   // --- le bouton « retour » du téléphone revient à l'écran précédent
@@ -2339,6 +2490,8 @@ button{cursor:pointer}
       if(connecte){
         btnContacter.hidden = true;
         contactOuvert.hidden = false;
+        var bm = document.getElementById('bloc-merci');
+        if(bm && document.getElementById('merci-fait').hidden){ bm.hidden = false; }
       } else {
         allerA('connexion');
       }
@@ -2744,6 +2897,321 @@ button{cursor:pointer}
     var k = c.querySelector('.kicker');
     return k ? k.textContent.trim() : '';
   });
+
+
+  // --- les zones photo prennent vraiment une photo
+  function reduire(fichier, fait){
+    var url = URL.createObjectURL(fichier);
+    var img = new Image();
+    img.onload = function(){
+      var MAX = 1600;
+      var r = Math.min(1, MAX / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * r);
+      c.height = Math.round(img.height * r);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(function(b){
+        fait(c.toDataURL('image/jpeg', 0.82), b ? b.size : 0, c.width, c.height);
+      }, 'image/jpeg', 0.82);
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); fait(null, 0, 0, 0); };
+    img.src = url;
+  }
+
+  var MAX_PHOTOS = 4;
+
+  Array.prototype.forEach.call(document.querySelectorAll('.drop'), function(zone, i){
+    var entree = document.createElement('input');
+    entree.type = 'file'; entree.accept = 'image/*'; entree.multiple = true;
+    entree.id = 'photo-' + i; entree.hidden = true;
+
+    var apercu = document.createElement('div');
+    apercu.className = 'apercu';
+
+    var ajouter = document.createElement('button');
+    ajouter.type = 'button'; ajouter.className = 'ajouter'; ajouter.hidden = true;
+    ajouter.innerHTML = '<b>+</b><span>Ajouter<br>une photo</span>';
+
+    var plein = document.createElement('p');
+    plein.className = 'photo-max'; plein.hidden = true;
+    plein.textContent = 'Quatre photos au maximum.';
+
+    zone.parentNode.insertBefore(entree, zone.nextSibling);
+    zone.parentNode.insertBefore(apercu, entree.nextSibling);
+    zone.parentNode.insertBefore(plein, apercu.nextSibling);
+    apercu.appendChild(ajouter);
+
+    function compte(){ return apercu.querySelectorAll('.vignette').length; }
+    function majZone(){
+      var k = compte();
+      zone.hidden = (k > 0);
+      ajouter.hidden = (k === 0 || k >= MAX_PHOTOS);
+      plein.hidden = (k < MAX_PHOTOS);
+      apercu.style.display = k ? '' : 'none';
+    }
+
+    zone.setAttribute('role','button');
+    zone.setAttribute('tabindex','0');
+    zone.addEventListener('click', function(){ entree.click(); });
+    zone.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); entree.click(); }
+    });
+    ajouter.addEventListener('click', function(){ entree.click(); });
+
+    entree.addEventListener('change', function(){
+      var fichiers = Array.prototype.slice.call(entree.files);
+      fichiers.forEach(function(f){
+        if(f.type.indexOf('image/') !== 0) return;
+        if(compte() >= MAX_PHOTOS) return;
+        var v = document.createElement('div');
+        v.className = 'vignette';
+        v.innerHTML = '<img alt="">'
+          + '<button class="oter" type="button" aria-label="Retirer cette photo">&times;</button>';
+        apercu.insertBefore(v, ajouter);
+        majZone();
+        v.querySelector('.oter').addEventListener('click', function(){
+          v.remove(); majZone(); majPret();
+        });
+        reduire(f, function(src){
+          if(!src){ v.remove(); majZone(); return; }
+          v.querySelector('img').src = src;
+          majPret();
+        });
+      });
+      entree.value = '';
+    });
+
+    majZone();
+  });
+
+  // --- publier vite : la photo d'abord, deux touches, c'est parti
+  var pQuoi = document.getElementById('p-quoi');
+  var pCombien = document.getElementById('p-combien');
+  var pOu = document.getElementById('p-ou');
+  var pOuTxt = document.getElementById('p-ou-txt');
+  var pPret = document.getElementById('p-pret');
+
+  function majPret(){
+    if(!pPret) return;
+    var aQuoi = !!(pQuoi && pQuoi.value.trim());
+    var aPhoto = !!document.querySelector('#s-publier .vignette img[src]');
+    pPret.classList.toggle('vu', aQuoi);
+    pPret.childNodes[pPret.childNodes.length - 1].nodeValue =
+      aQuoi && aPhoto ? ' Elle est prête, avec sa photo.' : ' Elle est prête.';
+  }
+  if(pQuoi){ pQuoi.addEventListener('input', majPret); }
+
+  document.addEventListener('click', function(e){
+    var c = e.target.closest ? e.target.closest('.chip') : null;
+    if(!c) return;
+    var g = c.parentElement;
+    if(!g) return;
+    var actif = c.getAttribute('aria-pressed') === 'true';
+    if(g.id === 'p-fruits' && pQuoi){
+      pQuoi.value = actif ? c.textContent.trim() : '';
+      majPret();
+    }
+    if(g.id === 'p-quantite' && pCombien){
+      pCombien.value = actif ? c.textContent.trim() : '';
+    }
+    if(g.id === 'm-vite'){
+      var m = document.getElementById('m-mot');
+      if(m && actif){ m.value = c.textContent.trim(); }
+    }
+  });
+
+  var pOuChg = document.getElementById('p-ou-chg');
+  if(pOuChg && pOu){
+    for(var io = 0; io < pOu.options.length; io++){
+      if(pOu.options[io].text === 'Lorient · Camaruche'){ pOu.selectedIndex = io; break; }
+    }
+    pOuChg.addEventListener('click', function(){
+      var cache = pOu.hidden;
+      pOu.hidden = !cache;
+      pOuChg.textContent = cache ? 'C’est bien là' : 'Ce n’est pas là';
+      if(cache){ pOu.focus(); }
+    });
+    pOu.addEventListener('change', function(){
+      pOuTxt.textContent = pOu.options[pOu.selectedIndex].text;
+    });
+  }
+
+  var pPlus = document.getElementById('p-plus');
+  var pMotBloc = document.getElementById('p-mot-bloc');
+  if(pPlus && pMotBloc){
+    pPlus.addEventListener('click', function(){
+      var ouvert = !pMotBloc.hidden;
+      pMotBloc.hidden = ouvert;
+      pPlus.setAttribute('aria-expanded', String(!ouvert));
+      pPlus.textContent = ouvert ? 'Ajouter un mot' : 'Finalement, sans mot';
+      if(!ouvert){ document.getElementById('p-mot').focus(); }
+    });
+  }
+
+  // --- l'annonce vit : le donneur voit ce qu'elle produit
+  var neuve = false;
+  var vieMinuteur = null;
+  var CLES = ['v-vues','v-appels','v-quartiers'];
+
+  function poser(id, v){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.setAttribute('data-fin', String(v));
+    monter(el, v);
+  }
+
+  function lancerLaVie(){
+    clearTimeout(vieMinuteur);
+    var etapes = [
+      {t:4500, vues:1, quartiers:1,
+       mot:'Quelqu’un vient de l’ouvrir.',
+       toast:'Quelqu’un vient d’ouvrir votre annonce.'},
+      {t:6000, vues:3, quartiers:2,
+       mot:'Trois personnes l’ont ouverte, depuis deux quartiers.', toast:null}
+    ];
+    var n = 0;
+    (function suite(){
+      if(n >= etapes.length) return;
+      var e = etapes[n++];
+      vieMinuteur = setTimeout(function(){
+        if(ecranCourant !== 'mienne') return;
+        poser('v-vues', e.vues);
+        poser('v-quartiers', e.quartiers);
+        var q = document.getElementById('mienne-quand');
+        if(q){ q.textContent = e.mot; }
+        if(e.toast){ dire(e.toast); }
+        suite();
+      }, e.t);
+    })();
+  }
+
+  function surEcran(nom){
+    if(nom !== 'mienne'){ clearTimeout(vieMinuteur); return; }
+    var quand = document.getElementById('mienne-quand');
+    if(!document.getElementById('v-vues')) return;
+    if(neuve){
+      CLES.forEach(function(id){
+        var el = document.getElementById(id);
+        el.setAttribute('data-fin','0'); el.textContent = '0';
+      });
+      if(quand){ quand.textContent = 'Personne ne l’a encore ouverte. Elle vient de partir.'; }
+      neuve = false;
+      lancerLaVie();
+      return;
+    }
+    CLES.forEach(function(id, i){
+      var el = document.getElementById(id);
+      var fin = parseInt(el.getAttribute('data-fin'), 10);
+      el.textContent = '0';
+      setTimeout(function(){ monter(el, fin); }, doux ? 0 : 340 + i * 140);
+    });
+  }
+
+  // --- publier mène à sa propre annonce
+  var pubAnnonce = document.getElementById('btn-publier-annonce');
+  if(pubAnnonce){
+    pubAnnonce.addEventListener('click', function(){
+      var quoi = (pQuoi && pQuoi.value || '').trim();
+      var combien = (pCombien && pCombien.value || '').trim();
+      var quartier = pOu ? pOu.options[pOu.selectedIndex].text : 'Lorient · Camaruche';
+      var tc = document.querySelector('#p-type .chip[aria-pressed="true"]');
+      var type = tc ? tc.textContent.trim() : 'Je donne';
+      var titre = quoi || 'Mangues Julie';
+      if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
+      document.getElementById('mienne-titre').textContent = titre;
+      document.getElementById('mienne-sub').textContent =
+        'Votre annonce · ' + quartier + ' · publiée à l’instant · 14 jours en ligne';
+      var k = document.getElementById('mienne-kick');
+      k.textContent = type;
+      k.className = 'kicker ' + (type === 'Je cherche' ? 'k-cherche' : 'k-donne');
+      k.style.alignSelf = 'flex-start';
+      document.getElementById('mienne-active').hidden = false;
+      document.getElementById('mienne-close').hidden = true;
+      var ph2 = document.getElementById('mienne-photo');
+      ph2.classList.remove('donne');
+      var vieux = ph2.querySelector('.cachet-donne');
+      if(vieux){ vieux.remove(); }
+      var vign = document.querySelector('#s-publier .vignette img');
+      if(vign && vign.src){
+        ph2.style.backgroundImage = 'url(' + vign.src + ')';
+        ph2.style.backgroundSize = 'cover';
+        ph2.style.backgroundPosition = 'center';
+        var kind = ph2.querySelector('.kind');
+        if(kind){ kind.hidden = true; }
+      }
+      neuve = true;
+      allerA('mienne');
+      dire('En ligne. On regarde qui la voit.');
+    });
+  }
+
+  var prolonger = document.getElementById('btn-prolonger');
+  if(prolonger){
+    prolonger.addEventListener('click', function(){
+      var sous = document.getElementById('mienne-sub');
+      var m = sous.textContent.match(/(\d+) jours en ligne/);
+      var j = m ? parseInt(m[1],10) + 14 : 14;
+      sous.textContent = m
+        ? sous.textContent.replace(/\d+ jours en ligne/, j + ' jours en ligne')
+        : sous.textContent + ' · prolongée de 14 jours';
+      dire('Prolongée : ' + j + ' jours en ligne.');
+    });
+  }
+
+  // --- la boucle se referme : celui qui prend dit mèsi
+  function ajouterMerci(qui, mot, src){
+    var liste = document.getElementById('mienne-mercis');
+    if(!liste) return;
+    var a = document.createElement('article');
+    a.className = 'merci neuf';
+    if(src){
+      var ph = document.createElement('div');
+      ph.className = 'merci-photo';
+      ph.style.backgroundImage = 'url(' + src + ')';
+      ph.style.backgroundSize = 'cover';
+      ph.style.backgroundPosition = 'center';
+      ph.innerHTML = '<span>Sa photo</span>';
+      a.appendChild(ph);
+    }
+    var h = document.createElement('div');
+    h.className = 'merci-h';
+    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand">à l’instant</span>';
+    h.querySelector('.pastille').textContent = qui.charAt(0).toUpperCase();
+    h.querySelector('b').textContent = qui;
+    a.appendChild(h);
+    var t = document.createElement('p');
+    t.textContent = mot;
+    a.appendChild(t);
+    liste.insertBefore(a, liste.querySelector('h3').nextSibling);
+  }
+
+  var mEnv = document.getElementById('btn-merci-envoyer');
+  var mAnn = document.getElementById('btn-merci-annuler');
+  if(mAnn){ mAnn.addEventListener('click', function(){ allerA('annonce'); }); }
+  if(mEnv){
+    mEnv.addEventListener('click', function(){
+      var champ = document.getElementById('m-mot');
+      var mot = (champ && champ.value || '').trim();
+      if(!mot){
+        var ch = document.querySelector('#m-vite .chip[aria-pressed="true"]');
+        mot = ch ? ch.textContent.trim() : 'Mèsi anpil !';
+      }
+      var img = document.querySelector('#s-merci .vignette img');
+      ajouterMerci(prenom || 'Armand', mot, img && img.src ? img.src : null);
+      var bm = document.getElementById('bloc-merci');
+      if(bm){ bm.hidden = true; }
+      var mf = document.getElementById('merci-fait');
+      if(mf){ mf.hidden = false; }
+      if(champ){ champ.value = ''; }
+      Array.prototype.forEach.call(document.querySelectorAll('#m-vite .chip'), function(c){
+        c.setAttribute('aria-pressed','false');
+      });
+      if(window.__pluie){ window.__pluie(); }
+      allerA('annonce');
+      dire('Mèsi envoyé.');
+    });
+  }
 
   show((location.hash || '').slice(1) || 'accueil');
 })();

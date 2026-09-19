@@ -249,6 +249,40 @@ button,select,input,textarea{font:inherit; color:inherit}
 .isle-read .v{font-family:var(--serif); font-weight:700; font-size:20px}
 .isle-read .v.vide{font-family:var(--sans); font-weight:400; font-size:17px; color:var(--ink-soft)}
 
+/* ---------- petits bonheurs ---------- */
+@keyframes tampon{
+  0%{opacity:0; transform:translate(-50%,-50%) rotate(-13deg) scale(2.4)}
+  55%{opacity:1; transform:translate(-50%,-50%) rotate(-13deg) scale(.92)}
+  75%{transform:translate(-50%,-50%) rotate(-11deg) scale(1.04)}
+  100%{opacity:1; transform:translate(-50%,-50%) rotate(-13deg) scale(1)}
+}
+.cachet-donne{animation:tampon .42s cubic-bezier(.3,1.2,.4,1) both}
+
+@keyframes tombe{
+  0%{opacity:0; transform:translateY(-14vh) rotate(0deg)}
+  10%{opacity:.9}
+  100%{opacity:0; transform:translateY(112vh) rotate(var(--tour))}
+}
+.pluie{position:fixed; inset:0; z-index:150; pointer-events:none; overflow:hidden}
+.pluie svg{
+  position:absolute; top:0; width:var(--t); height:var(--t); color:var(--c);
+  animation:tombe var(--d) linear var(--r) both;
+}
+
+.fruit-mois{
+  width:26px; height:26px; flex:0 0 26px; color:var(--mangue); cursor:default;
+}
+@keyframes respire{0%,100%{fill-opacity:.42} 50%{fill-opacity:.62}}
+.hero-map .ci-q.has:not(.on){animation:allume .7s both, respire 4.2s ease-in-out 1.4s infinite}
+
+.tab[aria-current="page"] svg{animation:rebond .34s ease}
+@keyframes rebond{0%{transform:translateY(0)} 40%{transform:translateY(-5px)} 100%{transform:translateY(0)}}
+
+@media (prefers-reduced-motion:reduce){
+  .cachet-donne,.pluie svg,.hero-map .ci-q.has:not(.on),.tab[aria-current="page"] svg{animation:none}
+  .pluie{display:none}
+}
+
 /* ---------- accueil : étapes et portes ---------- */
 .etapes{list-style:none; margin:0; padding:0; display:grid; gap:12px}
 .etapes li{
@@ -835,6 +869,7 @@ button{cursor:pointer}
       </svg>
       Jaden <span class="ph">nom provisoire</span>
     </span>
+    <svg class="fruit-mois" id="fruit-mois" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#f-mangue" fill="currentColor"/></svg>
     <nav class="topnav" aria-label="Sections">
       <button class="navlink" data-go="accueil">Accueil</button>
       <button class="navlink" data-go="echanges">Les échanges</button>
@@ -2273,6 +2308,7 @@ button{cursor:pointer}
       k.textContent = 'Donné'; k.className = 'kicker k-conseil';
       k.style.alignSelf = 'flex-start';
       document.getElementById('mienne-sub').textContent = 'Votre annonce · retirée à l\'instant';
+      if(window.__pluie){ window.__pluie(); }
       dire('Mèsi ! Votre annonce est retirée.');
     });
   }
@@ -2289,6 +2325,66 @@ button{cursor:pointer}
 
   var ver2 = document.getElementById('ver2');
   if(ver2 && ver){ ver2.textContent = ver.textContent + ' · '; }
+
+  var doux = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- les chiffres montent
+  function monter(el, fin){
+    if(doux || isNaN(fin)){ el.textContent = fin; return; }
+    var t0 = null, dur = 900;
+    function pas(t){
+      if(!t0){ t0 = t; }
+      var k = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(fin * (1 - Math.pow(1 - k, 3)));
+      if(k < 1){ requestAnimationFrame(pas); }
+    }
+    requestAnimationFrame(pas);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.hero-stat strong, .metric .n'), function(el){
+    var v = parseInt(el.textContent.replace(/\D/g,''), 10);
+    if(!isNaN(v)){ el.textContent = '0'; setTimeout(function(){ monter(el, v); }, 520); }
+  });
+
+  // --- une pluie de fruits quand on donne
+  var FRUITS = ['#f-mangue','#f-citron','#f-feuille','#f-piment'];
+  var TEINTES = ['#F3A72C','#A6D341','#42A470','#EE7A4C'];
+  function pluieDeFruits(){
+    if(doux) return;
+    var ciel = document.createElement('div');
+    ciel.className = 'pluie'; ciel.setAttribute('aria-hidden','true');
+    var ns = 'http://www.w3.org/2000/svg';
+    for(var i = 0; i < 16; i++){
+      var sv = document.createElementNS(ns,'svg');
+      sv.setAttribute('viewBox','0 0 100 100');
+      var taille = 22 + Math.random() * 30;
+      sv.style.setProperty('--t', taille + 'px');
+      sv.style.setProperty('--d', (1.5 + Math.random() * 1.1) + 's');
+      sv.style.setProperty('--r', (Math.random() * 0.5) + 's');
+      sv.style.setProperty('--tour', (Math.random() * 720 - 360) + 'deg');
+      sv.style.setProperty('--c', TEINTES[i % TEINTES.length]);
+      sv.style.left = (Math.random() * 94) + '%';
+      var u = document.createElementNS(ns,'use');
+      u.setAttribute('href', FRUITS[i % FRUITS.length]);
+      u.setAttribute('fill','currentColor');
+      sv.appendChild(u); ciel.appendChild(sv);
+    }
+    document.body.appendChild(ciel);
+    setTimeout(function(){ ciel.remove(); }, 3000);
+  }
+  window.__pluie = pluieDeFruits;
+
+  // --- le fruit du mois
+  var fm = document.getElementById('fruit-mois');
+  var moisCourant = document.querySelector('.month.now .fruit');
+  if(fm && moisCourant){
+    var CORRESP = {'Mangue':'#f-mangue','Citron vert':'#f-citron','Avocat':'#f-feuille',
+                   'Fruit à pain':'#f-feuille','Corossol':'#f-feuille','Papaye':'#f-mangue',
+                   'Cerise pays':'#f-citron','Pomme-cannelle':'#f-mangue','Ti-basilic':'#f-feuille',
+                   'Prune de Cythère':'#f-citron'};
+    var nomF = moisCourant.getAttribute('data-f');
+    fm.querySelector('use').setAttribute('href', CORRESP[nomF] || '#f-feuille');
+    fm.innerHTML = '<title>C\'est la saison : ' + nomF + '</title>' + fm.innerHTML;
+  }
 
   var themepick = document.getElementById('themepick');
   function setTheme(t){

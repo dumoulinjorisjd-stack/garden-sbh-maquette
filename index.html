@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jaden Saint-Barthélemy — maquette</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="512x512" href="icone-512.png">
+<link rel="apple-touch-icon" href="icone-192.png">
+<meta name="theme-color" content="#1F5D3C">
+<meta property="og:title" content="Jaden — Saint-Barthélemy">
+<meta property="og:description" content="Ce qui pousse ici se partage.">
+<meta property="og:image" content="icone-512.png">
 <style>
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html,body{margin:0}
@@ -2091,7 +2098,7 @@ button{cursor:pointer}
     var titre = b.getAttribute('data-titre') || document.title;
     var lien = location.href;
     if(navigator.share){
-      navigator.share({title:titre, text:titre, url:lien}).catch(function(err){
+      navigator.share({title:titre, url:lien}).catch(function(err){
         if(err && err.name === 'AbortError') return;
         copier(titre, lien);
       });

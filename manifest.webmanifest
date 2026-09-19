@@ -1,0 +1,17 @@
+{
+  "name": "Jaden — maquette Saint-Barthélemy",
+  "short_name": "Jaden",
+  "description": "Maquette : échange de fruits, légumes et conseils de jardin à Saint-Barthélemy.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E4EDDC",
+  "theme_color": "#1F5D3C",
+  "icons": [
+    { "src": "icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

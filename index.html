@@ -688,15 +688,16 @@ button{cursor:pointer}
       <option value="accueil">1 · Accueil (le fil)</option>
       <option value="echanges">2 · Les échanges</option>
       <option value="annonce">3 · Fiche d'une annonce</option>
-      <option value="connexion">4 · Mur de connexion</option>
-      <option value="publier">5 · Publier</option>
-      <option value="conseils">6 · Le jardin (les notes)</option>
-      <option value="article">7 · Une note</option>
-      <option value="saison">8 · La saison</option>
-      <option value="admin">9 · Console de l'administrateur</option>
-      <option value="note">10 · Console — écrire une note</option>
-      <option value="mienne">11 · Mon annonce (vue du donneur)</option>
-      <option value="bienvenue">12 · Compte créé</option>
+      <option value="connexion">4 · Créer un compte</option>
+      <option value="entrer">5 · Se connecter (autre appareil)</option>
+      <option value="bienvenue">6 · Compte créé</option>
+      <option value="publier">7 · Publier</option>
+      <option value="mienne">8 · Mon annonce (vue du donneur)</option>
+      <option value="conseils">9 · Le jardin (les notes)</option>
+      <option value="article">10 · Une note</option>
+      <option value="saison">11 · La saison</option>
+      <option value="admin">12 · Console de l'administrateur</option>
+      <option value="note">13 · Console — écrire une note</option>
     </select>
     <button class="scaffold-toggle" id="scaffold-toggle" aria-expanded="false" aria-controls="scaffold-ctrl">Réglages</button>
 
@@ -1024,7 +1025,7 @@ button{cursor:pointer}
     </label>
 
     <button class="btn btn-primary btn-block" id="creer-compte">Recevoir mon code</button>
-    <button class="btn btn-ghost btn-block" data-go="accueil">J'ai déjà un compte</button>
+    <button class="btn btn-ghost btn-block" data-go="entrer">J'ai déjà un compte</button>
 
     <div class="callout" id="etape-code" hidden>
       <h3>Le code est parti</h3>
@@ -1414,15 +1415,15 @@ button{cursor:pointer}
       <div class="stack">
         <div class="row">
           <span class="main"><span class="t">Sylvie</span><span class="s">Colombier · inscrite le 2 septembre · 3 annonces</span></span>
-          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+          <span class="acts"><button class="mini">Changer l'adresse</button><button class="mini danger">Suspendre</button></span>
         </div>
         <div class="row">
           <span class="main"><span class="t">Jean-Loup</span><span class="s">Corossol · inscrit le 28 août · 1 annonce</span></span>
-          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+          <span class="acts"><button class="mini">Changer l'adresse</button><button class="mini danger">Suspendre</button></span>
         </div>
         <div class="row">
           <span class="main"><span class="t">Armand</span><span class="s">Gustavia · inscrit hier · 1 annonce</span></span>
-          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+          <span class="acts"><button class="mini">Changer l'adresse</button><button class="mini danger">Suspendre</button></span>
         </div>
         <div class="row">
           <span class="main"><span class="t">Nadège</span><span class="s">Saint-Jean · inscrite le 14 août · suspendue</span></span>
@@ -1590,6 +1591,47 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="screen" id="s-entrer" hidden>
+    <div class="page-h">
+      <h1>Se connecter</h1>
+      <span class="sub">Sur un nouveau téléphone, un ordinateur, celui d'un proche : c'est toujours la même chose.</span>
+    </div>
+
+    <div class="field">
+      <label for="e-mail">Votre adresse e-mail</label>
+      <input id="e-mail" type="email" placeholder="vous@exemple.fr">
+    </div>
+
+    <label class="accord" style="border-left-color:var(--leaf); background:var(--leaf-soft)">
+      <input type="checkbox" id="e-rester" checked>
+      <span>Rester connecté sur cet appareil.<br>À décocher si ce n'est pas le vôtre.</span>
+    </label>
+
+    <button class="btn btn-primary btn-block" id="e-demander">Recevoir mon code</button>
+
+    <div class="callout" id="e-etape" hidden>
+      <h3>Le code est parti</h3>
+      <p id="e-dest">Vers votre adresse.</p>
+      <div class="field">
+        <label for="e-code" class="sr">Le code à six chiffres</label>
+        <input id="e-code" type="text" inputmode="numeric" autocomplete="one-time-code"
+               maxlength="6" placeholder="6 chiffres"
+               style="font-family:var(--display); font-size:30px; letter-spacing:.32em; text-align:center; min-height:62px">
+      </div>
+      <div class="vide-acts">
+        <button class="btn btn-primary" id="e-valider">Valider</button>
+        <button class="btn btn-ghost" id="e-renvoyer">Renvoyer le code</button>
+      </div>
+    </div>
+
+    <div class="callout alerte">
+      <h3>Vous n'avez plus accès à cette adresse&nbsp;?</h3>
+      <p>Appelez le jardinier : il change l'adresse de votre compte depuis sa console. Sur une île, c'est plus sûr qu'un formulaire.</p>
+    </div>
+
+    <button class="btn btn-ghost btn-block" data-go="connexion">Je n'ai pas encore de compte</button>
+  </section>
+
   <section class="screen" id="s-bienvenue" hidden>
     <div class="bienvenue">
       <svg viewBox="0 0 100 100" class="coche" aria-hidden="true" focusable="false">
@@ -1669,7 +1711,7 @@ button{cursor:pointer}
   var pick = document.getElementById('screenpick');
   var device = document.getElementById('device');
   var tabbar = document.getElementById('tabbar');
-  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne'];
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer'];
   var consoles = ['admin','note','tiers'];
   var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
 
@@ -1677,7 +1719,7 @@ button{cursor:pointer}
   var defilements = {};
   var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
                  publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil',
-                 mienne:'echanges'};
+                 mienne:'echanges', entrer:'accueil'};
   var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
               saison:'La saison', admin:'La console'};
   var RACINES = ['accueil','echanges','conseils','saison'];
@@ -1874,6 +1916,33 @@ button{cursor:pointer}
       allerA('bienvenue');
     });
   }
+  var eDem = document.getElementById('e-demander');
+  var eEtape = document.getElementById('e-etape');
+  if(eDem){
+    eDem.addEventListener('click', function(){
+      var m = document.getElementById('e-mail');
+      var adresse = (m && m.value.trim()) ? m.value.trim() : 'votre adresse';
+      document.getElementById('e-dest').textContent = 'Vers ' + adresse + '. Il arrive en moins d\'une minute.';
+      eDem.hidden = true; eEtape.hidden = false;
+      var c = document.getElementById('e-code'); c.value = ''; c.focus();
+      dire('Code envoyé.');
+    });
+  }
+  var eVal = document.getElementById('e-valider');
+  if(eVal){
+    eVal.addEventListener('click', function(){
+      var m = document.getElementById('e-mail');
+      var adr = (m && m.value.trim()) ? m.value.trim() : '';
+      prenom = adr ? (adr.split('@')[0].charAt(0).toUpperCase() + adr.split('@')[0].slice(1)) : prenom;
+      connecte = true; majCompte();
+      eEtape.hidden = true; eDem.hidden = false;
+      allerA('accueil');
+      dire('Vous voilà connecté. Bon tour des jardins.');
+    });
+  }
+  var eRenv = document.getElementById('e-renvoyer');
+  if(eRenv){ eRenv.addEventListener('click', function(){ dire('Nouveau code envoyé.'); }); }
+
   var renvoyer = document.getElementById('renvoyer-code');
   if(renvoyer){
     renvoyer.addEventListener('click', function(){ dire('Nouveau code envoyé.'); });
@@ -2336,6 +2405,10 @@ button{cursor:pointer}
     }
     if(nom === 'Modifier' && quel === 'saison' && r){
       editerEnLigne(txtSous(r), function(){ dire('Mois enregistré. La page « La saison » est à jour.'); });
+      return;
+    }
+    if(nom === 'Changer l\'adresse' && r){
+      editerEnLigne(txtSous(r), function(){ dire('Adresse changée. La personne peut se reconnecter.'); });
       return;
     }
     if((nom === 'Modifier' || nom === 'Renommer' || nom === 'Modifier le texte') && r){

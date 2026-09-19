@@ -219,6 +219,9 @@ button,select,input,textarea{font:inherit; color:inherit}
 .k-cherche{background:var(--flam-soft); color:var(--flam)}
 .k-echange{background:var(--mangue-soft); color:var(--mangue)}
 .k-conseil{background:var(--surface-2); color:var(--ink-soft)}
+.k-astuce{background:var(--mangue-soft); color:var(--mangue)}
+.signe{display:inline-flex; align-items:center; gap:5px}
+.signe svg{width:14px; height:14px}
 
 .byline{font-size:14px; color:var(--ink-soft); display:flex; align-items:center; gap:7px}
 .relay{
@@ -730,13 +733,14 @@ button{cursor:pointer}
       <option value="connexion">4 · Créer un compte</option>
       <option value="entrer">5 · Se connecter (autre appareil)</option>
       <option value="bienvenue">6 · Compte créé</option>
-      <option value="publier">7 · Publier</option>
+      <option value="publier">7 · Publier une annonce</option>
       <option value="mienne">8 · Mon annonce (vue du donneur)</option>
-      <option value="conseils">9 · Le jardin (les notes)</option>
+      <option value="conseils">9 · Le jardin</option>
       <option value="article">10 · Une note</option>
-      <option value="saison">11 · La saison</option>
-      <option value="admin">12 · Console de l'administrateur</option>
-      <option value="note">13 · Console — écrire une note</option>
+      <option value="astuce">11 · Proposer une astuce</option>
+      <option value="saison">12 · La saison</option>
+      <option value="admin">13 · Console de l'administrateur</option>
+      <option value="note">14 · Console — écrire une note</option>
     </select>
     <button class="scaffold-toggle" id="scaffold-toggle" aria-expanded="false" aria-controls="scaffold-ctrl">Réglages</button>
 
@@ -1127,7 +1131,7 @@ button{cursor:pointer}
   <section class="screen" id="s-conseils" hidden>
     <div class="page-h">
       <h1>Le jardin</h1>
-      <span class="sub">Des notes prises sur le terrain. Court, concret, et valable ici.</span>
+      <span class="sub">Ce qui marche ici. Les notes du jardinier, et les astuces de ceux qui jardinent.</span>
     </div>
     <div class="filters" role="group" aria-label="Thèmes">
       <button class="chip" aria-pressed="true">Tout</button>
@@ -1173,6 +1177,31 @@ button{cursor:pointer}
           <span class="byline">Le jardinier · 19 août</span>
         </span>
       </button>
+
+      <button class="card" data-go="article">
+        <span class="body">
+          <span class="kicker k-astuce">Astuce · Sol et compost</span>
+          <h3>Les coquilles d'œuf écrasées autour des jeunes plants</h3>
+          <span class="excerpt">Contre les limaces après la pluie. Ma mère faisait ça, j'ai vérifié : ça tient trois semaines.</span>
+          <span class="byline">Nadège · Saint-Jean · 12 septembre</span>
+        </span>
+      </button>
+
+      <button class="card" data-go="article">
+        <span class="thumb t-terre"><span class="kind">Photo d'un membre</span></span>
+        <span class="body">
+          <span class="kicker k-astuce">Astuce · Arrosage</span>
+          <h3>Une bouteille percée enterrée au pied du manguier</h3>
+          <span class="excerpt">On remplit une fois par semaine, l'eau descend aux racines au lieu de s'évaporer.</span>
+          <span class="byline">Jean-Loup · Corossol · 5 septembre</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="callout">
+      <h3>Vous savez quelque chose qui marche ici&nbsp;?</h3>
+      <p>Une photo, deux lignes. Le jardinier relit avant la mise en ligne.</p>
+      <button class="btn btn-primary" style="align-self:flex-start" data-go="astuce">Proposer une astuce</button>
     </div>
   </section>
 
@@ -1198,7 +1227,7 @@ button{cursor:pointer}
       <div class="callout">
         <h3>Vous faites autrement&nbsp;?</h3>
         <p>Une photo et deux lignes suffisent : le jardinier en fera une note.</p>
-        <button class="btn btn-primary" style="align-self:flex-start" id="btn-astuce">Envoyer mon astuce</button>
+        <button class="btn btn-primary" style="align-self:flex-start" data-go="astuce">Proposer la mienne</button>
       </div>
     </div>
   </section>
@@ -1407,7 +1436,18 @@ button{cursor:pointer}
     </div>
 
     <div class="apanel" data-panel="notes" hidden>
+      <div class="alert"><strong>2 astuces attendent votre relecture.</strong> Elles ne paraissent pas tant que vous ne les avez pas publiées.</div>
       <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">Les coquilles d'œuf écrasées autour des jeunes plants</span>
+          <span class="s">Astuce de Nadège · Saint-Jean · <strong>en attente</strong></span></span>
+          <span class="acts"><button class="mini solid">Publier</button><button class="mini">Modifier</button><button class="mini danger">Refuser</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Une bouteille percée enterrée au pied du manguier</span>
+          <span class="s">Astuce de Jean-Loup · Corossol · <strong>en attente</strong></span></span>
+          <span class="acts"><button class="mini solid">Publier</button><button class="mini">Modifier</button><button class="mini danger">Refuser</button></span>
+        </div>
         <div class="row">
           <span class="main"><span class="t">L'eau de la clim, c'est un arrosoir toutes les deux heures</span>
           <span class="s">Arrosage · publiée le 8 septembre · épinglée en une</span></span>
@@ -1631,6 +1671,51 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="screen" id="s-astuce" hidden>
+    <div class="page-h">
+      <h1>Proposer une astuce</h1>
+      <span class="sub">Ce que vous faites et qui marche chez vous. Le jardinier relit avant la mise en ligne.</span>
+    </div>
+
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Une photo</span>
+      <div class="drop">Prendre une photo ou en choisir une</div>
+    </div>
+
+    <div class="field">
+      <label for="a-titre">En une phrase, qu'est-ce que vous faites&nbsp;?</label>
+      <input id="a-titre" type="text" placeholder="Une bouteille percée enterrée au pied du manguier">
+    </div>
+
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Le thème</span>
+      <div class="seg">
+        <button class="chip" aria-pressed="true">Arrosage</button>
+        <button class="chip" aria-pressed="false">Sol et compost</button>
+        <button class="chip" aria-pressed="false">Boutures</button>
+        <button class="chip" aria-pressed="false">Ravageurs</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="a-texte">Comment vous faites</label>
+      <textarea id="a-texte" placeholder="On remplit une fois par semaine, l'eau descend aux racines…"></textarea>
+    </div>
+
+    <div class="callout">
+      <h3>Elle paraîtra signée de votre prénom</h3>
+      <p>Avec votre quartier, dans « Le jardin ». Vous pourrez la retirer quand vous voulez.</p>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="a-envoyer">Envoyer au jardinier</button>
+
+    <div class="callout alerte" id="a-envoye" hidden>
+      <h3>Mèsi&nbsp;! C'est parti.</h3>
+      <p>Le jardinier la relit, en général dans la journée. Vous serez prévenu quand elle paraît.</p>
+      <button class="btn btn-ghost" style="align-self:flex-start" data-go="conseils">Retour au jardin</button>
+    </div>
+  </section>
+
   <section class="screen" id="s-entrer" hidden>
     <div class="page-h">
       <h1>Se connecter</h1>
@@ -1752,7 +1837,7 @@ button{cursor:pointer}
   var pick = document.getElementById('screenpick');
   var device = document.getElementById('device');
   var tabbar = document.getElementById('tabbar');
-  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer'];
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer','astuce'];
   var consoles = ['admin','note','tiers'];
   var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
 
@@ -1760,7 +1845,7 @@ button{cursor:pointer}
   var defilements = {};
   var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
                  publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil',
-                 mienne:'echanges', entrer:'accueil'};
+                 mienne:'echanges', entrer:'accueil', astuce:'conseils'};
   var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
               saison:'La saison', admin:'La console'};
   var RACINES = ['accueil','echanges','conseils','saison'];
@@ -2047,10 +2132,12 @@ button{cursor:pointer}
       dire('Vous voilà connecté. Bon tour des jardins.');
     });
   }
-  var astuce = document.getElementById('btn-astuce');
-  if(astuce){
-    astuce.addEventListener('click', function(){
-      dire('Ouvre WhatsApp sur la conversation avec le jardinier.');
+  var aEnv = document.getElementById('a-envoyer');
+  if(aEnv){
+    aEnv.addEventListener('click', function(){
+      aEnv.hidden = true;
+      document.getElementById('a-envoye').hidden = false;
+      dire('Astuce envoyée au jardinier.');
     });
   }
   var appelJ = document.getElementById('btn-appeler-jardinier');
@@ -2522,6 +2609,17 @@ button{cursor:pointer}
       var parent = r.parentNode, suivant = r.nextSibling;
       r.remove();
       direAvecRetour('Supprimé.', 'Annuler', function(){ parent.insertBefore(r, suivant); });
+      return;
+    }
+    if(nom === 'Publier' && r){
+      txtSous(r).innerHTML = txtSous(r).innerHTML.replace('<strong>en attente</strong>', 'en ligne depuis aujourd\'hui');
+      b.remove();
+      dire('Astuce publiée dans « Le jardin ».'); return;
+    }
+    if(nom === 'Refuser' && r){
+      var par = r.parentNode, suiv = r.nextSibling;
+      r.remove();
+      direAvecRetour('Astuce refusée. L\'auteur en est prévenu.', 'Annuler', function(){ par.insertBefore(r, suiv); });
       return;
     }
     if(nom === 'Remettre' && r){

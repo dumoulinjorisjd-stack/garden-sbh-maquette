@@ -569,7 +569,6 @@ button,select,input,textarea{font:inherit; color:inherit}
   border:0; background:rgba(17,21,14,.66); color:#fff; font-size:17px; line-height:1;
   cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
-.photo-note{font-size:14px; color:var(--ink-soft)}
 
 /* ---------- savoir où est la souris ---------- */
 button{cursor:pointer}
@@ -2080,14 +2079,9 @@ button{cursor:pointer}
     plein.className = 'photo-max'; plein.hidden = true;
     plein.textContent = 'Quatre photos, c\'est le maximum — au-delà, personne ne les regarde.';
 
-    var note = document.createElement('p');
-    note.className = 'photo-note'; note.hidden = true;
-    note.textContent = 'Réduites si besoin à 1600 px et recompressées dans votre téléphone. Les coordonnées GPS enregistrées par l\'appareil sont effacées au passage : la photo ne dira jamais où vous habitez.';
-
     zone.parentNode.insertBefore(entree, zone.nextSibling);
     zone.parentNode.insertBefore(apercu, entree.nextSibling);
     zone.parentNode.insertBefore(plein, apercu.nextSibling);
-    zone.parentNode.insertBefore(note, plein.nextSibling);
     apercu.appendChild(ajouter);
 
     function compte(){ return apercu.querySelectorAll('.vignette').length; }
@@ -2096,7 +2090,6 @@ button{cursor:pointer}
       zone.hidden = (k > 0);
       ajouter.hidden = (k === 0 || k >= MAX_PHOTOS);
       plein.hidden = (k < MAX_PHOTOS);
-      note.hidden = (k === 0);
       apercu.style.display = k ? '' : 'none';
     }
 

@@ -346,9 +346,26 @@ button,select,input,textarea{font:inherit; color:inherit}
   opacity:.16; transform:rotate(12deg); pointer-events:none; z-index:0;
 }
 .card .body{position:relative; z-index:1}
-.card.sans-photo{background:var(--teinte, var(--surface))}
-.card.sans-photo:hover .card-motif{opacity:.24; transform:rotate(6deg) scale(1.04)}
 .card-motif{transition:opacity .2s ease, transform .25s ease}
+
+/* une annonce sans photo garde la même tête de carte */
+.thumb-vide{
+  background:var(--teinte, var(--surface-2));
+  border-bottom:1px dashed var(--line);
+  align-items:center; justify-content:center;
+}
+.thumb-vide .thumb-motif{
+  width:76px; height:76px; opacity:.32; color:var(--t-teint, var(--ink-soft));
+  transition:transform .25s ease, opacity .2s ease;
+}
+.card:hover .thumb-vide .thumb-motif{opacity:.44; transform:rotate(-7deg) scale(1.06)}
+.thumb-vide .kind{
+  position:absolute; left:10px; bottom:10px;
+  background:var(--surface); color:var(--ink-soft);
+}
+@media (prefers-reduced-motion: reduce){
+  .card:hover .thumb-vide .thumb-motif{transform:none}
+}
 
 .kicker svg{width:13px; height:13px; flex:0 0 13px; margin-right:-1px}
 
@@ -2256,9 +2273,9 @@ button{cursor:pointer}
   });
 
   var PAR_TYPE = {
-    'k-donne':   {motif:'f-mangue', teinte:'rgba(240,167,44,.10)', couleur:'var(--mangue)'},
-    'k-cherche': {motif:'f-citron', teinte:'rgba(190,62,25,.08)',  couleur:'var(--flam)'},
-    'k-conseil': {motif:'f-feuille',teinte:'rgba(31,93,60,.08)',   couleur:'var(--leaf)'}
+    'k-donne':   {motif:'f-mangue', teinte:'rgba(240,167,44,.14)', couleur:'var(--mangue)', vide:'Sans photo'},
+    'k-cherche': {motif:'f-citron', teinte:'rgba(190,62,25,.10)',  couleur:'var(--flam)',   vide:''},
+    'k-conseil': {motif:'f-feuille',teinte:'rgba(31,93,60,.10)',   couleur:'var(--leaf)',   vide:'Une note du jardin'}
   };
   var ICONES = {
     'k-donne':   'M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z',
@@ -2286,16 +2303,25 @@ button{cursor:pointer}
     }
 
     if(!carte.querySelector('.thumb')){
-      carte.classList.add('sans-photo');
-      carte.style.setProperty('--teinte', PAR_TYPE[cle].teinte);
+      var tete = document.createElement('span');
+      tete.className = 'thumb thumb-vide';
+      tete.style.setProperty('--teinte', PAR_TYPE[cle].teinte);
+      tete.style.setProperty('--t-teint', PAR_TYPE[cle].couleur);
       var sv = document.createElementNS(ns,'svg');
-      sv.setAttribute('class','card-motif'); sv.setAttribute('viewBox','0 0 100 100');
+      sv.setAttribute('class','thumb-motif'); sv.setAttribute('viewBox','0 0 100 100');
       sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
-      sv.style.color = PAR_TYPE[cle].couleur;
       var u = document.createElementNS(ns,'use');
       u.setAttribute('href','#' + PAR_TYPE[cle].motif);
       u.setAttribute('fill','currentColor');
-      sv.appendChild(u); carte.insertBefore(sv, carte.firstChild);
+      sv.appendChild(u);
+      tete.appendChild(sv);
+      if(PAR_TYPE[cle].vide){
+        var lab = document.createElement('span');
+        lab.className = 'kind';
+        lab.textContent = PAR_TYPE[cle].vide;
+        tete.appendChild(lab);
+      }
+      carte.insertBefore(tete, carte.firstChild);
     }
   });
 

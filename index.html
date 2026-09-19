@@ -86,7 +86,8 @@ button,select,input,textarea{font:inherit; color:inherit}
   font-size:11.5px; letter-spacing:.06em; color:var(--chrome-ink); opacity:.55;
   font-variant-numeric:tabular-nums; white-space:nowrap; flex:0 0 auto;
 }
-@media (max-width:760px){ .scaffold .ver{display:none} .scaffold-ctrl .ver{display:inline} }
+.scaffold .note .ver{display:none}
+@media (max-width:760px){ .scaffold-in > .ver{display:none} .scaffold .note .ver{display:inline} }
 .scaffold .note{font-size:13.5px; opacity:.6; flex:1 1 220px; min-width:0}
 .scaffold-ctrl{display:contents}
 .scaffold-toggle{
@@ -238,6 +239,37 @@ button,select,input,textarea{font:inherit; color:inherit}
 .isle-read .k{font-size:14.5px; color:var(--ink-soft)}
 .isle-read .v{font-family:var(--serif); font-weight:700; font-size:20px}
 .isle-read .v.vide{font-family:var(--sans); font-weight:400; font-size:17px; color:var(--ink-soft)}
+
+/* ---------- ludique ---------- */
+.card{position:relative}
+.card-motif{
+  position:absolute; top:-14px; right:-16px; width:104px; height:104px;
+  opacity:.16; transform:rotate(12deg); pointer-events:none; z-index:0;
+}
+.card .body{position:relative; z-index:1}
+.card.sans-photo{background:var(--teinte, var(--surface))}
+.card.sans-photo:hover .card-motif{opacity:.24; transform:rotate(6deg) scale(1.04)}
+.card-motif{transition:opacity .2s ease, transform .25s ease}
+
+.kicker svg{width:13px; height:13px; flex:0 0 13px; margin-right:-1px}
+
+.cachet-donne{
+  position:absolute; top:50%; left:50%; z-index:2;
+  transform:translate(-50%,-50%) rotate(-13deg);
+  font-family:var(--display); font-weight:400; font-size:clamp(30px,9vw,46px);
+  letter-spacing:.06em; color:#fff; padding:6px 22px 8px;
+  border:4px double rgba(255,255,255,.92); border-radius:6px;
+  text-shadow:0 2px 10px rgba(0,0,0,.35); pointer-events:none;
+}
+.thumb{position:relative}
+
+.vide-plante, .vide-min-plante{width:66px; height:66px; color:var(--leaf); opacity:.4; flex:0 0 auto}
+.vide{align-items:flex-start}
+.month .motif-mois{
+  position:absolute; right:-10px; bottom:-14px; width:74px; height:74px;
+  opacity:.14; color:var(--mangue); pointer-events:none;
+}
+.month{position:relative; overflow:hidden}
 
 /* ---------- filtres ---------- */
 .filters{display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; scrollbar-width:thin}
@@ -1796,6 +1828,72 @@ button{cursor:pointer}
     }
   });
 
+  var PAR_TYPE = {
+    'k-donne':   {motif:'f-mangue', teinte:'rgba(240,167,44,.10)', couleur:'var(--mangue)'},
+    'k-cherche': {motif:'f-citron', teinte:'rgba(190,62,25,.08)',  couleur:'var(--flam)'},
+    'k-echange': {motif:'f-piment', teinte:'rgba(156,100,16,.09)', couleur:'var(--mangue)'},
+    'k-conseil': {motif:'f-feuille',teinte:'rgba(31,93,60,.08)',   couleur:'var(--leaf)'}
+  };
+  var ICONES = {
+    'k-donne':   'M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z',
+    'k-cherche': 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 17-4.5-4.5',
+    'k-echange': 'M4 8h13l-3-3M20 16H7l3 3',
+    'k-conseil': 'M12 21c0-7 4-11 9-12-1 7-5 11-9 12zM12 21c0-5-3-8-8-9 1 5 4 8 8 9z'
+  };
+  var ns = 'http://www.w3.org/2000/svg';
+
+  Array.prototype.forEach.call(document.querySelectorAll('.card'), function(carte){
+    var k = carte.querySelector('.kicker');
+    if(!k) return;
+    var cle = null;
+    for(var c in PAR_TYPE){ if(k.classList.contains(c)){ cle = c; break; } }
+    if(!cle) return;
+
+    if(ICONES[cle] && !k.querySelector('svg')){
+      var ic = document.createElementNS(ns,'svg');
+      ic.setAttribute('viewBox','0 0 24 24'); ic.setAttribute('fill','none');
+      ic.setAttribute('stroke','currentColor'); ic.setAttribute('stroke-width','2.2');
+      ic.setAttribute('stroke-linecap','round'); ic.setAttribute('stroke-linejoin','round');
+      ic.setAttribute('aria-hidden','true');
+      var d = document.createElementNS(ns,'path');
+      d.setAttribute('d', ICONES[cle]);
+      ic.appendChild(d); k.insertBefore(ic, k.firstChild);
+    }
+
+    if(!carte.querySelector('.thumb')){
+      carte.classList.add('sans-photo');
+      carte.style.setProperty('--teinte', PAR_TYPE[cle].teinte);
+      var sv = document.createElementNS(ns,'svg');
+      sv.setAttribute('class','card-motif'); sv.setAttribute('viewBox','0 0 100 100');
+      sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
+      sv.style.color = PAR_TYPE[cle].couleur;
+      var u = document.createElementNS(ns,'use');
+      u.setAttribute('href','#' + PAR_TYPE[cle].motif);
+      u.setAttribute('fill','currentColor');
+      sv.appendChild(u); carte.insertBefore(sv, carte.firstChild);
+    }
+  });
+
+  var moisNow = document.querySelector('.month.now');
+  if(moisNow && !moisNow.querySelector('.motif-mois')){
+    var sm = document.createElementNS(ns,'svg');
+    sm.setAttribute('class','motif-mois'); sm.setAttribute('viewBox','0 0 100 100');
+    sm.setAttribute('aria-hidden','true');
+    var um = document.createElementNS(ns,'use');
+    um.setAttribute('href','#f-mangue'); um.setAttribute('fill','currentColor');
+    sm.appendChild(um); moisNow.appendChild(sm);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.vide'), function(v){
+    if(v.querySelector('.vide-plante')) return;
+    var sv = document.createElementNS(ns,'svg');
+    sv.setAttribute('class','vide-plante'); sv.setAttribute('viewBox','0 0 100 100');
+    sv.setAttribute('aria-hidden','true');
+    var u = document.createElementNS(ns,'use');
+    u.setAttribute('href','#v-aloes'); u.setAttribute('fill','currentColor');
+    sv.appendChild(u); v.insertBefore(sv, v.firstChild);
+  });
+
   var MOTIFS = {'t-mangue':'f-mangue','t-agrume':'f-citron','t-vert':'f-feuille','t-terre':'f-piment'};
   Array.prototype.forEach.call(document.querySelectorAll('.thumb'), function(t){
     var id = null;
@@ -2018,7 +2116,13 @@ button{cursor:pointer}
     btnParti.addEventListener('click', function(){
       document.getElementById('mienne-active').hidden = true;
       document.getElementById('mienne-close').hidden = false;
-      document.getElementById('mienne-photo').classList.add('donne');
+      var ph = document.getElementById('mienne-photo');
+      ph.classList.add('donne');
+      if(!ph.querySelector('.cachet-donne')){
+        var cach = document.createElement('span');
+        cach.className = 'cachet-donne'; cach.textContent = 'Donné';
+        ph.appendChild(cach);
+      }
       var k = document.getElementById('mienne-kick');
       k.textContent = 'Donné'; k.className = 'kicker k-conseil';
       k.style.alignSelf = 'flex-start';
@@ -2266,7 +2370,10 @@ button{cursor:pointer}
       k.textContent = 'Je donne'; k.className = 'kicker k-donne'; k.style.alignSelf = 'flex-start';
       document.getElementById('mienne-active').hidden = false;
       document.getElementById('mienne-close').hidden = true;
-      document.getElementById('mienne-photo').classList.remove('donne');
+      var ph2 = document.getElementById('mienne-photo');
+      ph2.classList.remove('donne');
+      var vieux = ph2.querySelector('.cachet-donne');
+      if(vieux){ vieux.remove(); }
       allerA('mienne');
       dire('Votre annonce est en ligne. Partagez-la dans le groupe si vous voulez aller plus vite.');
     });

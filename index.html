@@ -790,7 +790,7 @@ button{cursor:pointer}
 
     <div class="vide" id="feed-vide" hidden>
       <p class="vide-t">Rien à <strong id="vide-q">Colombier</strong> pour l'instant.</p>
-      <p class="vide-s">C'est normal : ça donne par vagues, et tout le monde n'a pas d'arbre. Revenez quand la saison tourne.</p>
+      <p class="vide-s">Ça donne par vagues. Revenez quand la saison tourne.</p>
       <div class="vide-acts">
         <button class="btn btn-primary" data-go="connexion">Me prévenir quand il y aura quelque chose ici</button>
         <button class="btn btn-ghost" id="vide-tout">Faire le tour de toute l'île</button>
@@ -945,10 +945,10 @@ button{cursor:pointer}
           <button class="btn btn-primary" id="btn-wa">Écrire sur WhatsApp au 0690 12 34 56</button>
           <button class="btn btn-ghost" id="btn-tel">Appeler le 0690 12 34 56</button>
         </div>
-        <p class="hint">Ce numéro est visible par tous les membres connectés qui ouvrent cette annonce. Dites-lui quand vous pouvez passer — et prévenez-la si vous ne venez plus.</p>
+        <p class="hint">Visible par tous les membres connectés. Prévenez-la si vous ne venez plus.</p>
       </div>
 
-      <p class="expiry">Cette annonce disparaîtra automatiquement le 26 septembre si personne ne la prolonge.</p>
+      <p class="expiry">Disparaît le 26 septembre si personne ne la prolonge.</p>
       <button class="linkish" id="btn-signaler" style="align-self:flex-start; padding-left:0">Signaler un problème</button>
 
       <div class="callout alerte" id="signal-form" hidden>
@@ -969,12 +969,12 @@ button{cursor:pointer}
           <button class="btn btn-primary" id="sg-envoyer">Envoyer le signalement</button>
           <button class="btn btn-ghost" id="sg-annuler">Annuler</button>
         </div>
-        <p class="hint">Votre signalement n'est lu que par le jardinier. La personne qui a publié l'annonce ne saura pas qui l'a signalée.</p>
+        <p class="hint">Lu par le jardinier seul. L'auteur ne saura pas qui l'a signalée.</p>
       </div>
 
       <div class="callout alerte" id="signal-envoye" hidden>
         <h3>Mèsi&nbsp;! C'est signalé.</h3>
-        <p>Le jardinier le verra dans sa console dès sa prochaine connexion. C'est comme ça que le site reste propre.</p>
+        <p>Le jardinier le verra à sa prochaine connexion.</p>
       </div>
     </div>
   </section>
@@ -983,7 +983,7 @@ button{cursor:pointer}
   <section class="screen" id="s-connexion" hidden>
     <div class="wall">
       <h2>Un compte est nécessaire pour contacter</h2>
-      <p>Consulter le site est libre pour tout le monde. On demande un compte uniquement pour écrire à quelqu'un ou publier une annonce — c'est ce qui évite les faux rendez-vous.</p>
+      <p>Consulter est libre. Le compte ne sert qu'à publier et à contacter.</p>
     </div>
 
     <div class="field">
@@ -1005,15 +1005,41 @@ button{cursor:pointer}
     <div class="field">
       <label for="f-tel">Votre téléphone</label>
       <input id="f-tel" type="tel" placeholder="0690 00 00 00">
-      <span class="hint"><strong>Il sera visible par les membres connectés</strong> qui ouvrent vos annonces — c'est ainsi qu'ils vous joindront. Il reste caché aux simples visiteurs et n'apparaît sur aucune page publique.</span>
+      <span class="hint"><strong>Visible par les membres connectés</strong> qui ouvrent vos annonces. Jamais par un simple visiteur.</span>
     </div>
     <div class="field">
       <label for="f-mail">Votre adresse e-mail</label>
       <input id="f-mail" type="email" placeholder="vous@exemple.fr">
-      <span class="hint">Pour votre mot de passe, et pour les alertes que vous choisirez.</span>
+      <span class="hint">Pour votre code de connexion, et les alertes que vous choisirez.</span>
     </div>
-    <button class="btn btn-primary btn-block" id="creer-compte">Créer mon compte</button>
+
+    <div class="callout" id="sans-mdp">
+      <h3>Pas de mot de passe ici</h3>
+      <p>On vous envoie un code à six chiffres. Rien à retenir, rien à perdre.</p>
+    </div>
+
+    <label class="accord" style="border-left-color:var(--leaf); background:var(--leaf-soft)">
+      <input type="checkbox" id="f-rester" checked>
+      <span>Rester connecté sur ce téléphone.<br>Vous n'aurez plus à demander de code.</span>
+    </label>
+
+    <button class="btn btn-primary btn-block" id="creer-compte">Recevoir mon code</button>
     <button class="btn btn-ghost btn-block" data-go="accueil">J'ai déjà un compte</button>
+
+    <div class="callout" id="etape-code" hidden>
+      <h3>Le code est parti</h3>
+      <p id="code-dest">Vers votre adresse. Il arrive en moins d'une minute.</p>
+      <div class="field">
+        <label for="f-code" class="sr">Le code à six chiffres</label>
+        <input id="f-code" type="text" inputmode="numeric" autocomplete="one-time-code"
+               maxlength="6" placeholder="6 chiffres"
+               style="font-family:var(--display); font-size:30px; letter-spacing:.32em; text-align:center; min-height:62px">
+      </div>
+      <div class="vide-acts">
+        <button class="btn btn-primary" id="valider-code">Valider</button>
+        <button class="btn btn-ghost" id="renvoyer-code">Renvoyer le code</button>
+      </div>
+    </div>
   </section>
 
   <!-- 5 PUBLIER -->
@@ -1043,25 +1069,25 @@ button{cursor:pointer}
     <div class="field">
       <label for="p-ou">Dans quel quartier&nbsp;?</label>
       <select id="p-ou"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
-      <span class="hint">Pré-rempli avec le quartier de votre compte.</span>
+      <span class="hint">Celui de votre compte.</span>
     </div>
     <div class="field">
       <span style="font-weight:600; font-size:16.5px">Une photo</span>
-      <div class="drop">Prendre une photo ou en choisir une<br><span style="font-size:14px">Facultatif — mais une annonce avec photo trouve preneur bien plus vite.</span></div>
+      <div class="drop">Prendre une photo ou en choisir une<br><span style="font-size:14px">Une annonce avec photo part bien plus vite.</span></div>
     </div>
     <div class="field">
       <label for="p-mot">Un mot pour expliquer</label>
       <textarea id="p-mot" placeholder="C'est mûr, ça ne tiendra pas la semaine…"></textarea>
     </div>
     <button class="btn btn-primary btn-block" id="btn-publier-annonce">Publier l'annonce</button>
-    <p class="expiry">Dans trois jours, on vous demandera si c'est toujours là — un geste pour répondre. Sans réponse, l'annonce s'efface d'elle-même au bout de quatorze jours, pour que personne n'appelle pour rien.</p>
+    <p class="expiry">On vous demandera dans trois jours si c'est toujours là. Sans réponse, l'annonce s'efface au bout de quatorze.</p>
   </section>
 
   <!-- 6 CONSEILS -->
   <section class="screen" id="s-conseils" hidden>
     <div class="page-h">
       <h1>Le jardin</h1>
-      <span class="sub">Des notes prises sur le terrain par le jardinier. Court, concret, et valable ici — pas ce qu'on lit sur les sites de métropole.</span>
+      <span class="sub">Des notes prises sur le terrain. Court, concret, et valable ici.</span>
     </div>
     <div class="filters" role="group" aria-label="Thèmes">
       <button class="chip" aria-pressed="true">Tout</button>
@@ -1108,7 +1134,6 @@ button{cursor:pointer}
         </span>
       </button>
     </div>
-    <p class="flag">Format volontairement court : une photo, quelques lignes. Une note se publie en trente secondes depuis un chantier, entre deux clients. C'est la condition pour qu'il y en ait encore dans deux ans.</p>
   </section>
 
   <!-- 7 ARTICLE -->
@@ -1132,7 +1157,7 @@ button{cursor:pointer}
 
       <div class="callout">
         <h3>Vous faites autrement&nbsp;?</h3>
-        <p>Envoyez-moi une photo et deux lignes. C'est comme ça que celle-ci est née.</p>
+        <p>Envoyez une photo et deux lignes.</p>
       </div>
     </div>
   </section>
@@ -1141,7 +1166,7 @@ button{cursor:pointer}
   <section class="screen" id="s-saison" hidden>
     <div class="page-h">
       <h1>La saison</h1>
-      <span class="sub">Ce qui donne sur l'île, mois par mois. Touchez un fruit : sa saison entière s'allume, et vous pouvez demander à être prévenu quand quelqu'un en propose.</span>
+      <span class="sub">Ce qui donne sur l'île, mois par mois. Touchez un fruit pour voir sa saison.</span>
     </div>
 
     <div class="suivis" id="suivis" hidden>
@@ -1156,7 +1181,7 @@ button{cursor:pointer}
         <button class="btn btn-primary" id="d-suivre">Me prévenir quand quelqu'un en propose</button>
         <button class="btn btn-ghost" id="d-voir" data-go="echanges">Voir les annonces</button>
       </div>
-      <p class="hint" id="d-note">Un courriel quand la saison démarre, un autre si une annonce paraît. Rien d'autre.</p>
+      <p class="hint" id="d-note">Un courriel au début de la saison, un autre si une annonce paraît.</p>
     </div>
 
     <div class="months">
@@ -1284,7 +1309,7 @@ button{cursor:pointer}
       </div>
     </div>
 
-    <p class="flag">Calendrier d'exemple, à corriger par le jardinier avant la mise en ligne : les dates varient d'un quartier à l'autre, d'une exposition à l'autre et d'une année à l'autre. C'est la première vraie donnée du site.</p>
+    <p class="flag">Calendrier d'exemple, à corriger par le jardinier : les dates varient d'un quartier et d'une année à l'autre.</p>
   </section>
 
   <!-- 9 ADMIN -->
@@ -1368,7 +1393,7 @@ button{cursor:pointer}
     <div class="apanel" data-panel="nouvelles" hidden>
       <div class="callout">
         <h3>Le ti-mot du jardinier</h3>
-        <p>Deux lignes en tête du fil d'accueil. Elles disparaissent toutes seules à la date choisie — personne n'a à penser à les retirer.</p>
+        <p>Deux lignes en tête du fil. Elles s'effacent toutes seules à la date choisie.</p>
         <button class="mini solid" style="align-self:flex-start">Écrire une nouvelle</button>
       </div>
       <div class="stack">
@@ -1409,7 +1434,7 @@ button{cursor:pointer}
     <div class="apanel" data-panel="saison" hidden>
       <div class="callout">
         <h3>C'est vous qui remplissez ce calendrier</h3>
-        <p>Il alimente la page « La saison » du site, et c'est là que les gens s'abonnent à un fruit. Les dates d'ici ne ressemblent à aucune liste trouvée ailleurs : corrigez-les librement, mois par mois.</p>
+        <p>Il alimente la page « La saison », où les gens s'abonnent à un fruit. Les dates d'ici ne ressemblent à aucune liste trouvée ailleurs.</p>
         <button class="mini solid" style="align-self:flex-start">Ajouter un fruit à la liste</button>
       </div>
       <div class="stack">
@@ -1506,7 +1531,7 @@ button{cursor:pointer}
     <div class="field">
       <label for="n-titre">En une phrase, qu'est-ce que vous montrez&nbsp;?</label>
       <input id="n-titre" type="text" placeholder="L'eau de la clim, c'est un arrosoir toutes les deux heures">
-      <span class="hint">Dites-le comme vous le diriez à un client. Pas besoin de faire un titre.</span>
+      <span class="hint">Comme vous le diriez à un client.</span>
     </div>
 
     <div class="field">
@@ -1522,7 +1547,7 @@ button{cursor:pointer}
     <div class="field">
       <label for="n-texte">Ce qu'il faut savoir</label>
       <textarea id="n-texte" placeholder="Je rallonge le tuyau jusqu'à un bidon. Fermé, sinon vous élevez des moustiques…"></textarea>
-      <span class="hint">Appuyez sur la touche microphone de votre clavier et dictez : c'est plus rapide que de taper, et ça marche avec les mains pleines de terre.</span>
+      <span class="hint">Dictez avec la touche microphone : plus rapide, et les mains sales.</span>
     </div>
 
     <div class="callout">
@@ -1547,7 +1572,7 @@ button{cursor:pointer}
 
       <div class="callout" id="mienne-active">
         <h3>Sept personnes ont ouvert votre annonce</h3>
-        <p>Quand tout est parti, retirez-la : ça évite qu'on vous appelle pour rien, et c'est comme ça que les gens gardent confiance.</p>
+        <p>Retirez-la quand tout est parti : personne n'appellera pour rien.</p>
         <div class="vide-acts">
           <button class="btn btn-primary" id="btn-parti">C'est parti, merci</button>
           <button class="btn btn-ghost" id="btn-prolonger">Prolonger de 14 jours</button>
@@ -1557,11 +1582,11 @@ button{cursor:pointer}
 
       <div class="callout alerte" id="mienne-close" hidden>
         <h3>Mèsi&nbsp;! C'est retiré.</h3>
-        <p>Votre annonce n'apparaît plus dans les échanges. Si l'arbre redonne le mois prochain, republiez-la en deux gestes.</p>
+        <p>Elle n'apparaît plus. Si l'arbre redonne, republiez-la.</p>
         <button class="btn btn-ghost" style="align-self:flex-start" data-go="publier">Republier</button>
       </div>
 
-      <p class="expiry">Dans trois jours, on vous demandera si c'est toujours là. Sans réponse de votre part, l'annonce s'efface d'elle-même au bout de quatorze jours.</p>
+      <p class="expiry">On vous demandera dans trois jours si c'est toujours là. Sans réponse, elle s'efface au bout de quatorze.</p>
     </div>
   </section>
 
@@ -1572,7 +1597,7 @@ button{cursor:pointer}
         <path d="M30 52 44 66 71 36" fill="none" stroke="var(--leaf)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <h1>Votre compte est créé, <span id="bv-prenom">Armand</span>.</h1>
-      <p class="lede">Vous pouvez maintenant publier une annonce et écrire aux personnes qui en proposent. Votre téléphone reste caché : il n'est transmis qu'à celle que vous contactez.</p>
+      <p class="lede">Vous pouvez publier une annonce et contacter ceux qui en proposent.</p>
     </div>
 
     <div class="vide-acts">
@@ -1582,7 +1607,7 @@ button{cursor:pointer}
 
     <div class="callout">
       <h3>Deux réglages, une seule fois</h3>
-      <p>Choisissez les fruits et le quartier qui vous intéressent : on vous préviendra quand quelque chose y apparaît, et vous n'aurez plus à venir voir.</p>
+      <p>Choisissez vos fruits et votre quartier : on vous préviendra.</p>
       <div class="vide-acts">
         <button class="btn btn-ghost" data-go="saison">Choisir mes fruits</button>
         <button class="btn btn-ghost" data-go="accueil">Choisir mon quartier</button>
@@ -1820,15 +1845,38 @@ button{cursor:pointer}
   });
 
   var creer = document.getElementById('creer-compte');
+  var etapeCode = document.getElementById('etape-code');
+  var sansMdp = document.getElementById('sans-mdp');
   if(creer){
     creer.addEventListener('click', function(){
       var champ = document.getElementById('f-prenom');
       prenom = (champ && champ.value.trim()) ? champ.value.trim() : 'Armand';
+      var mail = document.getElementById('f-mail');
+      var adresse = (mail && mail.value.trim()) ? mail.value.trim() : 'votre adresse';
+      document.getElementById('code-dest').textContent = 'Vers ' + adresse + '. Il arrive en moins d\'une minute.';
+      if(sansMdp){ sansMdp.hidden = true; }
+      creer.hidden = true;
+      etapeCode.hidden = false;
+      var c = document.getElementById('f-code');
+      c.value = ''; c.focus();
+      dire('Code envoyé. Sur un vrai téléphone, il se remplit tout seul.');
+    });
+  }
+  var valider = document.getElementById('valider-code');
+  if(valider){
+    valider.addEventListener('click', function(){
       connecte = true;
       majCompte();
       document.getElementById('bv-prenom').textContent = prenom;
+      etapeCode.hidden = true;
+      creer.hidden = false;
+      if(sansMdp){ sansMdp.hidden = false; }
       allerA('bienvenue');
     });
+  }
+  var renvoyer = document.getElementById('renvoyer-code');
+  if(renvoyer){
+    renvoyer.addEventListener('click', function(){ dire('Nouveau code envoyé.'); });
   }
   if(btnContacter){
     btnContacter.addEventListener('click', function(){
@@ -2077,7 +2125,7 @@ button{cursor:pointer}
 
     var plein = document.createElement('p');
     plein.className = 'photo-max'; plein.hidden = true;
-    plein.textContent = 'Quatre photos, c\'est le maximum — au-delà, personne ne les regarde.';
+    plein.textContent = 'Quatre photos au maximum.';
 
     zone.parentNode.insertBefore(entree, zone.nextSibling);
     zone.parentNode.insertBefore(apercu, entree.nextSibling);

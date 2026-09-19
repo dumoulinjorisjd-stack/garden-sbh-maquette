@@ -129,6 +129,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 @media (max-width:520px){
   .stage{padding-left:0; padding-right:0; padding-block:0 0}
   .device,.device.wide{border:0; border-radius:0; box-shadow:none; min-height:calc(100dvh - 60px)}
+  .tabbar{max-width:none}
 }
 
 /* ---------- barre d'app ---------- */
@@ -303,8 +304,12 @@ button,select,input,textarea{font:inherit; color:inherit}
 /* ---------- tabbar ---------- */
 .tabbar{
   display:flex; border-top:1px solid var(--line); background:var(--surface);
-  padding-bottom:env(safe-area-inset-bottom,0px); position:sticky; bottom:0;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:420px; z-index:60;
+  box-shadow:0 -3px 14px rgba(27,45,27,.08);
 }
+#device[data-view="phone"]{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .tab{
   flex:1; background:none; border:0; cursor:pointer; padding:10px 4px 12px;
   display:flex; flex-direction:column; align-items:center; gap:3px;
@@ -518,7 +523,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 .partage{display:inline-flex; align-items:center; gap:9px}
 .partage svg{width:20px; height:20px; flex:0 0 20px}
 .toast{
-  position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  position:fixed; left:50%; bottom:calc(88px + env(safe-area-inset-bottom,0px));
   transform:translateX(-50%); z-index:200; max-width:min(92vw,520px);
   background:var(--ink); color:var(--ground); border-radius:11px;
   padding:13px 17px; font-size:16px; box-shadow:0 8px 28px rgba(0,0,0,.28);

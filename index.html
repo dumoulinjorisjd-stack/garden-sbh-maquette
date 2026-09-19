@@ -486,6 +486,15 @@ button,select,input,textarea{font:inherit; color:inherit}
 .fruit.suivi .cloche{opacity:1}
 .fruit[aria-pressed="true"] .cloche{color:var(--btn-ink)}
 .apanel{display:flex; flex-direction:column; gap:14px}
+.row.off{opacity:.5}
+.row.off .t{text-decoration:line-through; text-decoration-thickness:1px}
+.edit-ligne{display:flex; flex-wrap:wrap; gap:8px; width:100%; align-items:center}
+.edit-ligne input{
+  flex:1 1 220px; min-width:0; background:var(--surface); border:1px solid var(--leaf);
+  border-radius:9px; padding:11px 12px; font-size:16.5px; min-height:46px;
+}
+.toast b.lien{color:var(--leaf); text-decoration:underline; cursor:pointer; margin-left:10px; pointer-events:auto; padding:6px 2px}
+
 .vide-min{
   border:1px dashed var(--line); background:var(--surface-2); border-radius:11px;
   padding:16px 16px; font-size:16.5px; color:var(--ink-soft);
@@ -2106,6 +2115,154 @@ button{cursor:pointer}
     });
 
     majZone();
+  });
+
+  // --- les boutons de la console agissent
+  function ligneDe(el){ return el.closest ? el.closest('.row') : null; }
+  function panneauDe(el){ return el.closest ? el.closest('.apanel') : null; }
+  function txtTitre(r){ return r.querySelector('.main .t'); }
+  function txtSous(r){ return r.querySelector('.main .s'); }
+  function boutonNomme(r, nom){
+    return Array.prototype.filter.call(r.querySelectorAll('.mini'), function(b){
+      return b.textContent.trim() === nom;
+    })[0];
+  }
+
+  function editerEnLigne(cible, apresSauvegarde){
+    if(cible.dataset.edition === '1') return;
+    cible.dataset.edition = '1';
+    var avant = cible.textContent;
+    var boite = document.createElement('span');
+    boite.className = 'edit-ligne';
+    var champ = document.createElement('input');
+    champ.type = 'text'; champ.value = avant;
+    var ok = document.createElement('button');
+    ok.type = 'button'; ok.className = 'mini solid'; ok.textContent = 'Enregistrer';
+    var non = document.createElement('button');
+    non.type = 'button'; non.className = 'mini'; non.textContent = 'Annuler';
+    boite.appendChild(champ); boite.appendChild(ok); boite.appendChild(non);
+    cible.textContent = ''; cible.appendChild(boite);
+    champ.focus(); champ.select();
+    function fermer(valeur){
+      cible.dataset.edition = '';
+      cible.textContent = valeur;
+      if(apresSauvegarde && valeur !== avant){ apresSauvegarde(valeur); }
+    }
+    ok.addEventListener('click', function(e){ e.stopPropagation(); fermer(champ.value.trim() || avant); });
+    non.addEventListener('click', function(e){ e.stopPropagation(); fermer(avant); });
+    champ.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); ok.click(); }
+      if(e.key === 'Escape'){ e.preventDefault(); non.click(); }
+    });
+  }
+
+  function direAvecRetour(msg, libelle, action){
+    toast.textContent = msg + ' ';
+    var a = document.createElement('b');
+    a.className = 'lien'; a.textContent = libelle;
+    a.addEventListener('click', function(){ action(); toast.classList.remove('vu'); });
+    toast.appendChild(a);
+    toast.classList.add('vu');
+    clearTimeout(minuteur);
+    minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 6000);
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('#s-admin .mini, #s-admin .btn') : null;
+    if(!b || b.hasAttribute('data-go') || b.closest('.edit-ligne')) return;
+    var nom = b.textContent.trim();
+    var r = ligneDe(b);
+    var pan = panneauDe(b);
+    var quel = pan ? pan.getAttribute('data-panel') : '';
+
+    if(nom === 'Épingler' && r){
+      Array.prototype.forEach.call(pan.querySelectorAll('.row'), function(autre){
+        var d = boutonNomme(autre, 'Désépingler');
+        if(d){ d.textContent = 'Épingler';
+               txtSous(autre).textContent = txtSous(autre).textContent.replace(' · épinglée en une',''); }
+      });
+      b.textContent = 'Désépingler';
+      txtSous(r).textContent += ' · épinglée en une';
+      dire('Épinglée en tête du fil.'); return;
+    }
+    if(nom === 'Désépingler' && r){
+      b.textContent = 'Épingler';
+      txtSous(r).textContent = txtSous(r).textContent.replace(' · épinglée en une','');
+      dire('Retirée de la une.'); return;
+    }
+    if((nom === 'Masquer' || nom === 'Dépublier') && r){
+      r.classList.add('off');
+      b.textContent = (nom === 'Masquer') ? 'Afficher' : 'Republier';
+      dire(nom === 'Masquer' ? 'Masquée : plus visible sur le site.' : 'Dépubliée.'); return;
+    }
+    if((nom === 'Afficher' || nom === 'Republier') && r){
+      r.classList.remove('off');
+      b.textContent = (nom === 'Afficher') ? 'Masquer' : 'Dépublier';
+      dire('De nouveau en ligne.'); return;
+    }
+    if((nom === 'Suspendre' || nom === 'Réactiver') && r){
+      var sus = (nom === 'Suspendre');
+      r.classList.toggle('off', sus);
+      b.textContent = sus ? 'Réactiver' : 'Suspendre';
+      txtSous(r).textContent = sus
+        ? txtSous(r).textContent.replace(/ · suspendu.?$/,'') + ' · suspendu'
+        : txtSous(r).textContent.replace(/ · suspendu.?$/,'');
+      dire(sus ? 'Compte suspendu.' : 'Compte réactivé.'); return;
+    }
+    if(nom === 'Prolonger' && r){
+      txtSous(r).textContent = txtSous(r).textContent.replace(/expire dans .*/,'expire dans 16 jours');
+      dire('Prolongée de quatorze jours.'); return;
+    }
+    if((nom === 'Supprimer' || nom === 'Jeter' || nom === 'Retirer') && r){
+      var parent = r.parentNode, suivant = r.nextSibling;
+      r.remove();
+      direAvecRetour('Supprimé.', 'Annuler', function(){ parent.insertBefore(r, suivant); });
+      return;
+    }
+    if(nom === 'Remettre' && r){
+      txtSous(r).textContent = 'En ligne · s\'efface dans 14 jours';
+      b.textContent = 'Retirer';
+      dire('Remise en une.'); return;
+    }
+    if(nom === 'Reprendre' || (nom === 'Modifier' && quel === 'notes')){
+      allerA('note'); return;
+    }
+    if(nom === 'Modifier' && quel === 'saison' && r){
+      editerEnLigne(txtSous(r), function(){ dire('Mois enregistré. La page « La saison » est à jour.'); });
+      return;
+    }
+    if((nom === 'Modifier' || nom === 'Renommer' || nom === 'Modifier le texte') && r){
+      var cible = (quel === 'site') ? txtSous(r) : txtTitre(r);
+      editerEnLigne(cible, function(){ dire('Enregistré.'); });
+      return;
+    }
+    if(nom === 'Ajouter' || nom === 'Ajouter un fruit à la liste'){
+      var pile = (pan || document.querySelector('#s-admin .apanel[data-panel=saison]')).querySelector('.stack');
+      var nouvelle = document.createElement('div');
+      nouvelle.className = 'row';
+      nouvelle.innerHTML = '<span class="main"><span class="t">Nouvel élément</span><span class="s">à nommer</span></span>'
+        + '<span class="acts"><button class="mini">Modifier</button><button class="mini danger">Supprimer</button></span>';
+      pile.appendChild(nouvelle);
+      editerEnLigne(nouvelle.querySelector('.t'), function(v){ dire('« ' + v +' » ajouté.'); });
+      return;
+    }
+    if(nom === 'Écrire une nouvelle'){
+      var pileN = pan.querySelector('.stack');
+      var ligneN = document.createElement('div');
+      ligneN.className = 'row';
+      ligneN.innerHTML = '<span class="main"><span class="t">Votre ti-mot</span><span class="s">Brouillon · pas encore en ligne</span></span>'
+        + '<span class="acts"><button class="mini">Modifier</button><button class="mini danger">Retirer</button></span>';
+      pileN.insertBefore(ligneN, pileN.firstChild);
+      editerEnLigne(ligneN.querySelector('.t'), function(){
+        ligneN.querySelector('.s').textContent = 'En ligne · s\'efface dans 14 jours';
+        dire('Ti-mot publié en tête du fil.');
+      });
+      return;
+    }
+    if(nom === 'Réordonner'){ dire('Glisser-déposer les quartiers — à construire.'); return; }
+    if(nom === 'Écrire' || nom === 'Écrire à l\'auteur'){
+      dire('Ouvre votre messagerie avec l\'adresse de la personne.'); return;
+    }
   });
 
   // --- les onglets de la console montrent leur contenu

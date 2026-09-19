@@ -478,6 +478,20 @@ button,select,input,textarea{font:inherit; color:inherit}
 .bienvenue .lede{font-size:17.5px; color:var(--ink-soft); max-width:48ch}
 #device[data-view="desktop"] .bienvenue h1{font-size:38px}
 
+.duo{display:flex; gap:10px; flex-wrap:wrap}
+.duo .btn{flex:1 1 150px}
+.partage{display:inline-flex; align-items:center; gap:9px}
+.partage svg{width:20px; height:20px; flex:0 0 20px}
+.toast{
+  position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%); z-index:200; max-width:min(92vw,520px);
+  background:var(--ink); color:var(--ground); border-radius:11px;
+  padding:13px 17px; font-size:16px; box-shadow:0 8px 28px rgba(0,0,0,.28);
+  opacity:0; transition:opacity .18s ease; pointer-events:none; word-break:break-word;
+}
+.toast.vu{opacity:1}
+#mienne-photo.donne{filter:grayscale(.75) brightness(.9)}
+
 .apercu{display:flex; flex-wrap:wrap; gap:10px}
 .apercu:empty{display:none}
 .vignette{
@@ -618,7 +632,8 @@ button{cursor:pointer}
       <option value="saison">8 · La saison</option>
       <option value="admin">9 · Console de l'administrateur</option>
       <option value="note">10 · Console — écrire une note</option>
-      <option value="bienvenue">11 · Compte créé</option>
+      <option value="mienne">11 · Mon annonce (vue du donneur)</option>
+      <option value="bienvenue">12 · Compte créé</option>
     </select>
     <button class="scaffold-toggle" id="scaffold-toggle" aria-expanded="false" aria-controls="scaffold-ctrl">Réglages</button>
 
@@ -851,7 +866,13 @@ button{cursor:pointer}
         <div><span class="k2">Publié</span><span class="v">le 12 septembre</span></div>
       </div>
 
-      <button class="btn btn-primary btn-block" id="btn-contacter">Contacter</button>
+      <div class="duo">
+        <button class="btn btn-primary" id="btn-contacter">Contacter</button>
+        <button class="btn btn-ghost partage" data-titre="Mangues Julie, environ 10 kg — à prendre à Lorient">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
+          Partager
+        </button>
+      </div>
 
       <div class="callout" id="contact-ouvert" hidden>
         <h3>Marie-Claude · Lorient</h3>
@@ -968,7 +989,7 @@ button{cursor:pointer}
       <textarea id="p-mot" placeholder="C'est mûr, ça ne tiendra pas la semaine…"></textarea>
     </div>
     <button class="btn btn-primary btn-block">Publier l'annonce</button>
-    <p class="expiry">Votre annonce restera en ligne 14 jours. On vous écrira avant pour demander si c'est toujours disponible.</p>
+    <p class="expiry">Dans trois jours, on vous demandera si c'est toujours là — un geste pour répondre. Sans réponse, l'annonce s'efface d'elle-même au bout de quatorze jours, pour que personne n'appelle pour rien.</p>
   </section>
 
   <!-- 6 CONSEILS -->
@@ -1039,6 +1060,11 @@ button{cursor:pointer}
         <p>Je rallonge le tuyau jusqu'à un bidon. <strong>Fermé</strong> — sinon vous élevez des moustiques. Un bout de moustiquaire tendu sur l'ouverture, un élastique, terminé.</p>
         <p>Deux précautions : ça ne se conserve pas, on vide tous les deux jours. Et c'est de l'eau distillée, sans aucun minéral. Pour les massifs et les pots, parfait. Pour un potager qu'on mange en salade, je coupe à moitié avec de l'eau de pluie.</p>
       </div>
+      <button class="btn btn-ghost partage" style="align-self:flex-start" data-titre="L'eau de la clim, c'est un arrosoir toutes les deux heures — une note du jardin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
+        Partager cette note
+      </button>
+
       <div class="callout">
         <h3>Vous faites autrement&nbsp;?</h3>
         <p>Envoyez-moi une photo et deux lignes. C'est comme ça que celle-ci est née.</p>
@@ -1445,6 +1471,35 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="screen pad0" id="s-mienne" hidden>
+    <div class="thumb cover t-mangue" id="mienne-photo"><span class="kind">Photo du jardin</span></div>
+    <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
+      <div class="page-h">
+        <span class="kicker k-donne" id="mienne-kick" style="align-self:flex-start">Je donne</span>
+        <h1>Mangues Julie, environ 10 kg</h1>
+        <span class="sub" id="mienne-sub">Votre annonce · publiée il y a 2 jours · encore 12 jours en ligne</span>
+      </div>
+
+      <div class="callout" id="mienne-active">
+        <h3>Sept personnes ont ouvert votre annonce</h3>
+        <p>Quand tout est parti, retirez-la : ça évite qu'on vous appelle pour rien, et c'est comme ça que les gens gardent confiance.</p>
+        <div class="vide-acts">
+          <button class="btn btn-primary" id="btn-parti">C'est parti, merci</button>
+          <button class="btn btn-ghost">Prolonger de 14 jours</button>
+          <button class="btn btn-ghost">Modifier</button>
+        </div>
+      </div>
+
+      <div class="callout alerte" id="mienne-close" hidden>
+        <h3>Mèsi&nbsp;! C'est retiré.</h3>
+        <p>Votre annonce n'apparaît plus dans les échanges. Si l'arbre redonne le mois prochain, republiez-la en deux gestes.</p>
+        <button class="btn btn-ghost" style="align-self:flex-start" data-go="publier">Republier</button>
+      </div>
+
+      <p class="expiry">Dans trois jours, on vous demandera si c'est toujours là. Sans réponse de votre part, l'annonce s'efface d'elle-même au bout de quatorze jours.</p>
+    </div>
+  </section>
+
   <section class="screen" id="s-bienvenue" hidden>
     <div class="bienvenue">
       <svg viewBox="0 0 100 100" class="coche" aria-hidden="true" focusable="false">
@@ -1524,14 +1579,15 @@ button{cursor:pointer}
   var pick = document.getElementById('screenpick');
   var device = document.getElementById('device');
   var tabbar = document.getElementById('tabbar');
-  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue'];
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne'];
   var consoles = ['admin','note','tiers'];
   var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
 
   var ecranCourant = null;
   var defilements = {};
   var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
-                 publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil'};
+                 publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil',
+                 mienne:'echanges'};
   var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
               saison:'La saison', admin:'La console'};
   var RACINES = ['accueil','echanges','conseils','saison'];
@@ -1735,6 +1791,57 @@ button{cursor:pointer}
     document.getElementById('sg-envoyer').addEventListener('click', function(){
       sgForm.hidden = true;
       sgEnvoye.hidden = false;
+    });
+  }
+
+  // --- partager
+  var toast = document.createElement('div');
+  toast.className = 'toast'; toast.setAttribute('role','status');
+  document.body.appendChild(toast);
+  var minuteur = null;
+  function dire(msg){
+    toast.textContent = msg;
+    toast.classList.add('vu');
+    clearTimeout(minuteur);
+    minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 3600);
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.partage') : null;
+    if(!b) return;
+    var titre = b.getAttribute('data-titre') || document.title;
+    var lien = location.href;
+    if(navigator.share){
+      navigator.share({title:titre, text:titre, url:lien}).catch(function(err){
+        if(err && err.name === 'AbortError') return;
+        copier(titre, lien);
+      });
+      return;
+    }
+    copier(titre, lien);
+  });
+  function copier(titre, lien){
+    var texte = titre + '\n' + lien;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        dire('Lien copié — collez-le dans WhatsApp ou dans le groupe.');
+      }).catch(function(){ dire(lien); });
+    } else {
+      dire(lien);
+    }
+  }
+
+  // --- « c'est parti »
+  var btnParti = document.getElementById('btn-parti');
+  if(btnParti){
+    btnParti.addEventListener('click', function(){
+      document.getElementById('mienne-active').hidden = true;
+      document.getElementById('mienne-close').hidden = false;
+      document.getElementById('mienne-photo').classList.add('donne');
+      var k = document.getElementById('mienne-kick');
+      k.textContent = 'Donné'; k.className = 'kicker k-conseil';
+      k.style.alignSelf = 'flex-start';
+      document.getElementById('mienne-sub').textContent = 'Votre annonce · retirée à l\'instant';
+      dire('Mèsi ! Votre annonce est retirée.');
     });
   }
 

@@ -249,6 +249,14 @@ button,select,input,textarea{font:inherit; color:inherit}
 .isle-read .v{font-family:var(--serif); font-weight:700; font-size:20px}
 .isle-read .v.vide{font-family:var(--sans); font-weight:400; font-size:17px; color:var(--ink-soft)}
 
+/* ---------- charte des icônes ---------- */
+.ico{width:1.5em; height:1.5em; flex:0 0 auto; vertical-align:-.36em}
+.fruit .ico{width:26px; height:26px; margin-right:1px}
+.etapes .ico-etape{position:absolute; right:12px; bottom:12px; width:52px; height:52px; opacity:.95}
+.porte .ico-porte{position:absolute; right:14px; bottom:14px; width:56px; height:56px; opacity:.95; z-index:1}
+.fruit-mois{width:30px; height:30px; flex:0 0 30px}
+.pluie svg{color:inherit}
+
 /* ---------- petits bonheurs ---------- */
 @keyframes tampon{
   0%{opacity:0; transform:translate(-50%,-50%) rotate(-13deg) scale(2.4)}
@@ -288,7 +296,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 .etapes li{
   position:relative; overflow:hidden;
   border:1px solid var(--line); border-radius:13px; background:var(--surface);
-  padding:16px 18px 18px 60px; display:flex; flex-direction:column; gap:4px;
+  padding:16px 76px 18px 60px; display:flex; flex-direction:column; gap:4px;
 }
 .etapes .num{
   position:absolute; left:16px; top:15px;
@@ -305,7 +313,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 .porte{
   position:relative; overflow:hidden; cursor:pointer; text-align:left;
   border:1px solid var(--line); border-radius:14px; background:var(--surface);
-  padding:18px 46px 20px 18px; display:flex; align-items:flex-start; gap:12px;
+  padding:18px 84px 20px 18px; display:flex; align-items:flex-start; gap:12px;
   transition:border-color .15s ease, transform .12s ease, box-shadow .15s ease;
 }
 .porte:hover{border-color:var(--leaf); transform:translateY(-2px); box-shadow:var(--shadow)}
@@ -317,7 +325,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 .porte-motif{position:absolute; right:-16px; top:-14px; width:108px; height:108px; opacity:.15; transform:rotate(12deg); transition:transform .25s ease, opacity .2s ease}
 .porte:hover .porte-motif{opacity:.22; transform:rotate(4deg) scale(1.05)}
 .porte-fleche{
-  position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  position:absolute; right:20px; top:20px;
   font-size:24px; color:var(--leaf); z-index:1;
 }
 .p-echanges{--t:var(--mangue)} .p-jardin{--t:var(--leaf)} .p-saison{--t:var(--flam)}
@@ -782,6 +790,76 @@ button{cursor:pointer}
     <ellipse cx="50" cy="32" rx="6" ry="4" transform="rotate(-25 50 32)"/>
     <ellipse cx="25" cy="29" rx="5" ry="3.4" transform="rotate(20 25 29)"/>
   </symbol>
+
+  <!-- charte illustrée : fruits et plantes de Saint-Barthélemy -->
+  <symbol id="i-mangue" viewBox="0 0 100 100">
+    <path d="M63 22c18 7 26 28 22 46-4 17-20 26-35 23C33 88 21 71 23 52 25 33 45 15 63 22z" fill="#F2A03D"/>
+    <path d="M63 22c18 7 26 28 22 46-4 17-20 26-35 23 21-11 30-31 28-48-1-11-7-17-15-21z" fill="#E2662B"/>
+    <path d="M60 23c-2-9 3-17 13-19 3 9-3 17-13 20z" fill="#2F7D4F"/>
+    <path d="M56 26c4-6 10-10 17-11-6 3-12 8-15 13z" fill="#6FB544"/>
+  </symbol>
+  <symbol id="i-citron" viewBox="0 0 100 100">
+    <circle cx="50" cy="58" r="29" fill="#A8CE3A"/>
+    <path d="M50 29a29 29 0 0 1 0 58c14-9 19-24 16-38-2-9-8-16-16-20z" fill="#7FA92A"/>
+    <path d="M48 30c-2-9 3-17 13-19 3 9-3 17-13 20z" fill="#2F7D4F"/>
+    <ellipse cx="39" cy="47" rx="7" ry="4" fill="#C7E06A" transform="rotate(-28 39 47)"/>
+  </symbol>
+  <symbol id="i-avocat" viewBox="0 0 100 100">
+    <path d="M50 16c13 0 22 13 24 27 2 17-8 34-24 34S24 60 26 43C28 29 37 16 50 16z" fill="#5E8C3A"/>
+    <path d="M50 16c13 0 22 13 24 27 2 17-8 34-24 34 11-8 16-22 15-36-1-11-6-20-15-25z" fill="#3C6B28"/>
+    <circle cx="50" cy="56" r="12" fill="#8B5E34"/>
+    <circle cx="46" cy="52" r="4" fill="#A97846"/>
+  </symbol>
+  <symbol id="i-pain" viewBox="0 0 100 100">
+    <circle cx="50" cy="57" r="31" fill="#7FB05A"/>
+    <path d="M50 26a31 31 0 0 1 0 62c15-10 20-26 17-41-2-9-9-17-17-21z" fill="#5F8E3E"/>
+    <g fill="#4A7A32"><circle cx="40" cy="46" r="2.6"/><circle cx="53" cy="42" r="2.6"/><circle cx="62" cy="54" r="2.6"/><circle cx="45" cy="60" r="2.6"/><circle cx="57" cy="68" r="2.6"/><circle cx="36" cy="66" r="2.6"/></g>
+    <path d="M47 27c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
+  </symbol>
+  <symbol id="i-corossol" viewBox="0 0 100 100">
+    <path d="M52 20c16 2 27 17 27 33 0 18-13 32-29 32S22 71 22 53c0-16 13-31 30-33z" fill="#7FB05A"/>
+    <path d="M52 20c16 2 27 17 27 33 0 18-13 32-29 32 14-10 20-26 18-41-1-11-7-19-16-24z" fill="#5F8E3E"/>
+    <g fill="#4A7A32"><path d="M37 40l5 4-5 4z"/><path d="M52 34l5 4-5 4z"/><path d="M65 46l5 4-5 4z"/><path d="M42 60l5 4-5 4z"/><path d="M58 66l5 4-5 4z"/></g>
+    <path d="M49 21c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
+  </symbol>
+  <symbol id="i-papaye" viewBox="0 0 100 100">
+    <path d="M50 16c15 0 25 16 25 34S64 86 50 86 25 68 25 50s10-34 25-34z" fill="#F0B93C"/>
+    <path d="M50 16c15 0 25 16 25 34S64 86 50 86c10-10 14-24 13-38-1-13-4-24-13-32z" fill="#E3822E"/>
+    <g fill="#4A3520"><circle cx="50" cy="48" r="3"/><circle cx="44" cy="56" r="3"/><circle cx="56" cy="56" r="3"/><circle cx="50" cy="63" r="3"/></g>
+    <path d="M48 17c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
+  </symbol>
+  <symbol id="i-cerise" viewBox="0 0 100 100">
+    <path d="M50 22c-8 12-20 20-24 32M50 22c6 13 15 22 20 32" stroke="#2F7D4F" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="33" cy="66" r="16" fill="#D8412E"/>
+    <circle cx="68" cy="68" r="14" fill="#B93122"/>
+    <ellipse cx="28" cy="60" rx="5" ry="3" fill="#EE7466" transform="rotate(-25 28 60)"/>
+    <path d="M50 22c6-6 14-8 22-6-4 7-13 11-22 10z" fill="#6FB544"/>
+  </symbol>
+  <symbol id="i-cannelle" viewBox="0 0 100 100">
+    <circle cx="50" cy="57" r="30" fill="#9FBF7A"/>
+    <path d="M50 27a30 30 0 0 1 0 60c14-10 19-26 16-41-2-8-8-15-16-19z" fill="#7FA45C"/>
+    <g stroke="#6B8F48" stroke-width="2.6" fill="none" stroke-linecap="round">
+      <path d="M34 42l8 7M50 36v9M66 42l-8 7M30 58l9 3M70 58l-9 3M42 72l5-8M58 72l-5-8"/>
+    </g>
+    <path d="M47 28c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
+  </symbol>
+  <symbol id="i-basilic" viewBox="0 0 100 100">
+    <path d="M50 88V34" stroke="#4A7A32" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M50 46c-4-12-14-18-27-18 2 13 12 20 27 20z" fill="#5E9B3C"/>
+    <path d="M50 60c4-12 14-18 27-18-2 13-12 20-27 20z" fill="#6FB544"/>
+    <path d="M50 30c-3-10-11-15-22-15 2 11 10 16 22 17z" fill="#2F7D4F"/>
+    <path d="M50 42c3-10 11-15 22-15-2 11-10 16-22 17z" fill="#5E9B3C"/>
+  </symbol>
+  <symbol id="i-piment" viewBox="0 0 100 100">
+    <path d="M34 28c15-4 32 5 40 20 9 17 5 38-10 45-9 4-18-1-19-10-1-9 6-13 5-23-1-13-12-21-21-24-5-2-4-7 5-8z" fill="#D8412E"/>
+    <path d="M74 48c9 17 5 38-10 45 12-13 14-31 10-45z" fill="#A82A1C"/>
+    <path d="M32 26c-6-4-6-13 1-17 6 3 9 10 7 16z" fill="#4A7A32"/>
+  </symbol>
+  <symbol id="i-prune" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="56" rx="27" ry="30" fill="#E8C13A"/>
+    <path d="M50 26c15 0 27 13 27 30S65 86 50 86c11-9 16-21 15-32-1-12-6-22-15-28z" fill="#CDA124"/>
+    <path d="M48 27c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
+  </symbol>
   <symbol id="f-mangue" viewBox="0 0 100 100" fill="currentColor">
     <path d="M58 22c18 2 30 18 30 36 0 20-16 34-34 34-18 0-32-13-32-31 0-22 18-41 36-39z"/>
     <path d="M57 23c-1-9 4-17 13-19 3 9-2 17-11 20z"/>
@@ -869,7 +947,7 @@ button{cursor:pointer}
       </svg>
       Jaden <span class="ph">nom provisoire</span>
     </span>
-    <svg class="fruit-mois" id="fruit-mois" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#f-mangue" fill="currentColor"/></svg>
+    <svg class="fruit-mois" id="fruit-mois" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#i-mangue"/></svg>
     <nav class="topnav" aria-label="Sections">
       <button class="navlink" data-go="accueil">Accueil</button>
       <button class="navlink" data-go="echanges">Les échanges</button>
@@ -2326,6 +2404,44 @@ button{cursor:pointer}
   var ver2 = document.getElementById('ver2');
   if(ver2 && ver){ ver2.textContent = ver.textContent + ' · '; }
 
+  var ICONE_FRUIT = {
+    'Mangue':'#i-mangue', 'Citron vert':'#i-citron', 'Avocat':'#i-avocat',
+    'Fruit à pain':'#i-pain', 'Corossol':'#i-corossol', 'Papaye':'#i-papaye',
+    'Cerise pays':'#i-cerise', 'Pomme-cannelle':'#i-cannelle',
+    'Ti-basilic':'#i-basilic', 'Prune de Cythère':'#i-prune'
+  };
+  var nsI = 'http://www.w3.org/2000/svg';
+  function poserIcone(cible, href, classe){
+    var sv = document.createElementNS(nsI,'svg');
+    sv.setAttribute('class', classe); sv.setAttribute('viewBox','0 0 100 100');
+    sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
+    var u = document.createElementNS(nsI,'use'); u.setAttribute('href', href);
+    sv.appendChild(u); cible.insertBefore(sv, cible.firstChild);
+    return sv;
+  }
+
+  // --- le calendrier des saisons prend ses illustrations
+  Array.prototype.forEach.call(document.querySelectorAll('.month .fruit'), function(f){
+    var nom = f.getAttribute('data-f');
+    if(ICONE_FRUIT[nom]){ poserIcone(f, ICONE_FRUIT[nom], 'ico'); }
+  });
+
+  // --- les étapes et les portes de l'accueil
+  var ETAPES = ['#i-mangue','#i-citron','#i-basilic'];
+  Array.prototype.forEach.call(document.querySelectorAll('.etapes li'), function(li, i){
+    var vieux = li.querySelector('.et-motif'); if(vieux){ vieux.remove(); }
+    poserIcone(li, ETAPES[i] || '#i-citron', 'ico-etape');
+  });
+  var PORTES = {'p-echanges':'#i-mangue','p-jardin':'#i-basilic','p-saison':'#i-corossol'};
+  Array.prototype.forEach.call(document.querySelectorAll('.porte'), function(po){
+    for(var c in PORTES){
+      if(po.classList.contains(c)){
+        var m = po.querySelector('.porte-motif'); if(m){ m.remove(); }
+        poserIcone(po, PORTES[c], 'ico-porte');
+      }
+    }
+  });
+
   var doux = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // --- les chiffres montent
@@ -2346,8 +2462,7 @@ button{cursor:pointer}
   });
 
   // --- une pluie de fruits quand on donne
-  var FRUITS = ['#f-mangue','#f-citron','#f-feuille','#f-piment'];
-  var TEINTES = ['#F3A72C','#A6D341','#42A470','#EE7A4C'];
+  var FRUITS = ['#i-mangue','#i-citron','#i-avocat','#i-piment','#i-cerise','#i-papaye'];
   function pluieDeFruits(){
     if(doux) return;
     var ciel = document.createElement('div');
@@ -2361,11 +2476,9 @@ button{cursor:pointer}
       sv.style.setProperty('--d', (1.5 + Math.random() * 1.1) + 's');
       sv.style.setProperty('--r', (Math.random() * 0.5) + 's');
       sv.style.setProperty('--tour', (Math.random() * 720 - 360) + 'deg');
-      sv.style.setProperty('--c', TEINTES[i % TEINTES.length]);
       sv.style.left = (Math.random() * 94) + '%';
       var u = document.createElementNS(ns,'use');
       u.setAttribute('href', FRUITS[i % FRUITS.length]);
-      u.setAttribute('fill','currentColor');
       sv.appendChild(u); ciel.appendChild(sv);
     }
     document.body.appendChild(ciel);
@@ -2377,12 +2490,8 @@ button{cursor:pointer}
   var fm = document.getElementById('fruit-mois');
   var moisCourant = document.querySelector('.month.now .fruit');
   if(fm && moisCourant){
-    var CORRESP = {'Mangue':'#f-mangue','Citron vert':'#f-citron','Avocat':'#f-feuille',
-                   'Fruit à pain':'#f-feuille','Corossol':'#f-feuille','Papaye':'#f-mangue',
-                   'Cerise pays':'#f-citron','Pomme-cannelle':'#f-mangue','Ti-basilic':'#f-feuille',
-                   'Prune de Cythère':'#f-citron'};
     var nomF = moisCourant.getAttribute('data-f');
-    fm.querySelector('use').setAttribute('href', CORRESP[nomF] || '#f-feuille');
+    fm.querySelector('use').setAttribute('href', ICONE_FRUIT[nomF] || '#i-basilic');
     fm.innerHTML = '<title>C\'est la saison : ' + nomF + '</title>' + fm.innerHTML;
   }
 

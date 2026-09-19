@@ -1,0 +1,1994 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jaden Saint-Barthélemy — maquette</title>
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Jaden Saint-Barth</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Faustina:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --ground:#E4EDDC; --surface:#FCFEF9; --surface-2:#EAF0E2;
+  --ink:#1B231B; --ink-soft:#586254; --line:#D3DCC8;
+  --leaf:#1F5D3C; --leaf-soft:#E3EDE5;
+  --flam:#BE3E19; --flam-soft:#F8E6DF;
+  --mangue:#9C6410; --mangue-soft:#F6EAD3;
+  --btn-bg:#1F5D3C; --btn-ink:#FCFEF9; --btn-hover:#154028; --surf-hover:#E6EEDD;
+  --chrome:#2A2E27; --chrome-ink:#E6E3D7; --chrome-line:#464B41;
+  --shadow:0 1px 2px rgba(27,45,27,.07), 0 10px 30px rgba(27,45,27,.09);
+  --serif:"Faustina",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#191509; --surface:#241F13; --surface-2:#30291A;
+    --ink:#F6EEDC; --ink-soft:#B5AC96; --line:#443B28;
+    --leaf:#8FD4A5; --leaf-soft:#22301F;
+    --flam:#FF9C6B; --flam-soft:#39231A;
+    --mangue:#F6C25F; --mangue-soft:#362A15;
+    --btn-bg:#8FD4A5; --btn-ink:#14180D; --btn-hover:#B0E6C2; --surf-hover:#342C1D; --btn-hover:#B0E6C2; --surf-hover:#342C1D;
+    --chrome:#0C0F09; --chrome-ink:#D7D3C5; --chrome-line:#2A3024;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#191509; --surface:#241F13; --surface-2:#30291A;
+  --ink:#F6EEDC; --ink-soft:#B5AC96; --line:#443B28;
+  --leaf:#8FD4A5; --leaf-soft:#22301F;
+  --flam:#FF9C6B; --flam-soft:#39231A;
+  --mangue:#F6C25F; --mangue-soft:#362A15;
+  --btn-bg:#8FD4A5; --btn-ink:#14180D;
+  --chrome:#0C0F09; --chrome-ink:#D7D3C5; --chrome-line:#2A3024;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:18px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--serif); font-weight:700; line-height:1.18; text-wrap:balance; margin:0}
+p{margin:0}
+button,select,input,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--leaf); outline-offset:2px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ---------- échafaudage maquette ---------- */
+.scaffold{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:50;
+  background:var(--chrome); color:var(--chrome-ink);
+  border-bottom:1px solid var(--chrome-line);
+}
+.scaffold-in{
+  max-width:1100px; margin:0 auto; padding:10px 16px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;
+}
+.scaffold .tag{
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+  border:1px solid var(--chrome-line); padding:3px 8px; border-radius:999px; white-space:nowrap;
+}
+.scaffold label{font-size:14px; color:var(--chrome-ink); opacity:.75}
+.scaffold select{
+  background:var(--chrome); color:var(--chrome-ink);
+  border:1px solid var(--chrome-line); border-radius:8px;
+  padding:8px 10px; font-size:15px; min-height:40px;
+}
+.scaffold .note{font-size:13.5px; opacity:.6; flex:1 1 220px; min-width:0}
+.scaffold-ctrl{display:contents}
+.scaffold-toggle{
+  display:none; align-items:center; gap:7px; margin-left:auto;
+  background:var(--chrome); color:var(--chrome-ink); border:1px solid var(--chrome-line);
+  border-radius:8px; padding:8px 12px; font-size:14px; min-height:40px; white-space:nowrap;
+}
+.scaffold-toggle[aria-expanded="true"]{background:var(--chrome-line)}
+@media (max-width:760px){
+  .scaffold-in{padding:8px 12px; gap:8px; flex-wrap:nowrap}
+  .scaffold .lbl-ecran{display:none}
+  .scaffold .tag{font-size:10px; padding:2px 7px}
+  .scaffold select#screenpick{flex:1 1 auto; min-width:0; font-size:14px; padding:7px 8px; min-height:38px}
+  .scaffold-toggle{display:inline-flex; flex:0 0 auto}
+  .scaffold-ctrl{
+    display:none; flex-basis:100%; width:100%;
+    flex-wrap:wrap; align-items:center; gap:8px 12px; padding-top:9px;
+  }
+  .scaffold-in:has(.scaffold-ctrl.ouvert){flex-wrap:wrap}
+  .scaffold-ctrl.ouvert{display:flex}
+  .scaffold .note{flex:1 1 100%; font-size:12.5px}
+}
+
+.fond{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.fond svg{position:absolute; width:min(46vw,520px); height:auto; opacity:.14}
+.fond .fond-a{top:-40px; left:-90px; transform:rotate(-8deg)}
+.fond .fond-b{bottom:-70px; right:-80px; transform:rotate(6deg) scaleX(-1)}
+.fond .leaf{fill:var(--leaf)}
+.fond .flower{fill:var(--flam)}
+
+.frise{
+  display:block; width:100%; height:92px; margin-top:10px;
+  opacity:.26; flex:0 0 auto;
+}
+.frise .leaf{fill:var(--leaf)}
+.frise .flower{fill:var(--flam)}
+
+.stage{position:relative; z-index:1; padding-block:24px 48px; padding-left:16px; padding-right:16px; display:flex; justify-content:center}
+.device{
+  width:100%; max-width:420px; background:var(--surface);
+  border:1px solid var(--line); border-radius:26px; box-shadow:var(--shadow);
+  overflow:hidden; display:flex; flex-direction:column; min-height:720px;
+}
+.device.wide{max-width:820px; border-radius:16px; min-height:640px}
+@media (max-width:520px){
+  .stage{padding-left:0; padding-right:0; padding-block:0 0}
+  .device,.device.wide{border:0; border-radius:0; box-shadow:none; min-height:calc(100dvh - 60px)}
+}
+
+/* ---------- barre d'app ---------- */
+.appbar{
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; border-bottom:1px solid var(--line); background:var(--surface);
+}
+.brand{display:flex; align-items:center; gap:9px; font-family:var(--serif); font-weight:700; font-size:21px; letter-spacing:-.01em}
+.brand .mark{width:26px; height:26px; flex:0 0 26px}
+.brand .ph{font-family:var(--sans); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-soft); border:1px dashed var(--line); padding:2px 5px; border-radius:5px}
+.appbar .spacer{flex:1}
+.linkish{background:none; border:0; padding:8px; color:var(--leaf); font-weight:600; font-size:15.5px; cursor:pointer; min-height:44px}
+.retour{
+  display:flex; align-items:center; gap:5px; flex:0 0 auto;
+  background:none; border:0; color:var(--leaf); font-weight:600; font-size:16px;
+  padding:8px 8px 8px 2px; margin-left:-2px; border-radius:9px; min-height:44px; cursor:pointer;
+}
+.retour svg{width:26px; height:26px}
+.retour-txt{display:none}
+.retour:hover{background:var(--leaf-soft)}
+#device[data-view="desktop"] .retour-txt{display:inline}
+@media (max-width:520px){ .brand .ph{display:none} }
+
+/* ---------- écrans ---------- */
+.screens{flex:1; min-height:0}
+.screen{padding:18px 16px 28px; display:flex; flex-direction:column; gap:18px}
+.screen.pad0{padding-left:0; padding-right:0}
+.page-h{display:flex; flex-direction:column; gap:4px}
+.page-h h1{font-size:27px}
+.page-h .sub{color:var(--ink-soft); font-size:15.5px}
+.eyebrow{font-size:11.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; color:var(--ink-soft)}
+
+/* ---------- bandeau nouvelle ---------- */
+.news{
+  background:var(--mangue-soft); border:1px solid var(--line); border-left:5px solid var(--mangue);
+  border-radius:10px; padding:13px 15px; display:flex; flex-direction:column; gap:5px;
+}
+.news .k{font-size:11.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; color:var(--mangue)}
+.news p{font-size:16.5px}
+
+/* ---------- fil ---------- */
+.feed{display:flex; flex-direction:column; gap:14px}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden; text-align:left; width:100%; cursor:pointer; padding:0;
+  display:flex; flex-direction:column;
+}
+.card:hover{border-color:var(--leaf)}
+.card .body{padding:14px 15px 15px; display:flex; flex-direction:column; gap:7px}
+.card h3{font-size:20px}
+.card .meta{font-size:14.5px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:4px 10px}
+.card .excerpt{font-size:16px; color:var(--ink-soft)}
+.thumb{height:150px; display:flex; align-items:flex-end; padding:10px; position:relative}
+.thumb .kind{
+  font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  background:var(--surface); color:var(--ink); padding:4px 9px; border-radius:999px; border:1px solid var(--line);
+}
+.thumb{overflow:hidden}
+.t-mangue{background:linear-gradient(145deg,#F3A72C,#D0661A)}
+.t-vert{background:linear-gradient(145deg,#42A470,#1C6B42)}
+.t-agrume{background:linear-gradient(145deg,#A6D341,#549A1F)}
+.t-terre{background:linear-gradient(145deg,#EE7A4C,#BB3F27)}
+.thumb .motif{
+  position:absolute; right:-16px; bottom:-22px; width:138px; height:138px;
+  color:#fff; opacity:.3; transform:rotate(-10deg); pointer-events:none;
+}
+.thumb .kind{position:relative; z-index:1}
+.cover .motif{width:190px; height:190px; right:-24px; bottom:-34px}
+
+.kicker{display:inline-flex; align-self:flex-start; align-items:center; gap:6px; font-size:11.5px; letter-spacing:.11em;
+  text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px}
+.k-donne{background:var(--leaf-soft); color:var(--leaf)}
+.k-cherche{background:var(--flam-soft); color:var(--flam)}
+.k-echange{background:var(--mangue-soft); color:var(--mangue)}
+.k-conseil{background:var(--surface-2); color:var(--ink-soft)}
+
+.byline{font-size:14px; color:var(--ink-soft); display:flex; align-items:center; gap:7px}
+.relay{
+  font-size:13.5px; color:var(--leaf); background:var(--leaf-soft);
+  border-radius:8px; padding:7px 10px; display:flex; gap:7px; align-items:flex-start;
+}
+
+/* ---------- carte de l'île ---------- */
+.isle{
+  color:var(--leaf); background:var(--surface-2); border:1px solid var(--line);
+  border-radius:12px; padding:10px 10px 6px;
+}
+.isle svg{width:100%; height:auto; display:block; touch-action:manipulation}
+.ci-land{fill:currentColor; opacity:.14}
+.ci-q{
+  fill:currentColor; fill-opacity:0; stroke:var(--surface); stroke-width:.55;
+  stroke-opacity:.9; cursor:pointer; transition:fill-opacity .12s ease;
+}
+.ci-q:hover{fill-opacity:.24}
+.ci-q.on{fill-opacity:.65}
+.isle-read{
+  display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;
+  padding:11px 13px; border:1px solid var(--line); border-radius:10px; background:var(--surface);
+}
+.isle-read .k{font-size:14.5px; color:var(--ink-soft)}
+.isle-read .v{font-family:var(--serif); font-weight:700; font-size:20px}
+.isle-read .v.vide{font-family:var(--sans); font-weight:400; font-size:17px; color:var(--ink-soft)}
+
+/* ---------- filtres ---------- */
+.filters{display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; scrollbar-width:thin}
+.chip{
+  white-space:nowrap; border:1px solid var(--line); background:var(--surface);
+  border-radius:999px; padding:9px 15px; font-size:15px; cursor:pointer; min-height:42px;
+}
+.chip[aria-pressed="true"]{background:var(--leaf); color:var(--btn-ink); border-color:var(--leaf); font-weight:600}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:var(--btn-ink)}
+
+/* ---------- boutons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  min-height:52px; padding:13px 20px; border-radius:11px; border:1px solid transparent;
+  font-size:17.5px; font-weight:600; cursor:pointer; text-decoration:none;
+}
+.btn-primary{background:var(--btn-bg); color:var(--btn-ink)}
+.btn-ghost{background:var(--surface); color:var(--ink); border-color:var(--line)}
+.btn-block{width:100%}
+
+/* ---------- fiche ---------- */
+.cover{height:210px; margin:0}
+.kv{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:11px; overflow:hidden}
+.kv div{display:flex; justify-content:space-between; gap:16px; padding:12px 15px; font-size:16.5px}
+.kv div+div{border-top:1px solid var(--line)}
+.kv dt,.kv .k2{color:var(--ink-soft)}
+.kv .v{font-weight:600; text-align:right}
+.expiry{font-size:14.5px; color:var(--ink-soft)}
+
+/* ---------- mur de connexion ---------- */
+.wall{
+  border:1px solid var(--line); border-radius:12px; padding:20px 18px;
+  background:var(--surface-2); display:flex; flex-direction:column; gap:14px; align-items:flex-start;
+}
+.wall h2{font-size:22px}
+.wall p{font-size:16.5px; color:var(--ink-soft)}
+
+/* ---------- formulaire ---------- */
+.field{display:flex; flex-direction:column; gap:7px}
+.field label{font-weight:600; font-size:16.5px}
+.field .hint{font-size:14.5px; color:var(--ink-soft)}
+.field input,.field select,.field textarea{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:13px 14px; font-size:17px; min-height:52px; width:100%;
+}
+.field textarea{min-height:96px; resize:vertical}
+.seg{display:flex; gap:8px; flex-wrap:wrap}
+.drop{
+  border:2px dashed var(--line); border-radius:11px; padding:22px 16px; text-align:center;
+  color:var(--ink-soft); font-size:16px; background:var(--surface-2);
+}
+
+/* ---------- article ---------- */
+.prose{display:flex; flex-direction:column; gap:14px; max-width:62ch}
+.prose h2{font-size:22px; margin-top:6px}
+.prose p{font-size:17.5px; line-height:1.62}
+.prose ul{margin:0; padding-left:22px; display:flex; flex-direction:column; gap:7px; font-size:17.5px}
+
+/* ---------- saison ---------- */
+.months{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px}
+.month{border:1px solid var(--line); border-radius:11px; padding:12px 13px; background:var(--surface); display:flex; flex-direction:column; gap:6px}
+.month.now{border-color:var(--mangue); background:var(--mangue-soft)}
+.month h3{font-size:16px; font-family:var(--sans); font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft)}
+.month.now h3{color:var(--mangue)}
+.month ul{list-style:none; margin:0; padding:0; font-size:16px; display:flex; flex-direction:column; gap:2px}
+.flag{font-size:14.5px; color:var(--ink-soft); border:1px dashed var(--line); border-radius:9px; padding:11px 13px; background:var(--surface-2)}
+
+/* ---------- tabbar ---------- */
+.tabbar{
+  display:flex; border-top:1px solid var(--line); background:var(--surface);
+  padding-bottom:env(safe-area-inset-bottom,0px); position:sticky; bottom:0;
+}
+.tab{
+  flex:1; background:none; border:0; cursor:pointer; padding:10px 4px 12px;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  font-size:12.5px; font-weight:600; color:var(--ink-soft); min-height:60px;
+}
+.tab svg{width:23px; height:23px}
+.tab[aria-current="page"]{color:var(--leaf)}
+
+/* ---------- admin ---------- */
+.admin{padding:20px 18px 30px; display:flex; flex-direction:column; gap:20px}
+.admin-top{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between}
+.metric{
+  border:1px solid var(--leaf); background:var(--leaf-soft); border-radius:13px;
+  padding:15px 18px; display:flex; flex-direction:column; gap:2px; min-width:230px;
+}
+.metric .n{font-family:var(--serif); font-size:42px; font-weight:700; line-height:1; color:var(--leaf); font-variant-numeric:tabular-nums}
+.metric .l{font-size:15px; color:var(--ink-soft)}
+.metric .l strong{color:var(--ink)}
+.atabs{display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:10px}
+.atab{border:1px solid var(--line); background:var(--surface); border-radius:9px; padding:9px 14px; font-size:15.5px; cursor:pointer; min-height:44px}
+.atab[aria-pressed="true"]{background:var(--ink); color:var(--ground); border-color:var(--ink); font-weight:600}
+.row{
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+  border:1px solid var(--line); border-radius:11px; padding:13px 15px; background:var(--surface);
+}
+.row .main{display:flex; flex-direction:column; gap:3px; min-width:0; flex:1 1 260px}
+.row .main .t{font-weight:600; font-size:17px}
+.row .main .s{font-size:14.5px; color:var(--ink-soft)}
+.row .acts{display:flex; gap:8px; flex-wrap:wrap}
+.mini{border:1px solid var(--line); background:var(--surface); border-radius:8px; padding:8px 12px; font-size:15px; cursor:pointer; min-height:42px}
+.mini.danger{color:var(--flam); border-color:var(--flam)}
+.mini.solid{background:var(--btn-bg); color:var(--btn-ink); border-color:var(--btn-bg); font-weight:600}
+.alert{border:1px solid var(--flam); background:var(--flam-soft); border-radius:10px; padding:12px 15px; font-size:16px}
+.stack{display:flex; flex-direction:column; gap:11px}
+.callout{
+  border:1px solid var(--line); border-left:5px solid var(--leaf); background:var(--leaf-soft);
+  border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; gap:6px;
+}
+.callout.alerte{border-left-color:var(--flam); background:var(--flam-soft)}
+.callout h3{font-size:18px}
+.callout p{font-size:16px; color:var(--ink-soft)}
+/* ---------- le hero ---------- */
+.hero{display:flex; flex-direction:column; gap:16px}
+.hero{position:relative}
+.hero-txt{display:flex; flex-direction:column; gap:12px; position:relative; z-index:1}
+.hero-map, .hero-stat, .hero-hint{position:relative; z-index:1}
+.hero h1{font-size:33px; letter-spacing:-.015em; max-width:16ch}
+.hero .lede{font-size:17.5px; color:var(--ink-soft); max-width:46ch}
+.hero-acts{display:flex; flex-wrap:wrap; gap:10px}
+.hero-acts .btn{flex:1 1 auto}
+.hero-map{display:flex; justify-content:center; color:var(--leaf); line-height:0}
+.hero-map svg{width:100%; max-width:322px; height:auto; display:block}
+.hero-map .ci-land{opacity:.13}
+.hero-map .ci-q{fill-opacity:0; stroke:var(--ground); stroke-width:.5; cursor:pointer; pointer-events:auto; transition:fill-opacity .12s ease}
+.hero-map .ci-q:hover{fill-opacity:.7}
+#heromap .ci-q:focus, #heromap .ci-q:focus-visible{outline:none}
+#heromap .ci-q:focus-visible{fill-opacity:.8; stroke:var(--ink); stroke-width:1.4}
+.hero-map .ci-q.on{fill-opacity:.55}
+.hero-stat{font-size:15px; color:var(--ink-soft)}
+.hero-stat strong{color:var(--ink); font-variant-numeric:tabular-nums}
+
+.feed-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.hero-map .ci-q.has{fill-opacity:.42}
+.hero-map .ci-q.on{fill-opacity:.92; stroke:var(--ink); stroke-width:.9}
+.hero-hint{font-size:14.5px; color:var(--ink-soft); text-align:center; margin-top:-4px}
+.vide{
+  border:1px dashed var(--line); background:var(--surface-2); border-radius:12px;
+  padding:20px 18px; display:flex; flex-direction:column; gap:12px;
+}
+.vide-t{font-family:var(--serif); font-weight:700; font-size:21px}
+.vide-s{font-size:16.5px; color:var(--ink-soft)}
+.vide-acts{display:flex; flex-wrap:wrap; gap:10px}
+
+/* ---------- navigation haute ---------- */
+.topnav{display:none; gap:2px}
+.navlink{
+  background:none; border:0; cursor:pointer; padding:9px 13px; border-radius:9px;
+  font-size:16px; font-weight:600; color:var(--ink-soft); min-height:44px;
+}
+.navlink:hover{background:var(--surface-2); color:var(--ink)}
+.navlink[aria-current="page"]{color:var(--leaf); background:var(--leaf-soft)}
+.navcta{display:none; min-height:44px; padding:10px 18px; font-size:16px}
+
+/* ---------- format ordinateur ---------- */
+#device[data-view="desktop"]{max-width:1440px; border-radius:18px; min-height:0}
+#device[data-view="desktop"].wide{max-width:1440px}
+#device[data-view="desktop"] .appbar{padding:15px 40px; gap:14px}
+#device[data-view="desktop"] .brand{font-size:23px}
+#device[data-view="desktop"] .topnav{display:flex}
+#device[data-view="desktop"] .navcta{display:inline-flex}
+#device[data-view="desktop"] .tabbar{display:none}
+#device[data-view="desktop"] .screen{padding:34px 40px 52px; gap:26px}
+#device[data-view="desktop"] .screen.pad0{padding-left:0; padding-right:0}
+#device[data-view="desktop"] .page-h h1{font-size:36px}
+#device[data-view="desktop"] .page-h .sub{font-size:17.5px}
+#device[data-view="desktop"] .feed{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(296px,1fr)); gap:20px; align-items:start;
+}
+#device[data-view="desktop"] .months{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+#device[data-view="desktop"] .filters{flex-wrap:wrap; overflow:visible}
+#device[data-view="desktop"] #s-connexion,
+#device[data-view="desktop"] #s-publier{max-width:620px; margin:0 auto; width:100%}
+#device[data-view="desktop"] #s-annonce > div,
+#device[data-view="desktop"] #s-article > div{
+  max-width:720px; margin:0 auto; padding-left:40px; padding-right:40px;
+}
+#device[data-view="desktop"] .hero{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  grid-template-areas:"txt map" "stat map";
+  align-items:center; gap:10px 34px; padding-block:14px 6px;
+}
+#device[data-view="desktop"] .hero-txt{grid-area:txt; gap:16px}
+#device[data-view="desktop"] .hero-map{grid-area:map}
+#device[data-view="desktop"] .hero-map svg{max-width:none}
+#device[data-view="desktop"] .hero-stat{grid-area:stat; align-self:start}
+#device[data-view="desktop"] .hero-hint{grid-area:map; align-self:end; margin-top:0}
+#device[data-view="desktop"] .hero h1{font-size:50px; line-height:1.06; max-width:13ch}
+#device[data-view="desktop"] .hero .lede{font-size:19px}
+#device[data-view="desktop"] .hero-acts .btn{flex:0 0 auto}
+#device[data-view="desktop"] .hero .ci-q{stroke:var(--surface)}
+#device[data-view="desktop"] .isle{max-width:460px}
+#device[data-view="desktop"] .admin{padding:34px 40px 52px}
+#device[data-view="desktop"] .frise{height:150px}
+#device[data-view="desktop"] .feed{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+@media (max-width:860px){
+  #device[data-view="desktop"] .hero{grid-template-columns:1fr; grid-template-areas:"txt" "map" "stat"}
+  #device[data-view="desktop"] .hero h1{font-size:36px; max-width:18ch}
+}
+
+.month ul{gap:1px}
+.fruit{
+  display:flex; align-items:center; gap:8px; width:100%; text-align:left;
+  background:none; border:0; padding:6px 7px; margin-left:-7px; border-radius:8px;
+  font-size:16.5px; cursor:pointer; min-height:38px; color:inherit;
+}
+.fruit:hover{background:var(--surface-2)}
+.month.now .fruit:hover{background:rgba(0,0,0,.06)}
+.fruit[aria-pressed="true"]{background:var(--leaf); color:var(--btn-ink); font-weight:600}
+.fruit .cloche{width:15px; height:15px; flex:0 0 15px; opacity:0; color:var(--mangue)}
+.fruit.suivi .cloche{opacity:1}
+.fruit[aria-pressed="true"] .cloche{color:var(--btn-ink)}
+.apanel{display:flex; flex-direction:column; gap:14px}
+.vide-min{
+  border:1px dashed var(--line); background:var(--surface-2); border-radius:11px;
+  padding:16px 16px; font-size:16.5px; color:var(--ink-soft);
+}
+.suivis{
+  display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline;
+  border:1px solid var(--line); border-left:5px solid var(--mangue);
+  background:var(--mangue-soft); border-radius:10px; padding:12px 15px;
+}
+.suivis .k{font-size:11.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; color:var(--mangue)}
+.suivis .v{font-size:16.5px; font-weight:600}
+.detail{
+  border:1px solid var(--leaf); background:var(--leaf-soft); border-radius:12px;
+  padding:18px 18px; display:flex; flex-direction:column; gap:12px;
+}
+.detail h3{font-size:23px}
+.detail p{font-size:16.5px}
+
+.accord{
+  display:flex; gap:12px; align-items:flex-start; cursor:pointer;
+  border:1px solid var(--line); border-left:5px solid var(--flam);
+  background:var(--flam-soft); border-radius:11px; padding:14px 16px; font-size:16px;
+}
+.accord input{width:24px; height:24px; flex:0 0 24px; margin:2px 0 0; accent-color:var(--leaf)}
+
+/* ---------- photos ---------- */
+.bienvenue{display:flex; flex-direction:column; gap:14px; align-items:flex-start; padding-top:8px}
+.bienvenue .coche{width:76px; height:76px}
+.bienvenue h1{font-size:29px}
+.bienvenue .lede{font-size:17.5px; color:var(--ink-soft); max-width:48ch}
+#device[data-view="desktop"] .bienvenue h1{font-size:38px}
+
+.apercu{display:flex; flex-wrap:wrap; gap:10px}
+.apercu:empty{display:none}
+.vignette{
+  position:relative; width:118px; border:1px solid var(--line);
+  border-radius:10px; overflow:hidden; background:var(--surface);
+}
+.vignette img{display:block; width:100%; height:92px; object-fit:cover}
+.vignette .poids{display:block; padding:6px 8px; font-size:12.5px; color:var(--ink-soft); line-height:1.35}
+.vignette .poids b{color:var(--leaf); font-variant-numeric:tabular-nums}
+.vignette .oter{
+  position:absolute; top:5px; right:5px; width:28px; height:28px; border-radius:50%;
+  border:0; background:rgba(17,21,14,.66); color:#fff; font-size:17px; line-height:1;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.photo-note{font-size:14px; color:var(--ink-soft)}
+
+/* ---------- savoir où est la souris ---------- */
+button{cursor:pointer}
+.btn,.mini,.chip,.tab,.atab,.navlink,.linkish,.card,.fruit,.drop,.accord{
+  transition:background-color .12s ease, border-color .12s ease, color .12s ease,
+             box-shadow .12s ease, transform .1s ease;
+}
+.btn-primary:hover,.mini.solid:hover{background:var(--btn-hover); border-color:var(--btn-hover)}
+.btn-ghost:hover,.mini:hover,.chip:hover{background:var(--surf-hover); border-color:var(--leaf)}
+.mini.danger:hover{background:var(--flam-soft); border-color:var(--flam)}
+.chip[aria-pressed="true"]:hover{background:var(--btn-hover); border-color:var(--btn-hover)}
+.atab:hover{background:var(--surf-hover); border-color:var(--leaf)}
+.atab[aria-pressed="true"]:hover{background:var(--ink-soft); border-color:var(--ink-soft)}
+.tab:hover{background:var(--surf-hover); color:var(--ink)}
+.linkish:hover{background:var(--leaf-soft); border-radius:8px}
+.drop:hover{border-color:var(--leaf); background:var(--surf-hover)}
+.accord:hover{background:var(--surface-2)}
+.card{box-shadow:0 0 0 rgba(0,0,0,0)}
+.card:hover{border-color:var(--leaf); box-shadow:var(--shadow); transform:translateY(-2px)}
+.btn:active,.mini:active,.chip:active,.atab:active,.tab:active,.navlink:active{transform:translateY(1px)}
+.card:active{transform:translateY(0)}
+@media (hover:none){
+  .card:hover{transform:none; box-shadow:0 0 0 rgba(0,0,0,0)}
+}
+
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+
+  <symbol id="v-cactus" viewBox="0 0 100 100">
+    <rect x="45" y="84" width="10" height="16" rx="2"/>
+    <ellipse cx="50" cy="60" rx="18" ry="27"/>
+    <ellipse cx="26" cy="46" rx="10" ry="16" transform="rotate(-24 26 46)"/>
+    <ellipse cx="74" cy="52" rx="9" ry="14" transform="rotate(22 74 52)"/>
+  </symbol>
+  <symbol id="v-raisinier" viewBox="0 0 100 100">
+    <rect x="47" y="44" width="6" height="56" rx="3"/>
+    <circle cx="28" cy="48" r="16"/><circle cx="71" cy="39" r="18"/><circle cx="47" cy="19" r="13"/>
+  </symbol>
+  <symbol id="v-latanier" viewBox="0 0 100 100">
+    <rect x="47" y="54" width="6" height="46" rx="3"/>
+    <path d="M50 56 46 12h8z" transform="rotate(-62 50 56)"/>
+    <path d="M50 56 46 10h8z" transform="rotate(-41 50 56)"/>
+    <path d="M50 56 46 6h8z"  transform="rotate(-20 50 56)"/>
+    <path d="M50 56 46 4h8z"/>
+    <path d="M50 56 46 6h8z"  transform="rotate(20 50 56)"/>
+    <path d="M50 56 46 10h8z" transform="rotate(41 50 56)"/>
+    <path d="M50 56 46 12h8z" transform="rotate(62 50 56)"/>
+  </symbol>
+  <symbol id="v-bougain" viewBox="0 0 100 100">
+    <path d="M56 100C56 70 50 46 33 21l5-4c18 26 24 53 24 83z"/>
+    <ellipse cx="44" cy="58" rx="11" ry="4.5" transform="rotate(-24 44 58)"/>
+    <ellipse cx="62" cy="76" rx="10" ry="4" transform="rotate(-18 62 76)"/>
+  </symbol>
+  <symbol id="v-aloes" viewBox="0 0 100 100">
+    <path d="M50 100C44 72 40 40 46 8c6 32 10 64 4 92z"/>
+    <path d="M50 100C44 72 40 40 46 8c6 32 10 64 4 92z" transform="rotate(-32 50 100)"/>
+    <path d="M50 100C44 72 40 40 46 8c6 32 10 64 4 92z" transform="rotate(32 50 100)"/>
+    <path d="M50 100C46 78 44 54 48 30c4 24 6 48 2 70z" transform="rotate(-58 50 100)"/>
+    <path d="M50 100C46 78 44 54 48 30c4 24 6 48 2 70z" transform="rotate(58 50 100)"/>
+  </symbol>
+  <symbol id="v-flamboyant" viewBox="0 0 100 100">
+    <path d="M47 100c0-32 1-54 7-78l5 2c-6 23-7 46-7 76z"/>
+    <ellipse cx="33" cy="54" rx="15" ry="4" transform="rotate(-16 33 54)"/>
+    <ellipse cx="68" cy="44" rx="15" ry="4" transform="rotate(14 68 44)"/>
+    <ellipse cx="35" cy="72" rx="13" ry="3.6" transform="rotate(-13 35 72)"/>
+    <ellipse cx="66" cy="62" rx="12" ry="3.4" transform="rotate(12 66 62)"/>
+  </symbol>
+  <symbol id="fl-bougain" viewBox="0 0 100 100">
+    <g transform="translate(34,18)"><path d="M0 0 12-6 6 8z"/><path d="M0 0-11-5-5 9z"/><path d="M0 0 2-12 11-3z"/></g>
+    <g transform="translate(51,44) scale(.8)"><path d="M0 0 12-6 6 8z"/><path d="M0 0-11-5-5 9z"/><path d="M0 0 2-12 11-3z"/></g>
+    <g transform="translate(64,64) scale(.62)"><path d="M0 0 12-6 6 8z"/><path d="M0 0-11-5-5 9z"/><path d="M0 0 2-12 11-3z"/></g>
+  </symbol>
+  <symbol id="fl-flamboyant" viewBox="0 0 100 100">
+    <g transform="translate(53,20)">
+      <ellipse cx="0" cy="0" rx="9" ry="5" transform="rotate(-20)"/>
+      <ellipse cx="7" cy="-6" rx="8" ry="4.5" transform="rotate(30 7 -6)"/>
+      <ellipse cx="-8" cy="-4" rx="8" ry="4.5" transform="rotate(-50 -8 -4)"/>
+    </g>
+    <g transform="translate(72,30) scale(.7)">
+      <ellipse cx="0" cy="0" rx="9" ry="5" transform="rotate(-20)"/>
+      <ellipse cx="7" cy="-6" rx="8" ry="4.5" transform="rotate(30 7 -6)"/>
+      <ellipse cx="-8" cy="-4" rx="8" ry="4.5" transform="rotate(-50 -8 -4)"/>
+    </g>
+  </symbol>
+  <symbol id="fl-cactus" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="32" rx="6" ry="4" transform="rotate(-25 50 32)"/>
+    <ellipse cx="25" cy="29" rx="5" ry="3.4" transform="rotate(20 25 29)"/>
+  </symbol>
+  <symbol id="f-mangue" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M58 22c18 2 30 18 30 36 0 20-16 34-34 34-18 0-32-13-32-31 0-22 18-41 36-39z"/>
+    <path d="M57 23c-1-9 4-17 13-19 3 9-2 17-11 20z"/>
+  </symbol>
+  <symbol id="f-citron" viewBox="0 0 100 100" fill="currentColor">
+    <circle cx="50" cy="59" r="31"/>
+    <path d="M50 28c-2-9 3-17 12-19 3 9-2 17-11 20z"/>
+  </symbol>
+  <symbol id="f-feuille" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M53 90c0-31 7-53 35-65 4 31-9 53-35 65z"/>
+    <path d="M47 90C47 63 41 45 15 33c-4 29 7 48 32 57z"/>
+  </symbol>
+  <symbol id="f-piment" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M30 27c14-4 30 4 38 18 9 16 6 36-8 44-9 5-18 1-19-8-1-8 5-12 4-22-1-12-11-19-19-22-4-2-4-8 4-10z"/>
+    <path d="M28 25c-6-4-6-12 0-16 6 3 9 9 7 15z"/>
+  </symbol>
+</svg>
+
+<div class="scaffold">
+  <div class="scaffold-in">
+    <span class="tag">Maquette</span>
+    <label for="screenpick" class="lbl-ecran">Écran</label>
+    <select id="screenpick">
+      <option value="accueil">1 · Accueil (le fil)</option>
+      <option value="echanges">2 · Les échanges</option>
+      <option value="annonce">3 · Fiche d'une annonce</option>
+      <option value="connexion">4 · Mur de connexion</option>
+      <option value="publier">5 · Publier</option>
+      <option value="conseils">6 · Le jardin (les notes)</option>
+      <option value="article">7 · Une note</option>
+      <option value="saison">8 · La saison</option>
+      <option value="admin">9 · Console de l'administrateur</option>
+      <option value="note">10 · Console — écrire une note</option>
+      <option value="bienvenue">11 · Compte créé</option>
+    </select>
+    <button class="scaffold-toggle" id="scaffold-toggle" aria-expanded="false" aria-controls="scaffold-ctrl">Réglages</button>
+
+    <div class="scaffold-ctrl" id="scaffold-ctrl">
+    <label for="themepick">Thème</label>
+    <select id="themepick">
+      <option value="auto">Système</option>
+      <option value="light">Clair</option>
+      <option value="dark">Sombre</option>
+    </select>
+    <label for="viewpick">Affichage</label>
+    <select id="viewpick">
+      <option value="desktop">Ordinateur</option>
+      <option value="phone">Téléphone</option>
+    </select>
+    <span class="note">Données fictives. Le nom « Jaden » est un remplaçant provisoire.</span>
+    </div>
+  </div>
+</div>
+
+<div class="fond" aria-hidden="true">
+  <svg class="fond-a" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+    <use class="leaf" href="#v-bougain" x="10" y="20" width="190" height="190"/>
+    <use class="flower" href="#fl-bougain" x="10" y="20" width="190" height="190"/>
+    <use class="leaf" href="#v-raisinier" x="130" y="100" width="165" height="165"/>
+  </svg>
+  <svg class="fond-b" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+    <use class="leaf" href="#v-latanier" x="5" y="90" width="180" height="180"/>
+    <use class="leaf" href="#v-flamboyant" x="120" y="35" width="195" height="195"/>
+    <use class="flower" href="#fl-flamboyant" x="120" y="35" width="195" height="195"/>
+  </svg>
+</div>
+
+<main class="stage">
+<div class="device" id="device">
+
+  <header class="appbar">
+    <button class="retour" id="btn-retour" hidden aria-label="Revenir à l'écran précédent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 19 8 12l7-7"/></svg>
+      <span class="retour-txt">Retour</span>
+    </button>
+    <span class="brand">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21c0-6 3.5-10 9-11-1 6-4.5 9.5-9 11z" fill="var(--leaf)"/>
+        <path d="M12 21C9 16 5 14 3 8c5 .5 8 3.5 9 13z" fill="var(--mangue)"/>
+      </svg>
+      Jaden <span class="ph">nom provisoire</span>
+    </span>
+    <nav class="topnav" aria-label="Sections">
+      <button class="navlink" data-go="accueil">Accueil</button>
+      <button class="navlink" data-go="echanges">Les échanges</button>
+      <button class="navlink" data-go="conseils">Le jardin</button>
+      <button class="navlink" data-go="saison">La saison</button>
+    </nav>
+    <span class="spacer"></span>
+    <button class="btn btn-primary navcta" data-go="publier">Publier</button>
+    <button class="linkish" id="btn-compte" data-go="connexion">Se connecter</button>
+  </header>
+
+  <div class="screens">
+
+  <!-- 1 ACCUEIL -->
+  <section class="screen" id="s-accueil">
+
+    <section class="hero">
+      <div class="hero-txt">
+        <span class="eyebrow">Saint-Barthélemy</span>
+        <h1>Ce qui pousse ici se partage.</h1>
+        <p class="lede">L'arbre a donné d'un coup, le voisin cherche des boutures. Déposez ce que vous avez en trop, prenez ce dont vous avez besoin. Rien ne se vend ici.</p>
+        <div class="hero-acts">
+          <button class="btn btn-primary" data-go="echanges">Faire le tour des jardins</button>
+          <button class="btn btn-ghost" data-go="publier">Mon jardin déborde</button>
+        </div>
+      </div>
+      <div class="hero-map" id="heromap"><svg viewBox="0 0 200 124.1" aria-hidden="true" focusable="false"><path class="ci-land" d="M3.6 3.6L4.1 5.0L10.7 5.8L13.8 9.4L13.5 12.7L10.5 17.9L0.0 18.7L0.6 21.2L3.3 20.6L8.5 22.8L10.2 32.2L17.9 35.8L18.2 38.5L20.6 39.1L21.5 41.5L31.4 51.4L40.7 50.3L42.9 52.5L42.9 55.6L50.1 60.5L51.2 63.0L48.7 65.7L54.5 72.1L59.7 80.9L56.7 83.1L53.4 78.4L53.9 76.5L49.5 74.3L46.8 77.0L48.7 82.0L55.6 88.6L58.9 88.0L62.4 90.5L61.6 93.8L68.0 102.9L72.9 105.9L75.4 111.7L79.8 115.5L80.1 121.0L85.0 124.1L88.3 124.1L93.8 109.5L100.1 107.6L108.9 119.7L110.6 116.9L110.9 112.0L112.5 110.9L114.4 113.1L117.2 113.3L118.3 104.3L126.8 100.1L130.7 100.7L132.9 105.9L137.0 104.5L138.1 110.6L142.8 115.3L148.8 112.5L150.8 108.9L150.8 94.4L153.5 91.1L171.7 83.4L175.5 79.0L182.9 76.5L188.2 80.6L189.0 84.2L192.3 84.7L193.9 82.5L192.3 68.5L197.0 64.6L199.2 59.1L197.8 55.3L200.0 47.6L198.3 44.3L192.3 51.7L187.9 53.1L187.6 57.2L183.5 57.5L180.5 54.5L183.2 48.7L181.0 41.5L176.6 42.1L176.1 47.0L171.9 50.3L168.4 49.2L165.3 45.7L166.4 39.3L169.2 38.5L168.1 36.9L163.1 39.6L161.8 38.8L158.7 41.5L157.4 45.9L153.2 45.7L151.0 42.4L157.4 34.9L154.6 32.2L154.6 27.2L153.0 30.8L150.5 30.8L148.0 33.3L144.2 33.0L143.9 30.8L141.1 29.4L141.1 24.5L139.5 23.1L133.1 28.6L133.7 37.1L126.8 45.4L124.6 51.2L119.1 54.2L112.2 54.2L108.7 51.4L110.0 47.9L106.7 47.3L95.5 55.8L94.9 57.5L97.1 60.2L95.5 62.7L91.9 64.4L89.7 62.7L85.6 63.5L81.2 60.8L77.6 56.1L77.3 53.6L80.6 50.6L79.2 45.4L76.8 44.8L73.5 46.5L69.1 40.7L68.5 36.0L71.0 34.7L70.2 29.7L68.2 28.6L63.5 30.3L60.8 29.4L58.9 27.5L58.0 20.1L55.3 16.2L47.0 18.7L45.1 22.6L39.1 23.9L32.7 22.6L29.2 17.1L28.6 20.4L24.5 22.3L20.6 17.9L19.5 11.8L14.9 9.6L17.3 5.5L14.6 1.1L15.1 0.0L7.4 0.8Z"/><path class="ci-q" data-q="Colombier" d="M3.5 3.5 L4.0 5.0 L10.6 5.8 L13.8 9.4 L13.5 12.6 L10.5 17.9 L0.0 18.6 L0.5 21.1 L3.4 20.5 L8.2 22.6 L8.6 23.1 L10.1 32.1 L17.6 35.6 L18.1 38.5 L20.4 39.0 L21.5 41.5 L31.4 51.4 L36.5 50.8 L37.5 49.0 L39.1 48.1 L44.0 48.4 L44.6 47.2 L44.2 45.5 L46.1 45.0 L47.2 45.6 L48.2 47.4 L51.9 47.9 L52.8 48.5 L53.5 49.8 L57.0 51.1 L56.5 49.0 L56.4 44.8 L54.6 43.2 L52.1 42.6 L51.5 41.9 L47.0 42.2 L44.5 39.9 L43.5 38.0 L41.0 37.9 L40.0 35.1 L37.2 30.5 L37.4 29.0 L38.8 26.8 L39.2 23.9 L32.6 22.5 L29.1 17.0 L28.5 20.2 L24.6 22.2 L20.5 17.9 L19.5 11.8 L15.0 9.5 L17.2 5.5 L14.5 1.0 L15.0 0.0 L7.4 0.8Z"><title>Colombier</title></path><path class="ci-q" data-q="Corossol" d="M52.6 48.5 L50.8 47.6 L48.2 47.5 L47.1 45.6 L46.1 45.1 L45.1 45.6 L44.4 45.5 L44.8 47.2 L44.0 48.5 L39.1 48.2 L37.6 49.0 L36.6 50.8 L40.6 50.2 L42.9 52.5 L42.9 55.5 L43.6 56.0 L44.9 55.4 L46.4 53.5 L49.5 53.4 L50.1 52.2 L52.4 50.5 L52.9 49.2Z"><title>Corossol</title></path><path class="ci-q" data-q="Terre Neuve · Merlette" d="M39.4 23.8 L38.9 26.8 L37.5 29.0 L37.4 30.5 L40.1 35.1 L41.1 37.9 L43.5 37.9 L44.6 39.9 L47.0 42.1 L51.5 41.8 L52.6 42.8 L54.6 43.1 L55.8 40.0 L55.6 38.1 L56.1 35.4 L55.5 25.1 L52.9 22.5 L48.9 23.9 L45.0 25.8 L41.8 24.8 L40.1 23.6Z"><title>Terre Neuve · Merlette</title></path><path class="ci-q" data-q="Anse des Flamands" d="M57.0 18.6 L55.2 16.1 L47.0 18.6 L45.0 22.5 L40.2 23.6 L43.5 25.4 L45.0 25.6 L48.9 23.8 L52.9 22.4 L55.6 20.2Z"><title>Anse des Flamands</title></path><path class="ci-q" data-q="Public" d="M53.0 49.4 L52.5 50.5 L50.8 51.8 L49.5 53.5 L46.4 53.6 L44.9 55.5 L43.8 56.0 L50.0 60.5 L51.1 63.0 L48.6 65.6 L51.8 69.0 L53.9 67.0 L55.9 66.9 L57.4 67.2 L59.0 66.9 L61.5 64.1 L60.8 58.2 L60.0 56.4 L58.5 55.0 L57.4 51.6Z"><title>Public</title></path><path class="ci-q" data-q="Gustavia" d="M61.8 64.1 L59.0 67.0 L57.4 67.4 L55.9 67.0 L53.9 67.1 L51.9 69.0 L54.6 72.1 L59.5 81.0 L56.6 83.0 L53.4 78.4 L53.9 76.5 L49.5 74.2 L46.8 77.0 L48.6 82.0 L55.5 88.5 L58.9 88.0 L61.2 89.8 L61.8 89.1 L61.6 88.6 L62.6 87.6 L63.8 87.0 L65.6 86.8 L66.8 86.0 L66.5 82.8 L66.0 82.4 L66.0 80.9 L66.8 77.5 L68.1 75.6 L66.6 71.0 L63.6 67.6 L63.0 64.9 L62.5 64.2Z"><title>Gustavia</title></path><path class="ci-q" data-q="Anse des Cayes · Quartier du Roy" d="M57.0 18.8 L55.6 20.4 L53.0 22.4 L55.6 25.1 L56.0 28.1 L56.1 37.0 L55.8 38.1 L55.9 40.0 L55.1 41.4 L54.8 43.4 L56.5 44.8 L56.6 49.0 L59.0 55.6 L60.2 56.6 L63.9 55.4 L68.1 55.6 L67.6 53.9 L68.8 50.5 L69.5 50.0 L71.4 49.8 L73.2 48.1 L73.5 47.4 L73.2 46.1 L69.2 41.0 L68.9 40.0 L68.5 36.0 L71.0 34.6 L70.0 29.5 L68.1 28.5 L63.6 30.2 L60.8 29.4 L58.9 27.5 L58.0 20.0Z"><title>Anse des Cayes · Quartier du Roy</title></path><path class="ci-q" data-q="Saint-Jean" d="M60.4 56.8 L61.4 60.2 L61.6 64.0 L62.5 64.1 L63.1 64.9 L63.8 67.6 L66.8 71.0 L68.1 75.4 L71.4 78.5 L76.2 79.4 L77.6 81.4 L78.2 84.5 L82.1 86.1 L85.4 86.6 L88.2 85.9 L89.5 85.0 L90.4 83.4 L93.0 81.8 L93.9 81.9 L95.1 84.0 L96.0 84.2 L97.2 82.8 L99.6 83.9 L100.5 83.1 L102.1 82.6 L102.5 82.1 L102.4 81.5 L99.2 78.6 L99.5 75.4 L100.2 74.4 L101.9 73.9 L103.5 71.4 L106.1 70.8 L108.5 67.5 L108.2 63.8 L107.2 62.4 L106.0 61.5 L102.6 62.4 L101.9 62.1 L101.8 59.8 L99.5 56.9 L99.9 54.9 L98.9 53.1 L95.8 55.5 L94.9 57.5 L97.0 60.1 L95.6 62.5 L92.0 64.4 L89.6 62.6 L85.5 63.5 L81.2 60.9 L77.5 56.0 L77.2 53.5 L80.5 50.4 L79.1 45.4 L76.9 44.8 L73.4 46.4 L73.4 48.1 L71.4 49.9 L68.9 50.5 L67.8 53.9 L68.2 55.0 L68.1 55.8 L63.9 55.5Z"><title>Saint-Jean</title></path><path class="ci-q" data-q="Lurin · Gouverneur" d="M68.2 75.6 L66.9 77.5 L66.1 80.9 L66.1 82.4 L66.6 82.8 L66.9 86.0 L65.6 86.9 L63.5 87.2 L61.8 88.6 L61.9 89.1 L61.4 89.8 L62.4 90.6 L61.5 93.8 L67.9 102.8 L72.9 105.9 L75.4 111.6 L79.8 115.5 L80.0 121.0 L85.0 124.0 L88.2 124.0 L94.0 109.4 L100.0 107.5 L104.1 112.9 L104.9 110.1 L104.9 107.4 L107.0 104.4 L106.0 101.8 L105.6 98.2 L103.4 94.9 L101.8 93.6 L100.1 92.9 L96.9 93.1 L94.6 91.5 L94.8 90.1 L95.6 88.9 L95.6 87.9 L97.0 86.6 L96.6 85.4 L95.9 84.4 L95.0 84.0 L93.9 82.0 L92.6 82.0 L91.0 83.0 L89.0 85.6 L87.6 86.2 L85.4 86.8 L82.1 86.2 L78.1 84.5 L77.5 81.4 L76.2 79.5 L71.4 78.6Z"><title>Lurin · Gouverneur</title></path><path class="ci-q" data-q="Grande &amp; Petite Saline" d="M125.1 58.5 L123.8 58.5 L122.2 60.4 L120.4 60.4 L119.0 61.5 L118.2 64.0 L116.0 66.6 L114.9 66.9 L113.6 65.9 L110.5 67.2 L108.8 67.2 L106.1 70.9 L103.5 71.5 L103.0 72.8 L101.9 74.0 L100.0 74.8 L99.4 76.2 L99.4 78.6 L102.5 81.5 L102.5 82.4 L99.6 84.0 L97.2 82.9 L96.0 84.4 L97.1 86.6 L95.8 87.9 L95.8 88.9 L94.9 90.1 L94.8 91.5 L96.9 93.0 L100.1 92.8 L101.8 93.5 L103.5 94.9 L105.8 98.2 L106.1 101.8 L107.1 104.4 L105.0 107.4 L105.0 110.1 L104.1 113.1 L108.9 119.6 L110.5 116.9 L111.0 111.9 L112.5 110.9 L114.4 113.0 L117.1 113.2 L118.1 104.8 L118.5 104.1 L127.1 100.0 L130.8 100.9 L132.9 105.9 L135.9 104.9 L135.4 101.6 L135.8 97.2 L135.2 93.9 L134.8 92.8 L133.8 92.0 L133.5 90.9 L132.5 90.2 L132.4 88.5 L130.8 86.0 L130.8 85.2 L129.6 84.9 L127.4 83.0 L125.5 80.9 L125.2 79.2 L126.6 77.9 L127.8 75.2 L127.4 72.5 L125.4 69.2 L125.6 66.1 L126.1 65.5 L128.6 65.5 L130.1 64.8 L131.6 62.2 L130.9 60.4 L127.0 59.9Z"><title>Grande &amp; Petite Saline</title></path><path class="ci-q" data-q="Lorient · Camaruche" d="M135.0 45.2 L134.4 44.6 L128.9 44.0 L128.2 43.5 L126.5 45.9 L124.5 51.1 L119.0 54.1 L112.1 54.1 L108.6 51.4 L110.0 47.9 L106.6 47.2 L99.0 53.1 L100.0 54.9 L99.6 56.9 L101.9 59.8 L102.1 62.2 L106.0 61.4 L107.8 62.8 L108.4 63.8 L108.5 67.2 L110.5 67.1 L113.6 65.8 L114.6 66.6 L115.5 66.8 L118.1 64.0 L118.6 61.8 L120.4 60.2 L122.2 60.2 L123.8 58.4 L125.1 58.4 L127.0 59.8 L130.4 60.4 L133.9 57.4 L135.9 53.9 L136.8 53.2 L136.6 50.9 L134.8 47.8Z"><title>Lorient · Camaruche</title></path><path class="ci-q" data-q="Pointe Milou · Mont-Jean" d="M154.5 27.1 L152.9 30.8 L150.5 30.8 L148.0 33.2 L144.2 33.0 L143.9 30.8 L141.0 29.2 L141.0 24.5 L139.5 23.0 L133.0 28.5 L133.6 37.0 L128.4 43.6 L134.4 44.5 L135.2 45.9 L137.6 45.1 L138.9 43.6 L140.8 43.2 L143.2 41.0 L145.0 41.0 L146.6 43.0 L151.4 42.0 L157.4 34.9 L154.5 32.1Z"><title>Pointe Milou · Mont-Jean</title></path><path class="ci-q" data-q="Grand Fond" d="M131.6 62.8 L131.1 63.1 L131.0 63.9 L129.5 65.2 L127.9 65.8 L126.1 65.6 L125.8 66.1 L125.5 69.2 L127.5 72.5 L127.9 75.2 L126.8 77.9 L125.4 79.2 L125.5 80.5 L128.2 83.8 L130.9 85.2 L130.9 86.0 L132.5 88.5 L132.6 90.2 L133.6 90.9 L133.9 92.0 L134.9 92.8 L135.8 95.8 L135.5 101.6 L136.0 104.9 L137.0 104.6 L138.0 110.5 L142.9 115.2 L148.8 112.5 L150.8 108.9 L151.0 94.0 L153.5 91.0 L165.0 86.0 L161.0 81.1 L159.2 77.9 L159.0 76.6 L153.2 74.9 L152.4 74.0 L150.6 73.2 L149.5 71.9 L144.4 71.0 L140.1 69.5 L138.8 68.1 L138.0 65.2 L136.6 62.8 L135.9 62.6 L134.5 63.8 L133.4 63.8 L132.5 62.9Z"><title>Grand Fond</title></path><path class="ci-q" data-q="Vitet · Dévé" d="M135.1 46.0 L134.9 47.8 L136.8 50.9 L136.9 53.2 L136.0 53.9 L134.0 57.4 L131.2 59.5 L131.0 60.6 L131.5 61.4 L131.6 62.6 L132.5 62.8 L133.4 63.6 L134.5 63.6 L135.9 62.5 L136.6 62.6 L138.1 65.2 L138.9 68.1 L140.1 69.4 L144.4 70.9 L149.5 71.8 L150.6 73.1 L152.4 73.9 L153.2 74.8 L159.1 76.6 L161.4 75.8 L168.4 75.8 L169.1 74.0 L170.8 73.4 L171.4 71.9 L172.2 71.9 L174.2 71.0 L174.0 69.0 L171.9 69.0 L170.2 68.2 L168.9 68.2 L167.6 69.2 L165.4 67.1 L165.2 65.1 L164.5 63.0 L163.0 62.4 L161.9 60.4 L162.1 58.4 L158.5 56.0 L155.9 53.0 L154.8 52.5 L153.9 52.6 L153.1 51.2 L151.0 50.5 L149.4 50.9 L148.1 52.0 L146.2 52.0 L145.6 51.4 L145.4 49.6 L144.0 48.4 L142.4 45.1 L140.9 43.4 L139.4 43.5 L137.2 45.5Z"><title>Vitet · Dévé</title></path><path class="ci-q" data-q="Marigot" d="M159.0 53.0 L159.0 49.5 L160.5 48.8 L160.9 47.8 L160.8 45.6 L159.1 43.8 L159.1 42.6 L160.0 41.0 L160.0 40.2 L158.5 41.8 L157.2 45.9 L153.1 45.6 L151.1 42.6 L151.2 42.1 L146.6 43.1 L145.0 41.1 L143.2 41.1 L140.9 43.0 L141.1 43.9 L142.5 45.1 L144.1 48.4 L145.5 49.6 L145.6 51.0 L146.2 51.9 L148.1 51.9 L149.4 50.8 L151.0 50.4 L152.8 50.9 L153.9 52.5 L155.5 52.6 L157.5 54.4Z"><title>Marigot</title></path><path class="ci-q" data-q="Cul-de-Sac · Toiny" d="M161.8 38.8 L160.1 40.1 L160.1 41.0 L159.2 42.6 L159.2 43.8 L160.9 45.6 L161.0 47.8 L160.5 48.9 L159.1 49.5 L159.4 52.5 L157.6 54.5 L157.8 55.0 L162.2 58.4 L162.0 60.4 L162.6 61.9 L164.6 63.0 L165.9 67.6 L167.6 69.1 L168.9 68.1 L170.2 68.1 L171.9 68.9 L174.0 68.9 L174.5 70.6 L173.0 71.8 L171.4 72.0 L170.8 73.5 L169.2 74.0 L168.4 75.9 L161.4 75.9 L159.4 76.5 L159.4 77.9 L161.1 81.1 L165.1 86.1 L171.6 83.4 L175.5 79.0 L182.9 76.5 L188.1 80.5 L189.0 84.1 L192.2 84.6 L193.9 82.5 L192.2 68.5 L197.0 64.5 L199.1 59.1 L197.8 55.1 L199.9 47.4 L198.4 44.4 L192.2 51.6 L187.9 53.0 L187.4 57.1 L183.5 57.5 L180.5 54.5 L183.1 48.8 L181.0 41.5 L176.5 42.0 L176.0 47.0 L171.8 50.2 L168.4 49.1 L165.2 45.6 L166.4 39.4 L169.1 38.5 L168.1 37.0 L163.0 39.5Z"><title>Cul-de-Sac · Toiny</title></path></svg></div>
+      <p class="hero-hint">Touchez un quartier pour voir ce qui s'y passe.</p>
+      <p class="hero-stat"><strong>14</strong> annonces en ligne · <strong>23</strong> mises en relation ce mois-ci · ça bouge à <strong>Lorient</strong>, <strong>Colombier</strong> et <strong>Corossol</strong></p>
+    </section>
+
+    <div class="news">
+      <span class="k">Le ti-mot du jardinier · 14 septembre</span>
+      <p>La saison des mangues démarre à Lorient. D'ici deux semaines ça va déborder — pensez à passer un coup de fil à vos voisins avant que ça tombe par terre.</p>
+    </div>
+
+    <div class="feed-head">
+      <span class="eyebrow" id="feed-eyebrow">Ce qui se passe sur l'île</span>
+      <button class="mini" id="feed-reset" hidden>← Toute l'île</button>
+    </div>
+
+    <div class="vide" id="feed-vide" hidden>
+      <p class="vide-t">Rien à <strong id="vide-q">Colombier</strong> pour l'instant.</p>
+      <p class="vide-s">C'est normal : ça donne par vagues, et tout le monde n'a pas d'arbre. Revenez quand la saison tourne.</p>
+      <div class="vide-acts">
+        <button class="btn btn-primary" data-go="connexion">Me prévenir quand il y aura quelque chose ici</button>
+        <button class="btn btn-ghost" id="vide-tout">Faire le tour de toute l'île</button>
+      </div>
+    </div>
+
+    <div class="feed" id="feed-accueil">
+
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
+        <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Mangues Julie, environ 10 kg</h3>
+          <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
+          <span class="excerpt">L'arbre a donné d'un coup, ça ne tiendra pas la semaine. Venez avec un sac.</span>
+        </span>
+      </button>
+
+      <button class="card" data-go="article" data-kind="note">
+        <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
+        <span class="body">
+          <span class="kicker k-conseil">Note du jardin</span>
+          <h3>L'eau de la clim, c'est un arrosoir toutes les deux heures</h3>
+          <span class="excerpt">Quatre splits sur une villa de Saint-Jean. Le tuyau dans un bidon fermé, une moustiquaire dessus, et c'est tout.</span>
+          <span class="byline">Le jardinier · 8 septembre</span>
+        </span>
+      </button>
+
+      <button class="card" data-go="annonce" data-q="Gustavia">
+        <span class="body">
+          <span class="kicker k-cherche">Je cherche</span>
+          <h3>Des boutures de ti-basilic</h3>
+          <span class="meta"><span>Gustavia</span><span>·</span><span>hier</span></span>
+          <span class="excerpt">Je repars de zéro après le passage de la sécheresse, si quelqu'un a des pieds à diviser.</span>
+        </span>
+      </button>
+
+      <button class="card" data-go="annonce" data-q="Colombier">
+        <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Un cageot de citrons verts</h3>
+          <span class="meta"><span>Colombier</span><span>·</span><span>il y a 3 jours</span><span>·</span><span>encore 9 jours</span></span>
+        </span>
+      </button>
+
+      <button class="card" data-go="annonce" data-q="Corossol">
+        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
+          <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
+        </span>
+      </button>
+
+      <button class="card" data-go="annonce" data-q="Saint-Jean">
+        <span class="body">
+          <span class="kicker k-echange">J'échange</span>
+          <h3>Plants de tomates cerises contre piments</h3>
+          <span class="meta"><span>Saint-Jean</span><span>·</span><span>il y a 5 jours</span></span>
+        </span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- 2 ÉCHANGES -->
+  <section class="screen" id="s-echanges" hidden>
+    <div class="page-h">
+      <h1>Les échanges</h1>
+      <span class="sub">14 choses à prendre ou à trouver, en ce moment sur l'île</span>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filtrer" data-multi>
+      <button class="chip" aria-pressed="false">Je donne</button>
+      <button class="chip" aria-pressed="false">Je cherche</button>
+      <button class="chip" aria-pressed="false">J'échange</button>
+    </div>
+
+    <div class="feed">
+      <button class="card" data-go="annonce">
+        <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Mangues Julie, environ 10 kg</h3>
+          <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
+        </span>
+      </button>
+      <button class="card" data-go="annonce">
+        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
+          <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
+        </span>
+      </button>
+      <button class="card" data-go="annonce">
+        <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-donne">Je donne</span>
+          <h3>Un cageot de citrons verts</h3>
+          <span class="meta"><span>Colombier</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
+        </span>
+      </button>
+      <button class="card" data-go="annonce">
+        <span class="body">
+          <span class="kicker k-cherche">Je cherche</span>
+          <h3>Des boutures de ti-basilic</h3>
+          <span class="meta"><span>Gustavia</span><span>·</span><span>Armand</span><span>·</span><span>encore 13 jours</span></span>
+        </span>
+      </button>
+      <button class="card" data-go="annonce">
+        <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
+        <span class="body">
+          <span class="kicker k-echange">J'échange</span>
+          <h3>Plants de tomates cerises contre piments</h3>
+          <span class="meta"><span>Saint-Jean</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 3 FICHE -->
+  <section class="screen pad0" id="s-annonce" hidden>
+    <div class="thumb cover t-mangue"><span class="kind">Photo du jardin</span></div>
+    <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
+      <div class="page-h">
+        <span class="kicker k-donne" style="align-self:flex-start">Je donne</span>
+        <h1>Mangues Julie, environ 10 kg</h1>
+      </div>
+
+      <p style="font-size:17.5px">L'arbre a donné d'un coup. C'est bon à manger tout de suite, ça ne tiendra pas la semaine. Venez avec un sac, il y en a pour plusieurs personnes.</p>
+
+      <div class="kv">
+        <div><span class="k2">Quantité</span><span class="v">Environ 10 kg</span></div>
+        <div><span class="k2">Quartier</span><span class="v">Lorient</span></div>
+        <div><span class="k2">Proposé par</span><span class="v">Marie-Claude</span></div>
+        <div><span class="k2">Publié</span><span class="v">le 12 septembre</span></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="btn-contacter">Contacter</button>
+
+      <div class="callout" id="contact-ouvert" hidden>
+        <h3>Marie-Claude · Lorient</h3>
+        <div class="vide-acts">
+          <button class="btn btn-primary">Écrire sur WhatsApp au 0690 12 34 56</button>
+          <button class="btn btn-ghost">Appeler le 0690 12 34 56</button>
+        </div>
+        <p class="hint">Ce numéro est visible par tous les membres connectés qui ouvrent cette annonce. Dites-lui quand vous pouvez passer — et prévenez-la si vous ne venez plus.</p>
+      </div>
+
+      <p class="expiry">Cette annonce disparaîtra automatiquement le 26 septembre si personne ne la prolonge.</p>
+      <button class="linkish" id="btn-signaler" style="align-self:flex-start; padding-left:0">Signaler un problème</button>
+
+      <div class="callout alerte" id="signal-form" hidden>
+        <h3>Que se passe-t-il&nbsp;?</h3>
+        <div class="seg">
+          <button class="chip" aria-pressed="true">Ce n'est plus disponible</button>
+          <button class="chip" aria-pressed="false">La photo ne correspond pas</button>
+          <button class="chip" aria-pressed="false">Quelqu'un vend au lieu de donner</button>
+          <button class="chip" aria-pressed="false">Je n'ai pas eu de réponse</button>
+          <button class="chip" aria-pressed="false">Comportement déplacé</button>
+          <button class="chip" aria-pressed="false">Autre</button>
+        </div>
+        <div class="field">
+          <label for="sg-mot" class="sr">Précision</label>
+          <textarea id="sg-mot" placeholder="Une précision, si vous voulez. Ce n'est pas obligatoire."></textarea>
+        </div>
+        <div class="vide-acts">
+          <button class="btn btn-primary" id="sg-envoyer">Envoyer le signalement</button>
+          <button class="btn btn-ghost" id="sg-annuler">Annuler</button>
+        </div>
+        <p class="hint">Votre signalement n'est lu que par le jardinier. La personne qui a publié l'annonce ne saura pas qui l'a signalée.</p>
+      </div>
+
+      <div class="callout alerte" id="signal-envoye" hidden>
+        <h3>Mèsi&nbsp;! C'est signalé.</h3>
+        <p>Le jardinier le verra dans sa console dès sa prochaine connexion. C'est comme ça que le site reste propre.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 CONNEXION -->
+  <section class="screen" id="s-connexion" hidden>
+    <div class="wall">
+      <h2>Un compte est nécessaire pour contacter</h2>
+      <p>Consulter le site est libre pour tout le monde. On demande un compte uniquement pour écrire à quelqu'un ou publier une annonce — c'est ce qui évite les faux rendez-vous.</p>
+    </div>
+
+    <div class="field">
+      <label for="f-prenom">Votre prénom</label>
+      <input id="f-prenom" type="text" value="Armand">
+      <span class="hint">C'est ce que les autres verront. Pas de nom de famille.</span>
+    </div>
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Votre quartier</span>
+      <span class="hint">Touchez-le sur la carte.</span>
+      <div class="isle" id="isle"><svg viewBox="0 0 200 124.1" role="img" aria-label="Carte de Saint-Barthélemy : les 16 quartiers"><path class="ci-land" d="M3.6 3.6L4.1 5.0L10.7 5.8L13.8 9.4L13.5 12.7L10.5 17.9L0.0 18.7L0.6 21.2L3.3 20.6L8.5 22.8L10.2 32.2L17.9 35.8L18.2 38.5L20.6 39.1L21.5 41.5L31.4 51.4L40.7 50.3L42.9 52.5L42.9 55.6L50.1 60.5L51.2 63.0L48.7 65.7L54.5 72.1L59.7 80.9L56.7 83.1L53.4 78.4L53.9 76.5L49.5 74.3L46.8 77.0L48.7 82.0L55.6 88.6L58.9 88.0L62.4 90.5L61.6 93.8L68.0 102.9L72.9 105.9L75.4 111.7L79.8 115.5L80.1 121.0L85.0 124.1L88.3 124.1L93.8 109.5L100.1 107.6L108.9 119.7L110.6 116.9L110.9 112.0L112.5 110.9L114.4 113.1L117.2 113.3L118.3 104.3L126.8 100.1L130.7 100.7L132.9 105.9L137.0 104.5L138.1 110.6L142.8 115.3L148.8 112.5L150.8 108.9L150.8 94.4L153.5 91.1L171.7 83.4L175.5 79.0L182.9 76.5L188.2 80.6L189.0 84.2L192.3 84.7L193.9 82.5L192.3 68.5L197.0 64.6L199.2 59.1L197.8 55.3L200.0 47.6L198.3 44.3L192.3 51.7L187.9 53.1L187.6 57.2L183.5 57.5L180.5 54.5L183.2 48.7L181.0 41.5L176.6 42.1L176.1 47.0L171.9 50.3L168.4 49.2L165.3 45.7L166.4 39.3L169.2 38.5L168.1 36.9L163.1 39.6L161.8 38.8L158.7 41.5L157.4 45.9L153.2 45.7L151.0 42.4L157.4 34.9L154.6 32.2L154.6 27.2L153.0 30.8L150.5 30.8L148.0 33.3L144.2 33.0L143.9 30.8L141.1 29.4L141.1 24.5L139.5 23.1L133.1 28.6L133.7 37.1L126.8 45.4L124.6 51.2L119.1 54.2L112.2 54.2L108.7 51.4L110.0 47.9L106.7 47.3L95.5 55.8L94.9 57.5L97.1 60.2L95.5 62.7L91.9 64.4L89.7 62.7L85.6 63.5L81.2 60.8L77.6 56.1L77.3 53.6L80.6 50.6L79.2 45.4L76.8 44.8L73.5 46.5L69.1 40.7L68.5 36.0L71.0 34.7L70.2 29.7L68.2 28.6L63.5 30.3L60.8 29.4L58.9 27.5L58.0 20.1L55.3 16.2L47.0 18.7L45.1 22.6L39.1 23.9L32.7 22.6L29.2 17.1L28.6 20.4L24.5 22.3L20.6 17.9L19.5 11.8L14.9 9.6L17.3 5.5L14.6 1.1L15.1 0.0L7.4 0.8Z"/><path class="ci-q" data-q="Colombier" d="M3.5 3.5 L4.0 5.0 L10.6 5.8 L13.8 9.4 L13.5 12.6 L10.5 17.9 L0.0 18.6 L0.5 21.1 L3.4 20.5 L8.2 22.6 L8.6 23.1 L10.1 32.1 L17.6 35.6 L18.1 38.5 L20.4 39.0 L21.5 41.5 L31.4 51.4 L36.5 50.8 L37.5 49.0 L39.1 48.1 L44.0 48.4 L44.6 47.2 L44.2 45.5 L46.1 45.0 L47.2 45.6 L48.2 47.4 L51.9 47.9 L52.8 48.5 L53.5 49.8 L57.0 51.1 L56.5 49.0 L56.4 44.8 L54.6 43.2 L52.1 42.6 L51.5 41.9 L47.0 42.2 L44.5 39.9 L43.5 38.0 L41.0 37.9 L40.0 35.1 L37.2 30.5 L37.4 29.0 L38.8 26.8 L39.2 23.9 L32.6 22.5 L29.1 17.0 L28.5 20.2 L24.6 22.2 L20.5 17.9 L19.5 11.8 L15.0 9.5 L17.2 5.5 L14.5 1.0 L15.0 0.0 L7.4 0.8Z"><title>Colombier</title></path><path class="ci-q" data-q="Corossol" d="M52.6 48.5 L50.8 47.6 L48.2 47.5 L47.1 45.6 L46.1 45.1 L45.1 45.6 L44.4 45.5 L44.8 47.2 L44.0 48.5 L39.1 48.2 L37.6 49.0 L36.6 50.8 L40.6 50.2 L42.9 52.5 L42.9 55.5 L43.6 56.0 L44.9 55.4 L46.4 53.5 L49.5 53.4 L50.1 52.2 L52.4 50.5 L52.9 49.2Z"><title>Corossol</title></path><path class="ci-q" data-q="Terre Neuve · Merlette" d="M39.4 23.8 L38.9 26.8 L37.5 29.0 L37.4 30.5 L40.1 35.1 L41.1 37.9 L43.5 37.9 L44.6 39.9 L47.0 42.1 L51.5 41.8 L52.6 42.8 L54.6 43.1 L55.8 40.0 L55.6 38.1 L56.1 35.4 L55.5 25.1 L52.9 22.5 L48.9 23.9 L45.0 25.8 L41.8 24.8 L40.1 23.6Z"><title>Terre Neuve · Merlette</title></path><path class="ci-q" data-q="Anse des Flamands" d="M57.0 18.6 L55.2 16.1 L47.0 18.6 L45.0 22.5 L40.2 23.6 L43.5 25.4 L45.0 25.6 L48.9 23.8 L52.9 22.4 L55.6 20.2Z"><title>Anse des Flamands</title></path><path class="ci-q" data-q="Public" d="M53.0 49.4 L52.5 50.5 L50.8 51.8 L49.5 53.5 L46.4 53.6 L44.9 55.5 L43.8 56.0 L50.0 60.5 L51.1 63.0 L48.6 65.6 L51.8 69.0 L53.9 67.0 L55.9 66.9 L57.4 67.2 L59.0 66.9 L61.5 64.1 L60.8 58.2 L60.0 56.4 L58.5 55.0 L57.4 51.6Z"><title>Public</title></path><path class="ci-q" data-q="Gustavia" d="M61.8 64.1 L59.0 67.0 L57.4 67.4 L55.9 67.0 L53.9 67.1 L51.9 69.0 L54.6 72.1 L59.5 81.0 L56.6 83.0 L53.4 78.4 L53.9 76.5 L49.5 74.2 L46.8 77.0 L48.6 82.0 L55.5 88.5 L58.9 88.0 L61.2 89.8 L61.8 89.1 L61.6 88.6 L62.6 87.6 L63.8 87.0 L65.6 86.8 L66.8 86.0 L66.5 82.8 L66.0 82.4 L66.0 80.9 L66.8 77.5 L68.1 75.6 L66.6 71.0 L63.6 67.6 L63.0 64.9 L62.5 64.2Z"><title>Gustavia</title></path><path class="ci-q" data-q="Anse des Cayes · Quartier du Roy" d="M57.0 18.8 L55.6 20.4 L53.0 22.4 L55.6 25.1 L56.0 28.1 L56.1 37.0 L55.8 38.1 L55.9 40.0 L55.1 41.4 L54.8 43.4 L56.5 44.8 L56.6 49.0 L59.0 55.6 L60.2 56.6 L63.9 55.4 L68.1 55.6 L67.6 53.9 L68.8 50.5 L69.5 50.0 L71.4 49.8 L73.2 48.1 L73.5 47.4 L73.2 46.1 L69.2 41.0 L68.9 40.0 L68.5 36.0 L71.0 34.6 L70.0 29.5 L68.1 28.5 L63.6 30.2 L60.8 29.4 L58.9 27.5 L58.0 20.0Z"><title>Anse des Cayes · Quartier du Roy</title></path><path class="ci-q" data-q="Saint-Jean" d="M60.4 56.8 L61.4 60.2 L61.6 64.0 L62.5 64.1 L63.1 64.9 L63.8 67.6 L66.8 71.0 L68.1 75.4 L71.4 78.5 L76.2 79.4 L77.6 81.4 L78.2 84.5 L82.1 86.1 L85.4 86.6 L88.2 85.9 L89.5 85.0 L90.4 83.4 L93.0 81.8 L93.9 81.9 L95.1 84.0 L96.0 84.2 L97.2 82.8 L99.6 83.9 L100.5 83.1 L102.1 82.6 L102.5 82.1 L102.4 81.5 L99.2 78.6 L99.5 75.4 L100.2 74.4 L101.9 73.9 L103.5 71.4 L106.1 70.8 L108.5 67.5 L108.2 63.8 L107.2 62.4 L106.0 61.5 L102.6 62.4 L101.9 62.1 L101.8 59.8 L99.5 56.9 L99.9 54.9 L98.9 53.1 L95.8 55.5 L94.9 57.5 L97.0 60.1 L95.6 62.5 L92.0 64.4 L89.6 62.6 L85.5 63.5 L81.2 60.9 L77.5 56.0 L77.2 53.5 L80.5 50.4 L79.1 45.4 L76.9 44.8 L73.4 46.4 L73.4 48.1 L71.4 49.9 L68.9 50.5 L67.8 53.9 L68.2 55.0 L68.1 55.8 L63.9 55.5Z"><title>Saint-Jean</title></path><path class="ci-q" data-q="Lurin · Gouverneur" d="M68.2 75.6 L66.9 77.5 L66.1 80.9 L66.1 82.4 L66.6 82.8 L66.9 86.0 L65.6 86.9 L63.5 87.2 L61.8 88.6 L61.9 89.1 L61.4 89.8 L62.4 90.6 L61.5 93.8 L67.9 102.8 L72.9 105.9 L75.4 111.6 L79.8 115.5 L80.0 121.0 L85.0 124.0 L88.2 124.0 L94.0 109.4 L100.0 107.5 L104.1 112.9 L104.9 110.1 L104.9 107.4 L107.0 104.4 L106.0 101.8 L105.6 98.2 L103.4 94.9 L101.8 93.6 L100.1 92.9 L96.9 93.1 L94.6 91.5 L94.8 90.1 L95.6 88.9 L95.6 87.9 L97.0 86.6 L96.6 85.4 L95.9 84.4 L95.0 84.0 L93.9 82.0 L92.6 82.0 L91.0 83.0 L89.0 85.6 L87.6 86.2 L85.4 86.8 L82.1 86.2 L78.1 84.5 L77.5 81.4 L76.2 79.5 L71.4 78.6Z"><title>Lurin · Gouverneur</title></path><path class="ci-q" data-q="Grande &amp; Petite Saline" d="M125.1 58.5 L123.8 58.5 L122.2 60.4 L120.4 60.4 L119.0 61.5 L118.2 64.0 L116.0 66.6 L114.9 66.9 L113.6 65.9 L110.5 67.2 L108.8 67.2 L106.1 70.9 L103.5 71.5 L103.0 72.8 L101.9 74.0 L100.0 74.8 L99.4 76.2 L99.4 78.6 L102.5 81.5 L102.5 82.4 L99.6 84.0 L97.2 82.9 L96.0 84.4 L97.1 86.6 L95.8 87.9 L95.8 88.9 L94.9 90.1 L94.8 91.5 L96.9 93.0 L100.1 92.8 L101.8 93.5 L103.5 94.9 L105.8 98.2 L106.1 101.8 L107.1 104.4 L105.0 107.4 L105.0 110.1 L104.1 113.1 L108.9 119.6 L110.5 116.9 L111.0 111.9 L112.5 110.9 L114.4 113.0 L117.1 113.2 L118.1 104.8 L118.5 104.1 L127.1 100.0 L130.8 100.9 L132.9 105.9 L135.9 104.9 L135.4 101.6 L135.8 97.2 L135.2 93.9 L134.8 92.8 L133.8 92.0 L133.5 90.9 L132.5 90.2 L132.4 88.5 L130.8 86.0 L130.8 85.2 L129.6 84.9 L127.4 83.0 L125.5 80.9 L125.2 79.2 L126.6 77.9 L127.8 75.2 L127.4 72.5 L125.4 69.2 L125.6 66.1 L126.1 65.5 L128.6 65.5 L130.1 64.8 L131.6 62.2 L130.9 60.4 L127.0 59.9Z"><title>Grande &amp; Petite Saline</title></path><path class="ci-q" data-q="Lorient · Camaruche" d="M135.0 45.2 L134.4 44.6 L128.9 44.0 L128.2 43.5 L126.5 45.9 L124.5 51.1 L119.0 54.1 L112.1 54.1 L108.6 51.4 L110.0 47.9 L106.6 47.2 L99.0 53.1 L100.0 54.9 L99.6 56.9 L101.9 59.8 L102.1 62.2 L106.0 61.4 L107.8 62.8 L108.4 63.8 L108.5 67.2 L110.5 67.1 L113.6 65.8 L114.6 66.6 L115.5 66.8 L118.1 64.0 L118.6 61.8 L120.4 60.2 L122.2 60.2 L123.8 58.4 L125.1 58.4 L127.0 59.8 L130.4 60.4 L133.9 57.4 L135.9 53.9 L136.8 53.2 L136.6 50.9 L134.8 47.8Z"><title>Lorient · Camaruche</title></path><path class="ci-q" data-q="Pointe Milou · Mont-Jean" d="M154.5 27.1 L152.9 30.8 L150.5 30.8 L148.0 33.2 L144.2 33.0 L143.9 30.8 L141.0 29.2 L141.0 24.5 L139.5 23.0 L133.0 28.5 L133.6 37.0 L128.4 43.6 L134.4 44.5 L135.2 45.9 L137.6 45.1 L138.9 43.6 L140.8 43.2 L143.2 41.0 L145.0 41.0 L146.6 43.0 L151.4 42.0 L157.4 34.9 L154.5 32.1Z"><title>Pointe Milou · Mont-Jean</title></path><path class="ci-q" data-q="Grand Fond" d="M131.6 62.8 L131.1 63.1 L131.0 63.9 L129.5 65.2 L127.9 65.8 L126.1 65.6 L125.8 66.1 L125.5 69.2 L127.5 72.5 L127.9 75.2 L126.8 77.9 L125.4 79.2 L125.5 80.5 L128.2 83.8 L130.9 85.2 L130.9 86.0 L132.5 88.5 L132.6 90.2 L133.6 90.9 L133.9 92.0 L134.9 92.8 L135.8 95.8 L135.5 101.6 L136.0 104.9 L137.0 104.6 L138.0 110.5 L142.9 115.2 L148.8 112.5 L150.8 108.9 L151.0 94.0 L153.5 91.0 L165.0 86.0 L161.0 81.1 L159.2 77.9 L159.0 76.6 L153.2 74.9 L152.4 74.0 L150.6 73.2 L149.5 71.9 L144.4 71.0 L140.1 69.5 L138.8 68.1 L138.0 65.2 L136.6 62.8 L135.9 62.6 L134.5 63.8 L133.4 63.8 L132.5 62.9Z"><title>Grand Fond</title></path><path class="ci-q" data-q="Vitet · Dévé" d="M135.1 46.0 L134.9 47.8 L136.8 50.9 L136.9 53.2 L136.0 53.9 L134.0 57.4 L131.2 59.5 L131.0 60.6 L131.5 61.4 L131.6 62.6 L132.5 62.8 L133.4 63.6 L134.5 63.6 L135.9 62.5 L136.6 62.6 L138.1 65.2 L138.9 68.1 L140.1 69.4 L144.4 70.9 L149.5 71.8 L150.6 73.1 L152.4 73.9 L153.2 74.8 L159.1 76.6 L161.4 75.8 L168.4 75.8 L169.1 74.0 L170.8 73.4 L171.4 71.9 L172.2 71.9 L174.2 71.0 L174.0 69.0 L171.9 69.0 L170.2 68.2 L168.9 68.2 L167.6 69.2 L165.4 67.1 L165.2 65.1 L164.5 63.0 L163.0 62.4 L161.9 60.4 L162.1 58.4 L158.5 56.0 L155.9 53.0 L154.8 52.5 L153.9 52.6 L153.1 51.2 L151.0 50.5 L149.4 50.9 L148.1 52.0 L146.2 52.0 L145.6 51.4 L145.4 49.6 L144.0 48.4 L142.4 45.1 L140.9 43.4 L139.4 43.5 L137.2 45.5Z"><title>Vitet · Dévé</title></path><path class="ci-q" data-q="Marigot" d="M159.0 53.0 L159.0 49.5 L160.5 48.8 L160.9 47.8 L160.8 45.6 L159.1 43.8 L159.1 42.6 L160.0 41.0 L160.0 40.2 L158.5 41.8 L157.2 45.9 L153.1 45.6 L151.1 42.6 L151.2 42.1 L146.6 43.1 L145.0 41.1 L143.2 41.1 L140.9 43.0 L141.1 43.9 L142.5 45.1 L144.1 48.4 L145.5 49.6 L145.6 51.0 L146.2 51.9 L148.1 51.9 L149.4 50.8 L151.0 50.4 L152.8 50.9 L153.9 52.5 L155.5 52.6 L157.5 54.4Z"><title>Marigot</title></path><path class="ci-q" data-q="Cul-de-Sac · Toiny" d="M161.8 38.8 L160.1 40.1 L160.1 41.0 L159.2 42.6 L159.2 43.8 L160.9 45.6 L161.0 47.8 L160.5 48.9 L159.1 49.5 L159.4 52.5 L157.6 54.5 L157.8 55.0 L162.2 58.4 L162.0 60.4 L162.6 61.9 L164.6 63.0 L165.9 67.6 L167.6 69.1 L168.9 68.1 L170.2 68.1 L171.9 68.9 L174.0 68.9 L174.5 70.6 L173.0 71.8 L171.4 72.0 L170.8 73.5 L169.2 74.0 L168.4 75.9 L161.4 75.9 L159.4 76.5 L159.4 77.9 L161.1 81.1 L165.1 86.1 L171.6 83.4 L175.5 79.0 L182.9 76.5 L188.1 80.5 L189.0 84.1 L192.2 84.6 L193.9 82.5 L192.2 68.5 L197.0 64.5 L199.1 59.1 L197.8 55.1 L199.9 47.4 L198.4 44.4 L192.2 51.6 L187.9 53.0 L187.4 57.1 L183.5 57.5 L180.5 54.5 L183.1 48.8 L181.0 41.5 L176.5 42.0 L176.0 47.0 L171.8 50.2 L168.4 49.1 L165.2 45.6 L166.4 39.4 L169.1 38.5 L168.1 37.0 L163.0 39.5Z"><title>Cul-de-Sac · Toiny</title></path></svg></div>
+      <div class="isle-read">
+        <span class="k">Quartier choisi</span>
+        <span class="v vide" id="isle-read">aucun pour l'instant</span>
+      </div>
+      <button class="linkish" style="align-self:flex-start; padding-left:0" id="isle-alt">Je préfère choisir dans une liste</button>
+      <select id="f-quartier" hidden aria-label="Votre quartier"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
+    </div>
+    <div class="field">
+      <label for="f-tel">Votre téléphone</label>
+      <input id="f-tel" type="tel" placeholder="0690 00 00 00">
+      <span class="hint"><strong>Il sera visible par les membres connectés</strong> qui ouvrent vos annonces — c'est ainsi qu'ils vous joindront. Il reste caché aux simples visiteurs et n'apparaît sur aucune page publique.</span>
+    </div>
+    <div class="field">
+      <label for="f-mail">Votre adresse e-mail</label>
+      <input id="f-mail" type="email" placeholder="vous@exemple.fr">
+      <span class="hint">Pour votre mot de passe, et pour les alertes que vous choisirez.</span>
+    </div>
+    <button class="btn btn-primary btn-block" id="creer-compte">Créer mon compte</button>
+    <button class="btn btn-ghost btn-block" data-go="accueil">J'ai déjà un compte</button>
+  </section>
+
+  <!-- 5 PUBLIER -->
+  <section class="screen" id="s-publier" hidden>
+    <div class="page-h">
+      <h1>Publier</h1>
+      <span class="sub">Six questions, deux minutes.</span>
+    </div>
+
+    <div class="field">
+      <span class="label" style="font-weight:600; font-size:16.5px">Il s'agit de…</span>
+      <div class="seg">
+        <button class="chip" aria-pressed="true">Je donne</button>
+        <button class="chip" aria-pressed="false">Je cherche</button>
+        <button class="chip" aria-pressed="false">J'échange</button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="p-quoi">De quoi&nbsp;?</label>
+      <input id="p-quoi" type="text" placeholder="Mangues, boutures de basilic, fruits à pain…">
+    </div>
+    <div class="field">
+      <label for="p-combien">Combien, à peu près&nbsp;?</label>
+      <input id="p-combien" type="text" placeholder="Un cageot, une dizaine, deux sacs…">
+      <span class="hint">Pas besoin de peser. Une idée suffit.</span>
+    </div>
+    <div class="field">
+      <label for="p-ou">Dans quel quartier&nbsp;?</label>
+      <select id="p-ou"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
+      <span class="hint">Pré-rempli avec le quartier de votre compte.</span>
+    </div>
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Une photo</span>
+      <div class="drop">Prendre une photo ou en choisir une<br><span style="font-size:14px">Facultatif — mais une annonce avec photo trouve preneur bien plus vite.</span></div>
+    </div>
+    <div class="field">
+      <label for="p-mot">Un mot pour expliquer</label>
+      <textarea id="p-mot" placeholder="C'est mûr, ça ne tiendra pas la semaine…"></textarea>
+    </div>
+    <button class="btn btn-primary btn-block">Publier l'annonce</button>
+    <p class="expiry">Votre annonce restera en ligne 14 jours. On vous écrira avant pour demander si c'est toujours disponible.</p>
+  </section>
+
+  <!-- 6 CONSEILS -->
+  <section class="screen" id="s-conseils" hidden>
+    <div class="page-h">
+      <h1>Le jardin</h1>
+      <span class="sub">Des notes prises sur le terrain par le jardinier. Court, concret, et valable ici — pas ce qu'on lit sur les sites de métropole.</span>
+    </div>
+    <div class="filters" role="group" aria-label="Thèmes">
+      <button class="chip" aria-pressed="true">Tout</button>
+      <button class="chip" aria-pressed="false">Arrosage</button>
+      <button class="chip" aria-pressed="false">Sol et compost</button>
+      <button class="chip" aria-pressed="false">Boutures</button>
+      <button class="chip" aria-pressed="false">Ravageurs</button>
+    </div>
+    <div class="feed">
+      <button class="card" data-go="article">
+        <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
+        <span class="body">
+          <span class="kicker k-conseil">Arrosage</span>
+          <h3>L'eau de la clim, c'est un arrosoir toutes les deux heures</h3>
+          <span class="excerpt">Quatre splits sur une villa de Saint-Jean. Le tuyau dans un bidon fermé, une moustiquaire dessus, et c'est tout.</span>
+          <span class="byline">Le jardinier · 8 septembre</span>
+        </span>
+      </button>
+      <button class="card" data-go="article">
+        <span class="thumb t-terre"><span class="kind">Photo prise sur un chantier</span></span>
+        <span class="body">
+          <span class="kicker k-conseil">Arrosage</span>
+          <h3>Sans paillage, vous arrosez deux fois pour rien</h3>
+          <span class="excerpt">Feuilles de cocotier sèches, tontes, carton brun. Ce qu'on a sous la main suffit.</span>
+          <span class="byline">Le jardinier · 2 septembre</span>
+        </span>
+      </button>
+      <button class="card" data-go="article">
+        <span class="thumb t-agrume"><span class="kind">Photo prise sur un chantier</span></span>
+        <span class="body">
+          <span class="kicker k-conseil">Ravageurs</span>
+          <h3>Cochenilles sur les citronniers : le savon noir, rien d'autre</h3>
+          <span class="excerpt">Trois remèdes essayés chez des clients cette année. Un marche, deux font perdre du temps.</span>
+          <span class="byline">Le jardinier · 26 août</span>
+        </span>
+      </button>
+      <button class="card" data-go="article">
+        <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
+        <span class="body">
+          <span class="kicker k-conseil">Boutures</span>
+          <h3>Diviser un pied de ti-basilic, cinq minutes</h3>
+          <span class="excerpt">De quoi en donner à trois voisins sans rien acheter. À faire le matin, jamais en plein soleil.</span>
+          <span class="byline">Le jardinier · 19 août</span>
+        </span>
+      </button>
+    </div>
+    <p class="flag">Format volontairement court : une photo, quelques lignes. Une note se publie en trente secondes depuis un chantier, entre deux clients. C'est la condition pour qu'il y en ait encore dans deux ans.</p>
+  </section>
+
+  <!-- 7 ARTICLE -->
+  <section class="screen pad0" id="s-article" hidden>
+    <div class="thumb cover t-vert"><span class="kind">Photo prise sur un chantier</span></div>
+    <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
+      <div class="page-h">
+        <span class="kicker k-conseil" style="align-self:flex-start">Arrosage</span>
+        <h1>L'eau de la clim, c'est un arrosoir toutes les deux heures</h1>
+        <span class="sub">Le jardinier · 8 septembre</span>
+      </div>
+      <div class="prose">
+        <p>Sur cette villa de Saint-Jean, quatre splits tournent toute la journée. L'eau qui goutte le long du mur, c'est entre dix et vingt litres par unité.</p>
+        <p>Je rallonge le tuyau jusqu'à un bidon. <strong>Fermé</strong> — sinon vous élevez des moustiques. Un bout de moustiquaire tendu sur l'ouverture, un élastique, terminé.</p>
+        <p>Deux précautions : ça ne se conserve pas, on vide tous les deux jours. Et c'est de l'eau distillée, sans aucun minéral. Pour les massifs et les pots, parfait. Pour un potager qu'on mange en salade, je coupe à moitié avec de l'eau de pluie.</p>
+      </div>
+      <div class="callout">
+        <h3>Vous faites autrement&nbsp;?</h3>
+        <p>Envoyez-moi une photo et deux lignes. C'est comme ça que celle-ci est née.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 SAISON -->
+  <section class="screen" id="s-saison" hidden>
+    <div class="page-h">
+      <h1>La saison</h1>
+      <span class="sub">Ce qui donne sur l'île, mois par mois. Touchez un fruit : sa saison entière s'allume, et vous pouvez demander à être prévenu quand quelqu'un en propose.</span>
+    </div>
+
+    <div class="suivis" id="suivis" hidden>
+      <span class="k">Vous êtes prévenu pour</span>
+      <span class="v" id="suivis-liste"></span>
+    </div>
+
+    <div class="detail" id="saison-detail" hidden>
+      <h3 id="d-nom">Mangue</h3>
+      <p id="d-etat">Personne n'en propose pour l'instant.</p>
+      <div class="vide-acts">
+        <button class="btn btn-primary" id="d-suivre">Me prévenir quand quelqu'un en propose</button>
+        <button class="btn btn-ghost" id="d-voir" data-go="echanges">Voir les annonces</button>
+      </div>
+      <p class="hint" id="d-note">Un courriel quand la saison démarre, un autre si une annonce paraît. Rien d'autre.</p>
+    </div>
+
+    <div class="months">
+      <div class="month">
+        <h3>Janvier</h3>
+        <ul><li><button class="fruit" data-f="Pomme-cannelle">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Pomme-cannelle</span></button></li><li><button class="fruit" data-f="Citron vert">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Citron vert</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Février</h3>
+        <ul><li><button class="fruit" data-f="Citron vert">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Citron vert</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li><li><button class="fruit" data-f="Cerise pays">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Cerise pays</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Mars</h3>
+        <ul><li><button class="fruit" data-f="Cerise pays">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Cerise pays</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li><li><button class="fruit" data-f="Ti-basilic">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Ti-basilic</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Avril</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li><li><button class="fruit" data-f="Ti-basilic">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Ti-basilic</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Mai</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Prune de Cythère">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Prune de Cythère</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Juin</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Fruit à pain">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Prune de Cythère">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Prune de Cythère</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Juillet</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Fruit à pain">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Corossol">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Corossol</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Août</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Avocat">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Avocat</span></button></li><li><button class="fruit" data-f="Fruit à pain">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Fruit à pain</span></button></li></ul>
+      </div>
+      <div class="month now">
+        <h3>Septembre · en ce moment</h3>
+        <ul><li><button class="fruit" data-f="Mangue">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Mangue</span></button></li><li><button class="fruit" data-f="Avocat">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Avocat</span></button></li><li><button class="fruit" data-f="Fruit à pain">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Citron vert">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Citron vert</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Octobre</h3>
+        <ul><li><button class="fruit" data-f="Avocat">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Avocat</span></button></li><li><button class="fruit" data-f="Corossol">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Corossol</span></button></li><li><button class="fruit" data-f="Citron vert">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Citron vert</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Novembre</h3>
+        <ul><li><button class="fruit" data-f="Corossol">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Corossol</span></button></li><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li><li><button class="fruit" data-f="Cerise pays">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Cerise pays</span></button></li></ul>
+      </div>
+      <div class="month">
+        <h3>Décembre</h3>
+        <ul><li><button class="fruit" data-f="Papaye">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Papaye</span></button></li><li><button class="fruit" data-f="Pomme-cannelle">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Pomme-cannelle</span></button></li><li><button class="fruit" data-f="Citron vert">
+            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+            <span>Citron vert</span></button></li></ul>
+      </div>
+    </div>
+
+    <p class="flag">Calendrier d'exemple, à corriger par le jardinier avant la mise en ligne : les dates varient d'un quartier à l'autre, d'une exposition à l'autre et d'une année à l'autre. C'est la première vraie donnée du site.</p>
+  </section>
+
+  <!-- 9 ADMIN -->
+  <section class="screen admin pad0" id="s-admin" hidden style="padding:20px 18px 30px">
+    <div class="admin-top">
+      <div class="page-h">
+        <span class="eyebrow">Console · le jardinier</span>
+        <h1>Administration</h1>
+      </div>
+      <div class="metric">
+        <span class="n">23</span>
+        <span class="l"><strong>mises en relation</strong> ce mois-ci<br>18 le mois dernier</span>
+      </div>
+    </div>
+
+    <div class="vide-acts">
+      <button class="btn btn-primary" data-go="note">Écrire une note du jardin</button>
+    </div>
+
+    <div class="atabs" role="group" aria-label="Sections">
+      <button class="atab" aria-pressed="true" data-panel="moderation">Modération</button>
+      <button class="atab" aria-pressed="false" data-panel="notes">Les notes</button>
+      <button class="atab" aria-pressed="false" data-panel="nouvelles">Nouvelles</button>
+      <button class="atab" aria-pressed="false" data-panel="membres">Membres</button>
+      <button class="atab" aria-pressed="false" data-panel="saison">La saison</button>
+      <button class="atab" aria-pressed="false" data-panel="site">Le site</button>
+    </div>
+
+    <div class="apanel" data-panel="moderation">
+      <div class="alert"><strong>1 signalement</strong> — annonce « Plants de piments », motif : photo floue et quantité invraisemblable.</div>
+      <div class="alert"><strong>Un membre récolte des numéros</strong> — « Kevin », inscrit avant-hier, a ouvert 31 annonces sans en publier aucune. Personne ne cherche 31 récoltes en deux jours.</div>
+      <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">Mangues Julie, environ 10 kg</span>
+          <span class="s">Lorient · Marie-Claude · il y a 2 jours · 7 contacts</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Masquer</button><button class="mini danger">Supprimer</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Trois fruits à pain, à ramasser aujourd'hui</span>
+          <span class="s">Corossol · Jean-Loup · expire dans 2 jours</span></span>
+          <span class="acts"><button class="mini">Prolonger</button><button class="mini">Masquer</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Plants de piments</span>
+          <span class="s">Vitet · compte créé il y a 1 heure · <strong>signalée</strong></span></span>
+          <span class="acts"><button class="mini">Écrire à l'auteur</button><button class="mini danger">Supprimer</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Un cageot de citrons verts</span>
+          <span class="s">Colombier · Sylvie · il y a 3 jours · 2 contacts</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Masquer</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="apanel" data-panel="notes" hidden>
+      <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">L'eau de la clim, c'est un arrosoir toutes les deux heures</span>
+          <span class="s">Arrosage · publiée le 8 septembre · épinglée en une</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Désépingler</button><button class="mini danger">Dépublier</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Sans paillage, vous arrosez deux fois pour rien</span>
+          <span class="s">Arrosage · publiée le 2 septembre</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Épingler</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Cochenilles sur les citronniers : le savon noir, rien d'autre</span>
+          <span class="s">Ravageurs · publiée le 26 août</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Épingler</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Récupérer les graines de piment</span>
+          <span class="s">Boutures · <strong>brouillon</strong> · commencée le 12 septembre</span></span>
+          <span class="acts"><button class="mini solid">Reprendre</button><button class="mini danger">Jeter</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="apanel" data-panel="nouvelles" hidden>
+      <div class="callout">
+        <h3>Le ti-mot du jardinier</h3>
+        <p>Deux lignes en tête du fil d'accueil. Elles disparaissent toutes seules à la date choisie — personne n'a à penser à les retirer.</p>
+        <button class="mini solid" style="align-self:flex-start">Écrire une nouvelle</button>
+      </div>
+      <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">« La saison des mangues démarre à Lorient… »</span>
+          <span class="s">En ligne · s'efface le 28 septembre</span></span>
+          <span class="acts"><button class="mini">Modifier</button><button class="mini">Retirer</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">« Coupure d'eau annoncée mercredi à Colombier »</span>
+          <span class="s">Effacée le 30 août</span></span>
+          <span class="acts"><button class="mini">Remettre</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="apanel" data-panel="membres" hidden>
+      <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">Sylvie</span><span class="s">Colombier · inscrite le 2 septembre · 3 annonces</span></span>
+          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Jean-Loup</span><span class="s">Corossol · inscrit le 28 août · 1 annonce</span></span>
+          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Armand</span><span class="s">Gustavia · inscrit hier · 1 annonce</span></span>
+          <span class="acts"><button class="mini">Écrire</button><button class="mini danger">Suspendre</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Nadège</span><span class="s">Saint-Jean · inscrite le 14 août · suspendue</span></span>
+          <span class="acts"><button class="mini">Réactiver</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="apanel" data-panel="saison" hidden>
+      <div class="callout">
+        <h3>C'est vous qui remplissez ce calendrier</h3>
+        <p>Il alimente la page « La saison » du site, et c'est là que les gens s'abonnent à un fruit. Les dates d'ici ne ressemblent à aucune liste trouvée ailleurs : corrigez-les librement, mois par mois.</p>
+        <button class="mini solid" style="align-self:flex-start">Ajouter un fruit à la liste</button>
+      </div>
+      <div class="stack">
+      <div class="row">
+        <span class="main"><span class="t">Janvier</span><span class="s">Pomme-cannelle · Citron vert · Papaye</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Février</span><span class="s">Citron vert · Papaye · Cerise pays</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Mars</span><span class="s">Cerise pays · Papaye · Ti-basilic</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Avril</span><span class="s">Mangue · Papaye · Ti-basilic</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Mai</span><span class="s">Mangue · Prune de Cythère · Papaye</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Juin</span><span class="s">Mangue · Fruit à pain · Prune de Cythère</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Juillet</span><span class="s">Mangue · Fruit à pain · Corossol</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Août</span><span class="s">Mangue · Avocat · Fruit à pain</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Septembre</span><span class="s">Mangue · Avocat · Fruit à pain · Citron vert</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Octobre</span><span class="s">Avocat · Corossol · Citron vert</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Novembre</span><span class="s">Corossol · Papaye · Cerise pays</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      <div class="row">
+        <span class="main"><span class="t">Décembre</span><span class="s">Papaye · Pomme-cannelle · Citron vert</span></span>
+        <span class="acts"><button class="mini">Modifier</button></span>
+      </div>
+      </div>
+    </div>
+
+    <div class="apanel" data-panel="site" hidden>
+      <div class="stack">
+        <div class="row">
+          <span class="main"><span class="t">Page « À propos »</span>
+          <span class="s">Qui anime le site, les règles, le rappel que rien n'y est vendu</span></span>
+          <span class="acts"><button class="mini">Modifier le texte</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Les quartiers</span>
+          <span class="s">16 quartiers proposés à la publication</span></span>
+          <span class="acts"><button class="mini">Ajouter</button><button class="mini">Réordonner</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Les catégories</span>
+          <span class="s">Fruits pays · Légumes pays · Plants et boutures · Aromates pays · Graines</span></span>
+          <span class="acts"><button class="mini">Ajouter</button><button class="mini">Renommer</button></span>
+        </div>
+        <div class="row">
+          <span class="main"><span class="t">Les thèmes des notes</span>
+          <span class="s">Arrosage · Sol et compost · Boutures · Ravageurs</span></span>
+          <span class="acts"><button class="mini">Ajouter</button></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen admin" id="s-note" hidden style="padding:24px 22px 34px">
+    <button class="linkish" data-go="admin" style="align-self:flex-start; padding-left:0">← Retour à la console</button>
+    <div class="page-h">
+      <span class="eyebrow">Console · une note du jardin</span>
+      <h1>Écrire une note</h1>
+      <span class="sub">Une photo, quelques lignes. Trente secondes depuis un chantier.</span>
+    </div>
+
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">La photo</span>
+      <div class="drop">Prendre une photo maintenant<br><span style="font-size:14px">ou en choisir une dans la pellicule</span></div>
+    </div>
+
+    <div class="field">
+      <label for="n-titre">En une phrase, qu'est-ce que vous montrez&nbsp;?</label>
+      <input id="n-titre" type="text" placeholder="L'eau de la clim, c'est un arrosoir toutes les deux heures">
+      <span class="hint">Dites-le comme vous le diriez à un client. Pas besoin de faire un titre.</span>
+    </div>
+
+    <div class="field">
+      <span style="font-weight:600; font-size:16.5px">Le thème</span>
+      <div class="seg">
+        <button class="chip" aria-pressed="true">Arrosage</button>
+        <button class="chip" aria-pressed="false">Sol et compost</button>
+        <button class="chip" aria-pressed="false">Boutures</button>
+        <button class="chip" aria-pressed="false">Ravageurs</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="n-texte">Ce qu'il faut savoir</label>
+      <textarea id="n-texte" placeholder="Je rallonge le tuyau jusqu'à un bidon. Fermé, sinon vous élevez des moustiques…"></textarea>
+      <span class="hint">Appuyez sur la touche microphone de votre clavier et dictez : c'est plus rapide que de taper, et ça marche une main sur le volant.</span>
+    </div>
+
+    <div class="callout">
+      <h3>Elle paraîtra signée « Le jardinier »</h3>
+      <p>Dans l'onglet « Le jardin », et en tête du fil d'accueil pendant trois jours.</p>
+    </div>
+
+    <div class="vide-acts">
+      <button class="btn btn-primary" data-go="admin">Publier la note</button>
+      <button class="btn btn-ghost" data-go="admin">Garder en brouillon</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s-bienvenue" hidden>
+    <div class="bienvenue">
+      <svg viewBox="0 0 100 100" class="coche" aria-hidden="true" focusable="false">
+        <circle cx="50" cy="50" r="46" fill="var(--leaf-soft)"/>
+        <path d="M30 52 44 66 71 36" fill="none" stroke="var(--leaf)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>Votre compte est créé, <span id="bv-prenom">Armand</span>.</h1>
+      <p class="lede">Vous pouvez maintenant publier une annonce et écrire aux personnes qui en proposent. Votre téléphone reste caché : il n'est transmis qu'à celle que vous contactez.</p>
+    </div>
+
+    <div class="vide-acts">
+      <button class="btn btn-primary" data-go="publier">Mon jardin déborde</button>
+      <button class="btn btn-ghost" data-go="accueil">Voir ce qui se passe sur l'île</button>
+    </div>
+
+    <div class="callout">
+      <h3>Deux réglages, une seule fois</h3>
+      <p>Choisissez les fruits et le quartier qui vous intéressent : on vous préviendra quand quelque chose y apparaît, et vous n'aurez plus à venir voir.</p>
+      <div class="vide-acts">
+        <button class="btn btn-ghost" data-go="saison">Choisir mes fruits</button>
+        <button class="btn btn-ghost" data-go="accueil">Choisir mon quartier</button>
+      </div>
+    </div>
+  </section>
+
+  <svg class="frise" viewBox="0 0 1200 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <use class="leaf" href="#v-cactus" x="0" y="40" width="88" height="88"/>
+    <use class="flower" href="#fl-cactus" x="0" y="40" width="88" height="88"/>
+    <use class="leaf" href="#v-raisinier" x="72" y="28" width="100" height="100"/>
+    <use class="leaf" href="#v-bougain" x="158" y="14" width="114" height="114"/>
+    <use class="flower" href="#fl-bougain" x="158" y="14" width="114" height="114"/>
+    <use class="leaf" href="#v-latanier" x="256" y="34" width="96" height="96"/>
+    <use class="leaf" href="#v-aloes" x="338" y="52" width="76" height="76"/>
+    <use class="leaf" href="#v-flamboyant" x="400" y="10" width="120" height="120"/>
+    <use class="flower" href="#fl-flamboyant" x="400" y="10" width="120" height="120"/>
+    <use class="leaf" href="#v-raisinier" x="510" y="44" width="84" height="84"/>
+    <use class="leaf" href="#v-cactus" x="580" y="26" width="104" height="104"/>
+    <use class="flower" href="#fl-cactus" x="580" y="26" width="104" height="104"/>
+    <use class="leaf" href="#v-latanier" x="672" y="48" width="82" height="82"/>
+    <use class="leaf" href="#v-bougain" x="740" y="20" width="112" height="112"/>
+    <use class="flower" href="#fl-bougain" x="740" y="20" width="112" height="112"/>
+    <use class="leaf" href="#v-aloes" x="846" y="52" width="78" height="78"/>
+    <use class="leaf" href="#v-raisinier" x="908" y="32" width="100" height="100"/>
+    <use class="leaf" href="#v-flamboyant" x="996" y="24" width="108" height="108"/>
+    <use class="flower" href="#fl-flamboyant" x="996" y="24" width="108" height="108"/>
+    <use class="leaf" href="#v-latanier" x="1096" y="42" width="92" height="92"/>
+  </svg>
+
+  <nav class="tabbar" id="tabbar" aria-label="Navigation">
+    <button class="tab" data-go="accueil" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Accueil
+    </button>
+    <button class="tab" data-go="echanges">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Échanges
+    </button>
+    <button class="tab" data-go="publier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      Publier
+    </button>
+    <button class="tab" data-go="conseils">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5"/></svg>
+      Le jardin
+    </button>
+    <button class="tab" data-go="saison">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      Saison
+    </button>
+  </nav>
+
+</div>
+</main>
+
+<script>
+(function(){
+  var pick = document.getElementById('screenpick');
+  var device = document.getElementById('device');
+  var tabbar = document.getElementById('tabbar');
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue'];
+  var consoles = ['admin','note','tiers'];
+  var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
+
+  var ecranCourant = null;
+  var defilements = {};
+  var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
+                 publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil'};
+  var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
+              saison:'La saison', admin:'La console'};
+  var RACINES = ['accueil','echanges','conseils','saison'];
+  var btnRetour = document.getElementById('btn-retour');
+
+  function show(name){
+    if(ids.indexOf(name) === -1){ name = 'accueil'; }
+    if(ecranCourant){ defilements[ecranCourant] = window.scrollY || 0; }
+    ecranCourant = name;
+    ids.forEach(function(id){
+      var el = document.getElementById('s-' + id);
+      if(el){ el.hidden = (id !== name); }
+    });
+    device.classList.toggle('wide', consoles.indexOf(name) !== -1);
+    tabbar.hidden = (consoles.indexOf(name) !== -1);
+    if(pick.value !== name){ pick.value = name; }
+    var active = tabFor[name];
+    Array.prototype.forEach.call(document.querySelectorAll('.tab, .navlink'), function(t){
+      if(t.getAttribute('data-go') === active){ t.setAttribute('aria-current','page'); }
+      else { t.removeAttribute('aria-current'); }
+    });
+    if(btnRetour){
+      var racine = RACINES.indexOf(name) !== -1;
+      btnRetour.hidden = racine;
+      if(!racine){
+        var parent = PARENTS[name] || 'accueil';
+        btnRetour.querySelector('.retour-txt').textContent = NOMS[parent] || 'Accueil';
+        btnRetour.setAttribute('aria-label', 'Revenir à ' + (NOMS[parent] || 'Accueil'));
+      }
+    }
+    window.scrollTo({top: defilements[name] || 0, behavior:'auto'});
+  }
+
+  // --- le bouton « retour » du téléphone revient à l'écran précédent
+  function allerA(nom){
+    if(ids.indexOf(nom) === -1){ nom = 'accueil'; }
+    if((location.hash || '').slice(1) === nom){ show(nom); return; }
+    try { location.hash = nom; } catch(e){ show(nom); }
+  }
+
+  if(btnRetour){
+    btnRetour.addEventListener('click', function(){
+      allerA(PARENTS[ecranCourant] || 'accueil');
+    });
+  }
+  window.addEventListener('hashchange', function(){
+    show((location.hash || '').slice(1) || 'accueil');
+  });
+  window.addEventListener('popstate', function(){
+    show((location.hash || '').slice(1) || 'accueil');
+  });
+
+  pick.addEventListener('change', function(){ allerA(pick.value); });
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest ? e.target.closest('[data-go]') : null;
+    if(el){
+      var cible = el.getAttribute('data-go');
+      if(!cible) return;
+      if(cible === 'publier' && !connecte){ allerA('connexion'); return; }
+      allerA(cible); return;
+    }
+    var chip = e.target.closest ? e.target.closest('.chip, .atab') : null;
+    if(chip){
+      var group = chip.parentElement;
+      if(group.hasAttribute('data-multi')){
+        var on = chip.getAttribute('aria-pressed') === 'true';
+        chip.setAttribute('aria-pressed', on ? 'false' : 'true');
+      } else {
+        Array.prototype.forEach.call(group.querySelectorAll('[aria-pressed]'), function(c){
+          c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+        });
+      }
+    }
+  });
+
+  var MOTIFS = {'t-mangue':'f-mangue','t-agrume':'f-citron','t-vert':'f-feuille','t-terre':'f-piment'};
+  Array.prototype.forEach.call(document.querySelectorAll('.thumb'), function(t){
+    var id = null;
+    for(var k in MOTIFS){ if(t.classList.contains(k)){ id = MOTIFS[k]; break; } }
+    if(!id) return;
+    var ns = 'http://www.w3.org/2000/svg';
+    var sv = document.createElementNS(ns,'svg');
+    sv.setAttribute('class','motif'); sv.setAttribute('viewBox','0 0 100 100');
+    sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
+    var u = document.createElementNS(ns,'use');
+    u.setAttribute('href','#'+id);
+    sv.appendChild(u); t.insertBefore(sv, t.firstChild);
+  });
+
+  var STOCK = {'Mangue':1,'Citron vert':1,'Fruit à pain':1};
+  var suivis = [];
+  var dNom = document.getElementById('d-nom');
+  var dEtat = document.getElementById('d-etat');
+  var dSuivre = document.getElementById('d-suivre');
+  var dVoir = document.getElementById('d-voir');
+  var detail = document.getElementById('saison-detail');
+  var bandeau = document.getElementById('suivis');
+  var bListe = document.getElementById('suivis-liste');
+  var courant = null;
+
+  function boutonsFruit(nom){
+    return Array.prototype.filter.call(document.querySelectorAll('.fruit'), function(f){
+      return f.getAttribute('data-f') === nom;
+    });
+  }
+  function rafraichir(){
+    Array.prototype.forEach.call(document.querySelectorAll('.fruit'), function(f){
+      var nom = f.getAttribute('data-f');
+      f.setAttribute('aria-pressed', nom === courant ? 'true' : 'false');
+      f.classList.toggle('suivi', suivis.indexOf(nom) !== -1);
+    });
+    bandeau.hidden = suivis.length === 0;
+    bListe.textContent = suivis.join(', ');
+    if(!courant){ detail.hidden = true; return; }
+    var k = STOCK[courant] || 0;
+    detail.hidden = false;
+    dNom.textContent = courant;
+    dEtat.textContent = k === 0
+      ? "Personne n'en propose pour l'instant."
+      : (k + (k > 1 ? ' annonces en ce moment.' : ' annonce en ce moment.'));
+    dVoir.hidden = (k === 0);
+    var suivi = suivis.indexOf(courant) !== -1;
+    dSuivre.textContent = suivi ? '✓ Vous serez prévenu — ne plus me prévenir' : 'Me prévenir quand quelqu\'un en propose';
+    dSuivre.className = suivi ? 'btn btn-ghost' : 'btn btn-primary';
+  }
+  document.addEventListener('click', function(e){
+    var f = e.target.closest ? e.target.closest('.fruit') : null;
+    if(!f) return;
+    var nom = f.getAttribute('data-f');
+    courant = (courant === nom) ? null : nom;
+    rafraichir();
+  });
+  if(dSuivre){
+    dSuivre.addEventListener('click', function(){
+      if(!courant) return;
+      var i = suivis.indexOf(courant);
+      if(i === -1){ suivis.push(courant); } else { suivis.splice(i,1); }
+      rafraichir();
+    });
+  }
+  rafraichir();
+
+  // --- l'état « connecté »
+  var connecte = false, prenom = 'Armand';
+  var btnCompte = document.getElementById('btn-compte');
+  var contactOuvert = document.getElementById('contact-ouvert');
+  var btnContacter = document.getElementById('btn-contacter');
+
+  function majCompte(){
+    btnCompte.textContent = connecte ? (prenom + ' · se déconnecter') : 'Se connecter';
+    btnCompte.setAttribute('data-go', connecte ? '' : 'connexion');
+    if(!connecte && contactOuvert){
+      contactOuvert.hidden = true;
+      btnContacter.hidden = false;
+    }
+  }
+  btnCompte.addEventListener('click', function(e){
+    if(connecte){
+      e.stopPropagation();
+      connecte = false;
+      majCompte();
+      allerA('accueil');
+    }
+  });
+
+  var creer = document.getElementById('creer-compte');
+  if(creer){
+    creer.addEventListener('click', function(){
+      var champ = document.getElementById('f-prenom');
+      prenom = (champ && champ.value.trim()) ? champ.value.trim() : 'Armand';
+      connecte = true;
+      majCompte();
+      document.getElementById('bv-prenom').textContent = prenom;
+      allerA('bienvenue');
+    });
+  }
+  if(btnContacter){
+    btnContacter.addEventListener('click', function(){
+      if(connecte){
+        btnContacter.hidden = true;
+        contactOuvert.hidden = false;
+      } else {
+        allerA('connexion');
+      }
+    });
+  }
+  majCompte();
+
+  var btnSignaler = document.getElementById('btn-signaler');
+  var sgForm = document.getElementById('signal-form');
+  var sgEnvoye = document.getElementById('signal-envoye');
+  if(btnSignaler){
+    btnSignaler.addEventListener('click', function(){
+      sgForm.hidden = !sgForm.hidden;
+      sgEnvoye.hidden = true;
+    });
+    document.getElementById('sg-annuler').addEventListener('click', function(){
+      sgForm.hidden = true;
+    });
+    document.getElementById('sg-envoyer').addEventListener('click', function(){
+      sgForm.hidden = true;
+      sgEnvoye.hidden = false;
+    });
+  }
+
+  var themepick = document.getElementById('themepick');
+  function setTheme(t){
+    var r = document.documentElement;
+    if(t === 'auto'){ r.removeAttribute('data-theme'); }
+    else { r.setAttribute('data-theme', t); }
+  }
+  themepick.addEventListener('change', function(){ setTheme(themepick.value); });
+
+  var bascule = document.getElementById('scaffold-toggle');
+  var reglages = document.getElementById('scaffold-ctrl');
+  bascule.addEventListener('click', function(){
+    var ouvert = reglages.classList.toggle('ouvert');
+    bascule.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    bascule.textContent = ouvert ? 'Fermer' : 'Réglages';
+  });
+
+  var viewpick = document.getElementById('viewpick');
+  function setView(v){
+    device.setAttribute('data-view', v);
+    if(viewpick.value !== v){ viewpick.value = v; }
+  }
+  viewpick.addEventListener('change', function(){ setView(viewpick.value); });
+  setView(window.innerWidth >= 900 ? 'desktop' : 'phone');
+
+  var heromap  = document.getElementById('heromap');
+  var feed     = document.getElementById('feed-accueil');
+  var eyebrow  = document.getElementById('feed-eyebrow');
+  var reset    = document.getElementById('feed-reset');
+  var vide     = document.getElementById('feed-vide');
+  var videQ    = document.getElementById('vide-q');
+  var videTout = document.getElementById('vide-tout');
+  var cartes   = feed ? Array.prototype.slice.call(feed.children) : [];
+
+  function compte(q){
+    var k = 0;
+    cartes.forEach(function(c){ if(c.getAttribute('data-q') === q){ k++; } });
+    return k;
+  }
+
+  function filtrer(q){
+    var total = q ? compte(q) : 0;
+    cartes.forEach(function(c){
+      c.hidden = q ? (c.getAttribute('data-q') !== q) : false;
+    });
+    if(heromap){
+      Array.prototype.forEach.call(heromap.querySelectorAll('.ci-q'), function(z){
+        z.classList.toggle('on', !!q && z.getAttribute('data-q') === q);
+      });
+    }
+    eyebrow.textContent = q
+      ? (total + (total > 1 ? ' annonces à ' : ' annonce à ') + q)
+      : "Ce qui se passe sur l'île";
+    if(q && total === 0){ eyebrow.textContent = 'À ' + q; }
+    reset.hidden = !q;
+    vide.hidden  = !(q && total === 0);
+    if(q && total === 0){ videQ.textContent = q; }
+    feed.hidden = !!(q && total === 0);
+  }
+
+  if(heromap){
+    Array.prototype.forEach.call(heromap.querySelectorAll('.ci-q'), function(z){
+      var nom = z.getAttribute('data-q');
+      if(compte(nom) > 0){ z.classList.add('has'); }
+      z.setAttribute('tabindex','0');
+      z.setAttribute('role','button');
+      z.setAttribute('aria-label', nom + ' — ' + compte(nom) + ' annonce(s)');
+      function activer(){
+        filtrer(z.classList.contains('on') ? null : nom);
+      }
+      z.addEventListener('click', activer);
+      z.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activer(); }
+      });
+    });
+  }
+  if(reset){ reset.addEventListener('click', function(){ filtrer(null); }); }
+  if(videTout){ videTout.addEventListener('click', function(){ filtrer(null); }); }
+  filtrer(null);
+
+  var isle = document.getElementById('isle');
+  var read = document.getElementById('isle-read');
+  var alt  = document.getElementById('isle-alt');
+  var sel  = document.getElementById('f-quartier');
+
+  function choisir(nom){
+    read.textContent = nom;
+    read.classList.remove('vide');
+    for(var i=0;i<sel.options.length;i++){
+      if(sel.options[i].text === nom){ sel.selectedIndex = i; break; }
+    }
+  }
+
+  if(isle){
+    Array.prototype.forEach.call(isle.querySelectorAll('.ci-q'), function(q){
+      q.style.pointerEvents = 'auto';
+      q.addEventListener('click', function(){
+        Array.prototype.forEach.call(isle.querySelectorAll('.ci-q'), function(o){ o.classList.remove('on'); });
+        q.classList.add('on');
+        choisir(q.getAttribute('data-q'));
+      });
+    });
+  }
+
+  if(alt){
+    alt.addEventListener('click', function(){
+      var liste = sel.hidden;
+      sel.hidden = !liste;
+      isle.hidden = liste;
+      alt.textContent = liste ? 'Revenir à la carte' : 'Je préfère choisir dans une liste';
+      if(liste){ sel.focus(); }
+    });
+  }
+  if(sel){ sel.addEventListener('change', function(){ choisir(sel.options[sel.selectedIndex].text); }); }
+
+  // --- les zones photo prennent vraiment une photo
+  function poids(o){
+    return o > 1048576 ? (o/1048576).toFixed(1).replace('.',',') + ' Mo'
+                       : Math.round(o/1024) + ' Ko';
+  }
+  function reduire(fichier, fait){
+    var url = URL.createObjectURL(fichier);
+    var img = new Image();
+    img.onload = function(){
+      var MAX = 1600;
+      var r = Math.min(1, MAX / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * r);
+      c.height = Math.round(img.height * r);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(function(b){
+        fait(c.toDataURL('image/jpeg', 0.82), b ? b.size : 0, c.width, c.height);
+      }, 'image/jpeg', 0.82);
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); fait(null, 0, 0, 0); };
+    img.src = url;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.drop'), function(zone, i){
+    var entree = document.createElement('input');
+    entree.type = 'file'; entree.accept = 'image/*'; entree.multiple = true;
+    entree.id = 'photo-' + i; entree.hidden = true;
+
+    var apercu = document.createElement('div');
+    apercu.className = 'apercu';
+
+    var note = document.createElement('p');
+    note.className = 'photo-note';
+    note.hidden = true;
+    note.textContent = 'Réduites à 1600 px et recompressées dans votre téléphone. Les coordonnées GPS enregistrées par l\'appareil sont effacées au passage : la photo ne dira jamais où vous habitez.';
+
+    zone.parentNode.insertBefore(entree, zone.nextSibling);
+    zone.parentNode.insertBefore(apercu, entree.nextSibling);
+    zone.parentNode.insertBefore(note, apercu.nextSibling);
+
+    zone.setAttribute('role','button');
+    zone.setAttribute('tabindex','0');
+    zone.addEventListener('click', function(){ entree.click(); });
+    zone.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); entree.click(); }
+    });
+
+    entree.addEventListener('change', function(){
+      Array.prototype.forEach.call(entree.files, function(f){
+        if(f.type.indexOf('image/') !== 0) return;
+        var avant = f.size;
+        reduire(f, function(src, apres, l, h){
+          if(!src) return;
+          var v = document.createElement('div');
+          v.className = 'vignette';
+          v.innerHTML = '<img alt="">'
+            + '<button class="oter" type="button" aria-label="Retirer cette photo">×</button>'
+            + '<span class="poids">' + poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h + '</span>';
+          v.querySelector('img').src = src;
+          v.querySelector('.oter').addEventListener('click', function(){
+            v.remove();
+            if(!apercu.children.length){ note.hidden = true; }
+          });
+          apercu.appendChild(v);
+          note.hidden = false;
+        });
+      });
+      entree.value = '';
+    });
+  });
+
+  // --- les onglets de la console montrent leur contenu
+  var atabs = document.querySelectorAll('#s-admin .atab');
+  var apanels = document.querySelectorAll('#s-admin .apanel');
+  Array.prototype.forEach.call(atabs, function(t){
+    t.addEventListener('click', function(){
+      var cible = t.getAttribute('data-panel');
+      Array.prototype.forEach.call(apanels, function(pn){
+        pn.hidden = (pn.getAttribute('data-panel') !== cible);
+      });
+    });
+  });
+
+  // --- les filtres filtrent vraiment
+  function brancher(idSection, lire){
+    var sec = document.getElementById(idSection);
+    if(!sec) return;
+    var groupe = sec.querySelector('.filters');
+    var fil = sec.querySelector('.feed');
+    if(!groupe || !fil) return;
+
+    var cartes = Array.prototype.slice.call(fil.children);
+    var vide = document.createElement('p');
+    vide.className = 'vide-min';
+    vide.hidden = true;
+    fil.parentNode.insertBefore(vide, fil);
+
+    function appliquer(){
+      var actifs = [];
+      Array.prototype.forEach.call(groupe.querySelectorAll('.chip[aria-pressed="true"]'), function(c){
+        var t = c.textContent.trim();
+        if(t !== 'Tout'){ actifs.push(t); }
+      });
+      var vus = 0;
+      cartes.forEach(function(c){
+        var ok = actifs.length === 0 || actifs.indexOf(lire(c)) !== -1;
+        c.hidden = !ok;
+        if(ok){ vus++; }
+      });
+      fil.hidden = (vus === 0);
+      vide.hidden = (vus > 0);
+      if(vus === 0){
+        vide.textContent = 'Rien dans « ' + actifs.join(' », « ') + ' » en ce moment. Touchez à nouveau le filtre pour tout revoir.';
+      }
+    }
+    document.addEventListener('click', function(e){
+      var c = e.target.closest ? e.target.closest('.chip') : null;
+      if(c && groupe.contains(c)){ appliquer(); }
+    });
+    appliquer();
+  }
+
+  var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche','k-echange':"J'échange"};
+  brancher('s-echanges', function(c){
+    var k = c.querySelector('.kicker');
+    if(!k) return '';
+    for(var cl in TYPES){ if(k.classList.contains(cl)){ return TYPES[cl]; } }
+    return '';
+  });
+  brancher('s-conseils', function(c){
+    var k = c.querySelector('.kicker');
+    return k ? k.textContent.trim() : '';
+  });
+
+  show((location.hash || '').slice(1) || 'accueil');
+})();
+</script>
+</body>
+</html>

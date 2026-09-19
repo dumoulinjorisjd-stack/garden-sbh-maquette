@@ -532,8 +532,17 @@ button,select,input,textarea{font:inherit; color:inherit}
 .toast.vu{opacity:1}
 #mienne-photo.donne{filter:grayscale(.75) brightness(.9)}
 
-.apercu{display:flex; flex-wrap:wrap; gap:10px}
+.apercu{display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:10px; align-items:start}
 .apercu:empty{display:none}
+.ajouter{
+  border:2px dashed var(--line); background:var(--surface-2); border-radius:10px;
+  min-height:126px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:5px; cursor:pointer; color:var(--ink-soft); font-size:14px; line-height:1.25; text-align:center;
+  padding:8px;
+}
+.ajouter:hover{border-color:var(--leaf); background:var(--surf-hover); color:var(--ink)}
+.ajouter b{font-family:var(--display); font-weight:400; font-size:30px; line-height:1; color:var(--leaf)}
+.photo-max{font-size:14px; color:var(--ink-soft)}
 .vignette{
   position:relative; width:118px; border:1px solid var(--line);
   border-radius:10px; overflow:hidden; background:var(--surface);
@@ -1499,7 +1508,7 @@ button{cursor:pointer}
     <div class="field">
       <label for="n-texte">Ce qu'il faut savoir</label>
       <textarea id="n-texte" placeholder="Je rallonge le tuyau jusqu'à un bidon. Fermé, sinon vous élevez des moustiques…"></textarea>
-      <span class="hint">Appuyez sur la touche microphone de votre clavier et dictez : c'est plus rapide que de taper, et ça marche une main sur le volant.</span>
+      <span class="hint">Appuyez sur la touche microphone de votre clavier et dictez : c'est plus rapide que de taper, et ça marche avec les mains pleines de terre.</span>
     </div>
 
     <div class="callout">
@@ -2025,6 +2034,8 @@ button{cursor:pointer}
     img.src = url;
   }
 
+  var MAX_PHOTOS = 4;
+
   Array.prototype.forEach.call(document.querySelectorAll('.drop'), function(zone, i){
     var entree = document.createElement('input');
     entree.type = 'file'; entree.accept = 'image/*'; entree.multiple = true;
@@ -2033,14 +2044,33 @@ button{cursor:pointer}
     var apercu = document.createElement('div');
     apercu.className = 'apercu';
 
+    var ajouter = document.createElement('button');
+    ajouter.type = 'button'; ajouter.className = 'ajouter'; ajouter.hidden = true;
+    ajouter.innerHTML = '<b>+</b><span>Ajouter<br>une photo</span>';
+
+    var plein = document.createElement('p');
+    plein.className = 'photo-max'; plein.hidden = true;
+    plein.textContent = 'Quatre photos, c\'est le maximum — au-delà, personne ne les regarde.';
+
     var note = document.createElement('p');
-    note.className = 'photo-note';
-    note.hidden = true;
+    note.className = 'photo-note'; note.hidden = true;
     note.textContent = 'Réduites à 1600 px et recompressées dans votre téléphone. Les coordonnées GPS enregistrées par l\'appareil sont effacées au passage : la photo ne dira jamais où vous habitez.';
 
     zone.parentNode.insertBefore(entree, zone.nextSibling);
     zone.parentNode.insertBefore(apercu, entree.nextSibling);
-    zone.parentNode.insertBefore(note, apercu.nextSibling);
+    zone.parentNode.insertBefore(plein, apercu.nextSibling);
+    zone.parentNode.insertBefore(note, plein.nextSibling);
+    apercu.appendChild(ajouter);
+
+    function compte(){ return apercu.querySelectorAll('.vignette').length; }
+    function majZone(){
+      var k = compte();
+      zone.hidden = (k > 0);
+      ajouter.hidden = (k === 0 || k >= MAX_PHOTOS);
+      plein.hidden = (k < MAX_PHOTOS);
+      note.hidden = (k === 0);
+      apercu.style.display = k ? '' : 'none';
+    }
 
     zone.setAttribute('role','button');
     zone.setAttribute('tabindex','0');
@@ -2048,29 +2078,34 @@ button{cursor:pointer}
     zone.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); entree.click(); }
     });
+    ajouter.addEventListener('click', function(){ entree.click(); });
 
     entree.addEventListener('change', function(){
-      Array.prototype.forEach.call(entree.files, function(f){
+      var fichiers = Array.prototype.slice.call(entree.files);
+      fichiers.forEach(function(f){
         if(f.type.indexOf('image/') !== 0) return;
+        if(compte() >= MAX_PHOTOS) return;
         var avant = f.size;
+        var v = document.createElement('div');
+        v.className = 'vignette';
+        v.innerHTML = '<img alt="">'
+          + '<button class="oter" type="button" aria-label="Retirer cette photo">×</button>'
+          + '<span class="poids">traitement…</span>';
+        apercu.insertBefore(v, ajouter);
+        majZone();
+        v.querySelector('.oter').addEventListener('click', function(){
+          v.remove(); majZone();
+        });
         reduire(f, function(src, apres, l, h){
-          if(!src) return;
-          var v = document.createElement('div');
-          v.className = 'vignette';
-          v.innerHTML = '<img alt="">'
-            + '<button class="oter" type="button" aria-label="Retirer cette photo">×</button>'
-            + '<span class="poids">' + poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h + '</span>';
+          if(!src){ v.remove(); majZone(); return; }
           v.querySelector('img').src = src;
-          v.querySelector('.oter').addEventListener('click', function(){
-            v.remove();
-            if(!apercu.children.length){ note.hidden = true; }
-          });
-          apercu.appendChild(v);
-          note.hidden = false;
+          v.querySelector('.poids').innerHTML = poids(avant) + ' → <b>' + poids(apres) + '</b><br>' + l + '×' + h;
         });
       });
       entree.value = '';
     });
+
+    majZone();
   });
 
   // --- les onglets de la console montrent leur contenu

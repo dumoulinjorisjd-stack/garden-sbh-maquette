@@ -241,6 +241,8 @@ button,select,input,textarea{font:inherit; color:inherit}
 }
 .ci-q:hover{fill-opacity:.24}
 .ci-q.on{fill-opacity:.65}
+#isle .ci-q:focus, #isle .ci-q:focus-visible{outline:none}
+#isle .ci-q:focus-visible{fill-opacity:.8; stroke:var(--ink); stroke-width:1.4}
 .isle-read{
   display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;
   padding:11px 13px; border:1px solid var(--line); border-radius:10px; background:var(--surface);
@@ -727,6 +729,7 @@ button{cursor:pointer}
 </style>
 </head>
 <body>
+
 
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
 
@@ -2745,5 +2748,6 @@ button{cursor:pointer}
   show((location.hash || '').slice(1) || 'accueil');
 })();
 </script>
+
 </body>
 </html>

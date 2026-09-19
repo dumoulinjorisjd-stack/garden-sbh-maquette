@@ -1197,7 +1197,8 @@ button{cursor:pointer}
 
       <div class="callout">
         <h3>Vous faites autrement&nbsp;?</h3>
-        <p>Envoyez une photo et deux lignes.</p>
+        <p>Une photo et deux lignes suffisent : le jardinier en fera une note.</p>
+        <button class="btn btn-primary" style="align-self:flex-start" id="btn-astuce">Envoyer mon astuce</button>
       </div>
     </div>
   </section>
@@ -1665,7 +1666,8 @@ button{cursor:pointer}
 
     <div class="callout alerte">
       <h3>Vous n'avez plus accès à cette adresse&nbsp;?</h3>
-      <p>Appelez le jardinier, il s'en occupe.</p>
+      <p>Le jardinier s'en occupe.</p>
+      <button class="btn btn-ghost" style="align-self:flex-start" id="btn-appeler-jardinier">Appeler le jardinier</button>
     </div>
 
     <button class="btn btn-ghost btn-block" data-go="connexion">Je n'ai pas encore de compte</button>
@@ -2045,6 +2047,19 @@ button{cursor:pointer}
       dire('Vous voilà connecté. Bon tour des jardins.');
     });
   }
+  var astuce = document.getElementById('btn-astuce');
+  if(astuce){
+    astuce.addEventListener('click', function(){
+      dire('Ouvre WhatsApp sur la conversation avec le jardinier.');
+    });
+  }
+  var appelJ = document.getElementById('btn-appeler-jardinier');
+  if(appelJ){
+    appelJ.addEventListener('click', function(){
+      dire('Lance l\'appel depuis votre téléphone.');
+    });
+  }
+
   var eRenv = document.getElementById('e-renvoyer');
   if(eRenv){ eRenv.addEventListener('click', function(){ dire('Nouveau code envoyé.'); }); }
 

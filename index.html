@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -33,18 +33,6 @@ img{max-width:100%}
   --display:"Anton","Archivo Black",Impact,"Haettenschweiler",sans-serif;
   --serif:"Faustina",Georgia,"Times New Roman",serif;
   --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --ground:#191509; --surface:#241F13; --surface-2:#30291A;
-    --ink:#F6EEDC; --ink-soft:#B5AC96; --line:#443B28;
-    --leaf:#8FD4A5; --leaf-soft:#22301F;
-    --flam:#FF9C6B; --flam-soft:#39231A;
-    --mangue:#F6C25F; --mangue-soft:#362A15;
-    --btn-bg:#8FD4A5; --btn-ink:#14180D; --btn-hover:#B0E6C2; --surf-hover:#342C1D; --btn-hover:#B0E6C2; --surf-hover:#342C1D;
-    --chrome:#0C0F09; --chrome-ink:#D7D3C5; --chrome-line:#2A3024;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
-  }
 }
 :root[data-theme="dark"]{
   --ground:#191509; --surface:#241F13; --surface-2:#30291A;
@@ -394,8 +382,7 @@ button,select,input,textarea{font:inherit; color:inherit}
   border-radius:999px; padding:9px 15px; font-size:15px; cursor:pointer; min-height:42px;
 }
 .chip[aria-pressed="true"]{background:var(--leaf); color:var(--btn-ink); border-color:var(--leaf); font-weight:600}
-:root[data-theme="dark"] .chip[aria-pressed="true"],
-:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:var(--btn-ink)}
+:root[data-theme="dark"] .chip[aria-pressed="true"]{color:var(--btn-ink)}
 
 /* ---------- boutons ---------- */
 .btn{
@@ -1003,9 +990,9 @@ button{cursor:pointer}
     <div class="scaffold-ctrl" id="scaffold-ctrl">
     <label for="themepick">Thème</label>
     <select id="themepick">
-      <option value="auto">Système</option>
-      <option value="light">Clair</option>
+      <option value="light" selected>Clair</option>
       <option value="dark">Sombre</option>
+      <option value="auto">Comme l'appareil</option>
     </select>
     <label for="viewpick">Affichage</label>
     <select id="viewpick">
@@ -2755,12 +2742,22 @@ button{cursor:pointer}
   }
 
   var themepick = document.getElementById('themepick');
+  var sombreAppareil = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
   function setTheme(t){
     var r = document.documentElement;
-    if(t === 'auto'){ r.removeAttribute('data-theme'); }
-    else { r.setAttribute('data-theme', t); }
+    if(t === 'auto'){
+      r.setAttribute('data-theme', sombreAppareil && sombreAppareil.matches ? 'dark' : 'light');
+    } else {
+      r.setAttribute('data-theme', t);
+    }
   }
   themepick.addEventListener('change', function(){ setTheme(themepick.value); });
+  if(sombreAppareil && sombreAppareil.addEventListener){
+    sombreAppareil.addEventListener('change', function(){
+      if(themepick.value === 'auto'){ setTheme('auto'); }
+    });
+  }
+  setTheme(themepick.value);
 
   var bascule = document.getElementById('scaffold-toggle');
   var reglages = document.getElementById('scaffold-ctrl');

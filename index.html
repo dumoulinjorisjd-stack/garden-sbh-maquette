@@ -516,6 +516,18 @@ body.presentation .sortie-presentation{display:block}
 .drop-grand svg{width:38px; height:38px; color:var(--leaf)}
 .drop-grand .sous{font-size:14.5px; color:var(--ink-soft)}
 
+/* COMBIEN, ET QUAND. Une quantité n'est pas un poids : trois fruits à pain se
+   comptent, dix kilos de mangues se pèsent, et forcer l'un dans l'autre donne des
+   annonces fausses. Le créneau passe aux sélecteurs natifs du téléphone — tous les
+   jours, toutes les heures : quatre pastilles ne couvraient pas la vraie vie. */
+.mesure{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+.mesure input[type=number]{width:104px; text-align:right}
+.mesure select{width:auto; min-width:118px}
+.quand-champs{display:flex; flex-wrap:wrap; gap:10px}
+.quand-champs label{font-size:14.5px; color:var(--ink-soft); font-weight:400; display:block; margin-bottom:4px}
+.quand-champs > div{flex:1 1 130px; min-width:0}
+.quand-champs input{width:100%}
+.alerte-creneau{color:var(--flam); font-weight:600}
 /* PRIX ET CRÉNEAU. Le prix se choisit d'abord — donné ou vendu — parce que tout
    le reste en dépend. « À donner » est l'état par défaut et le restera : c'est le
    sujet du site. Le créneau répond à un vrai problème, celui de l'annonceur
@@ -1609,12 +1621,17 @@ button{cursor:pointer}
 
     <div class="field">
       <span style="font-weight:600; font-size:16.5px">Combien&nbsp;?</span>
-      <div class="seg" id="p-quantite">
-        <button class="chip" aria-pressed="false">De quoi goûter</button>
-        <button class="chip" aria-pressed="false">Un plein sac</button>
-        <button class="chip" aria-pressed="false">Un cageot</button>
-        <button class="chip" aria-pressed="false">Tout un arbre</button>
+      <div class="seg" id="p-mesure">
+        <button class="chip" aria-pressed="true">En nombre</button>
+        <button class="chip" aria-pressed="false">En poids</button>
       </div>
+      <div class="mesure">
+        <label for="p-valeur" class="sr">Combien</label>
+        <input id="p-valeur" type="number" inputmode="decimal" min="0" step="1" placeholder="3">
+        <label for="p-unite" class="sr">Unité</label>
+        <select id="p-unite"></select>
+      </div>
+      <span class="hint" id="p-mesure-hint">À peu près suffit. Personne ne va vérifier.</span>
       <input id="p-combien" type="text" hidden aria-hidden="true" tabindex="-1">
     </div>
 
@@ -1637,17 +1654,18 @@ button{cursor:pointer}
     <div class="field">
       <span style="font-weight:600; font-size:16.5px">Quand peut-on passer&nbsp;?</span>
       <span class="hint">Sans créneau, vous êtes dérangé toute la journée pour trois bananes.</span>
-      <div class="creneau">
-        <div class="seg jours" id="p-jour">
-          <button class="chip" aria-pressed="false">Aujourd'hui</button>
-          <button class="chip" aria-pressed="true">Demain</button>
-          <button class="chip" aria-pressed="false">Samedi</button>
-          <button class="chip" aria-pressed="false">Dimanche</button>
+      <div class="quand-champs">
+        <div>
+          <label for="p-date">Le jour</label>
+          <input id="p-date" type="date">
         </div>
-        <div class="seg" id="p-heure">
-          <button class="chip" aria-pressed="false">Le matin<br><span style="font-weight:400">7h – 12h</span></button>
-          <button class="chip" aria-pressed="true">L'après-midi<br><span style="font-weight:400">14h – 18h</span></button>
-          <button class="chip" aria-pressed="false">En fin de journée<br><span style="font-weight:400">17h – 19h</span></button>
+        <div>
+          <label for="p-de">À partir de</label>
+          <input id="p-de" type="time" value="14:00" step="900">
+        </div>
+        <div>
+          <label for="p-a">Jusqu'à</label>
+          <input id="p-a" type="time" value="18:00" step="900">
         </div>
       </div>
       <span class="hint" id="p-creneau-lu">Les gens verront&nbsp;: <b>demain, de 14h à 18h</b>.</span>
@@ -3336,11 +3354,8 @@ button{cursor:pointer}
       pQuoi.value = actif ? c.textContent.trim() : '';
       majPret();
     }
-    if(g.id === 'p-quantite' && pCombien){
-      pCombien.value = actif ? c.textContent.trim() : '';
-    }
+    if(g.id === 'p-mesure'){ majMesure(); }
     if(g.id === 'p-don'){ majDon(); }
-    if(g.id === 'p-jour' || g.id === 'p-heure'){ majCreneau(); }
     if(g.id === 'm-vite'){
       var m = document.getElementById('m-mot');
       if(m && actif){ m.value = c.textContent.trim(); }
@@ -3380,23 +3395,96 @@ button{cursor:pointer}
     });
   }
 
+  // --- combien : un nombre OU un poids, avec l'unité qui va avec
+  var pValeur = document.getElementById('p-valeur');
+  var pUnite = document.getElementById('p-unite');
+  var pMesureHint = document.getElementById('p-mesure-hint');
+  var UNITES = {
+    nombre: ['pièces', 'sacs', 'cageots', 'seaux', 'bouquets', 'pots', 'pieds', 'bocaux'],
+    poids:  ['kg', 'g']
+  };
+  function enPoids(){
+    var c = document.querySelector('#p-mesure .chip[aria-pressed="true"]');
+    return !!c && c.textContent.trim() === 'En poids';
+  }
+  function majMesure(){
+    if(!pUnite) return;
+    var poids = enPoids();
+    var liste = UNITES[poids ? 'poids' : 'nombre'];
+    var garde = pUnite.value;
+    pUnite.innerHTML = liste.map(function(u){ return '<option>' + u + '</option>'; }).join('');
+    if(liste.indexOf(garde) >= 0){ pUnite.value = garde; }
+    if(pValeur){
+      pValeur.step = poids ? '0.5' : '1';
+      pValeur.placeholder = poids ? '10' : '3';
+    }
+    if(pMesureHint){
+      pMesureHint.textContent = poids
+        ? 'À peu près suffit : pas besoin de peser au gramme.'
+        : 'À peu près suffit. Personne ne va vérifier.';
+    }
+    majCombien();
+  }
+  // « 1 cageots » : le pluriel du menu ne vaut pas pour l'annonce. Les deux seules
+  // irrégularités de la liste sont seaux et bocaux ; le reste perd son s.
+  var SINGULIER = {'seaux':'seau', 'bocaux':'bocal', 'kg':'kg', 'g':'g'};
+  function accord(u, n){
+    if(n >= 2 || n === 0 || isNaN(n)) return u;
+    return SINGULIER[u] || u.replace(/s$/, '');
+  }
+  function majCombien(){
+    if(!pCombien) return;
+    var brut = (pValeur && pValeur.value || '').trim();
+    if(!brut){ pCombien.value = ''; return; }
+    var n = parseFloat(brut);
+    pCombien.value = brut.replace('.', ',') + ' ' + accord(pUnite ? pUnite.value : '', n);
+  }
+  if(pValeur){ pValeur.addEventListener('input', majCombien); }
+  if(pUnite){ pUnite.addEventListener('change', majCombien); }
+
+  // --- le créneau : tous les jours, toutes les heures
   var pCreneauLu = document.getElementById('p-creneau-lu');
-  function choixSeg(id){
-    var c = document.querySelector('#' + id + ' .chip[aria-pressed="true"]');
-    if(!c) return '';
-    var clone = c.cloneNode(true);
-    var pet = clone.querySelector('span');
-    var heures = pet ? pet.textContent.trim() : '';
-    if(pet){ pet.remove(); }
-    return {titre: clone.textContent.trim(), heures: heures};
+  var pDate = document.getElementById('p-date');
+  var pDe = document.getElementById('p-de');
+  var pA = document.getElementById('p-a');
+  function iso(d){
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  if(pDate){
+    var auj = new Date();
+    var dem = new Date(auj.getTime() + 86400000);
+    pDate.min = iso(auj);
+    pDate.value = iso(dem);
+  }
+  function heureLisible(h){
+    var m = (h || '').split(':');
+    if(m.length < 2) return '';
+    return m[1] === '00' ? (+m[0]) + 'h' : (+m[0]) + 'h' + m[1];
   }
   function majCreneau(){
     if(!pCreneauLu) return;
-    var j = choixSeg('p-jour'), h = choixSeg('p-heure');
-    if(!j || !h){ pCreneauLu.innerHTML = 'Choisissez un jour et une plage.'; return; }
-    var quand = j.titre.toLowerCase() + ', de ' + h.heures.replace(' – ', 'h à ').replace(/h+/g,'h');
-    pCreneauLu.innerHTML = 'Les gens verront&nbsp;: <b>' + quand + '</b>.';
+    if(!pDate || !pDate.value || !pDe || !pDe.value || !pA || !pA.value){
+      pCreneauLu.className = 'hint';
+      pCreneauLu.innerHTML = 'Choisissez un jour et deux heures.';
+      return;
+    }
+    if(pA.value <= pDe.value){
+      pCreneauLu.className = 'hint alerte-creneau';
+      pCreneauLu.textContent = 'La fin doit venir après le début.';
+      return;
+    }
+    var d = new Date(pDate.value + 'T12:00:00');
+    var jour;
+    try {
+      jour = d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+    } catch(_){ jour = pDate.value; }
+    pCreneauLu.className = 'hint';
+    pCreneauLu.innerHTML = 'Les gens verront&nbsp;: <b>' + jour + ', de '
+      + heureLisible(pDe.value) + ' à ' + heureLisible(pA.value) + '</b>.';
   }
+  [pDate, pDe, pA].forEach(function(el){
+    if(el){ el.addEventListener('change', majCreneau); el.addEventListener('input', majCreneau); }
+  });
 
   var pOuChg = document.getElementById('p-ou-chg');
   if(pOuChg && pOu){
@@ -3426,7 +3514,7 @@ button{cursor:pointer}
     });
   }
 
-  majDon(); majCreneau();
+  majMesure(); majDon(); majCreneau();
 
   // --- l'annonce vit : le donneur voit ce qu'elle produit
   var neuve = false;

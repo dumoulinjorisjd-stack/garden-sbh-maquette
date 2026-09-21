@@ -1190,6 +1190,7 @@ button{cursor:pointer}
       <option value="publier">7 · Publier une annonce</option>
       <option value="mienne">8 · Mon annonce (vue du donneur)</option>
       <option value="merci">8b · Dire mèsi</option>
+      <option value="compte">8c · Mon compte</option>
       <option value="conseils">9 · Le jardin</option>
       <option value="article">10 · Une note</option>
       <option value="astuce">11 · Proposer une astuce</option>
@@ -2347,6 +2348,80 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="screen" id="s-compte" hidden>
+    <div class="page-h">
+      <span class="kicker k-conseil" style="align-self:flex-start">Mon compte</span>
+      <h1 id="c-titre">Armand</h1>
+      <span class="sub">Tout se change ici, et à tout moment.</span>
+    </div>
+
+    <div class="field section">
+      <span class="titre-section">Vous</span>
+      <label for="c-prenom">Votre prénom</label>
+      <input id="c-prenom" type="text" value="Armand">
+      <span class="hint">C'est ce que les autres verront. Pas de nom de famille.</span>
+      <label for="c-tel">Votre téléphone</label>
+      <input id="c-tel" type="tel" value="0690 12 34 56">
+      <span class="hint"><strong>Visible par les membres inscrits</strong> qui ouvrent vos annonces. Jamais par un simple visiteur.</span>
+      <label for="c-mail">Votre adresse e-mail</label>
+      <input id="c-mail" type="email" value="armand@exemple.fr">
+      <span class="hint">C'est là que part votre code quand vous changez d'appareil.</span>
+    </div>
+
+    <div class="field section">
+      <span class="titre-section">Votre quartier</span>
+      <span class="hint">Il apparaît sur vos annonces et sert à vous proposer ce qui est près de chez vous.</span>
+      <select id="c-quartier" aria-label="Votre quartier"><option>Colombier</option><option>Corossol</option><option>Terre Neuve · Merlette</option><option>Anse des Flamands</option><option>Public</option><option>Gustavia</option><option>Anse des Cayes · Quartier du Roy</option><option>Saint-Jean</option><option>Lurin · Gouverneur</option><option>Grande &amp; Petite Saline</option><option>Lorient · Camaruche</option><option>Pointe Milou · Mont-Jean</option><option>Grand Fond</option><option>Vitet · Dévé</option><option>Marigot</option><option>Cul-de-Sac · Toiny</option></select>
+    </div>
+
+    <div class="field section">
+      <span class="titre-section">Le point où l'on vous trouve</span>
+      <span class="hint">Facultatif, et privé : il ne part qu'avec les annonces auxquelles vous le joignez.</span>
+      <div class="geo">
+        <div class="geo-carte" id="geo-carte-compte">
+          <div class="geo-tuiles"></div>
+          <svg class="geo-pin" viewBox="0 0 24 34" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 0C5.9 0 1 4.9 1 11c0 8 11 23 11 23s11-15 11-23c0-6.1-4.9-11-11-11z"/>
+            <circle cx="12" cy="11" r="4.2" fill="#fff"/>
+          </svg>
+          <div class="geo-zoom">
+            <button type="button" data-geo="plus" aria-label="Zoomer">+</button>
+            <button type="button" data-geo="moins" aria-label="Dézoomer">&minus;</button>
+          </div>
+          <span class="geo-credit">&copy; OpenStreetMap</span>
+          <div class="geo-raté">La carte n'a pas pu se charger. Réessayez plus tard.</div>
+        </div>
+        <div class="geo-lu">
+          <svg class="coche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5 5L20 6.5"/></svg>
+          <span class="etat">Aucun point pour l'instant</span>
+          <span class="coord"></span>
+        </div>
+        <div class="vide-acts">
+          <button class="btn btn-ghost" type="button" data-geo="ici">Me localiser</button>
+          <button class="btn btn-ghost" type="button" data-geo="poser">C'est là</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field section">
+      <span class="titre-section">Ce qu'on vous signale</span>
+      <span class="hint">On vous prévient quand l'un de ces fruits est proposé près de chez vous.</span>
+      <div class="seg propositions" id="c-fruits" data-multi role="group" aria-label="Fruits suivis"></div>
+      <label class="accord" style="border-left-color:var(--leaf); background:var(--leaf-soft)">
+        <input type="checkbox" id="c-alertes" checked>
+        <span>Me prévenir quand une annonce paraît dans mon quartier.</span>
+      </label>
+    </div>
+
+    <div class="field section">
+      <span class="titre-section">Quitter</span>
+      <div class="vide-acts">
+        <button class="btn btn-ghost" id="c-deconnexion">Se déconnecter</button>
+      </div>
+      <span class="hint">Vos annonces restent en ligne. Vous les retrouverez en revenant avec votre e-mail.</span>
+    </div>
+  </section>
+
   <section class="screen" id="s-merci" hidden>
     <div class="page-h">
       <span class="kicker k-donne" style="align-self:flex-start">Dire mèsi</span>
@@ -2482,10 +2557,9 @@ button{cursor:pointer}
 
     <div class="callout">
       <h3>Deux réglages, une seule fois</h3>
-      <p>Choisissez vos fruits et votre quartier : on vous préviendra.</p>
+      <p>Vos fruits, votre quartier, le point où l'on vous trouve : tout se règle depuis votre compte.</p>
       <div class="vide-acts">
-        <button class="btn btn-ghost" data-go="saison">Choisir mes fruits</button>
-        <button class="btn btn-ghost" data-go="accueil">Choisir mon quartier</button>
+        <button class="btn btn-ghost" data-go="compte">Régler tout ça</button>
       </div>
     </div>
   </section>
@@ -2544,7 +2618,7 @@ button{cursor:pointer}
   var pick = document.getElementById('screenpick');
   var device = document.getElementById('device');
   var tabbar = document.getElementById('tabbar');
-  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer','astuce','merci'];
+  var ids = ['accueil','echanges','annonce','connexion','publier','conseils','article','saison','admin','note','bienvenue','mienne','entrer','astuce','merci','compte'];
   var consoles = ['admin','note','tiers'];
   var tabFor = {accueil:'accueil', echanges:'echanges', annonce:'echanges', merci:'echanges', mienne:'echanges', publier:'publier', conseils:'conseils', article:'conseils', saison:'saison'};
 
@@ -2552,7 +2626,8 @@ button{cursor:pointer}
   var defilements = {};
   var PARENTS = {annonce:'echanges', article:'conseils', connexion:'accueil',
                  publier:'accueil', bienvenue:'accueil', note:'admin', admin:'accueil',
-                 mienne:'echanges', entrer:'accueil', astuce:'conseils', merci:'annonce'};
+                 mienne:'echanges', entrer:'accueil', astuce:'conseils', merci:'annonce',
+                 compte:'accueil'};
   var NOMS = {accueil:'Accueil', echanges:'Les échanges', conseils:'Le jardin',
               saison:'La saison', admin:'La console'};
   var RACINES = ['accueil','echanges','conseils','saison'];
@@ -2619,6 +2694,12 @@ button{cursor:pointer}
     var chip = e.target.closest ? e.target.closest('.chip, .atab') : null;
     if(chip){
       var group = chip.parentElement;
+      // Un groupe à choix multiple ne se comporte pas comme un bouton radio : suivre
+      // les mangues ne doit pas faire oublier les fruits à pain.
+      if(group && group.hasAttribute('data-multi')){
+        chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        return;
+      }
       var dejaActif = chip.getAttribute('aria-pressed') === 'true';
       var aTout = !!Array.prototype.filter.call(group.querySelectorAll('.chip'), function(c){
         return c.textContent.trim() === 'Tout';
@@ -2777,21 +2858,33 @@ button{cursor:pointer}
   var btnContacter = document.getElementById('btn-contacter');
 
   function majCompte(){
-    btnCompte.textContent = connecte ? (prenom + ' · se déconnecter') : 'Se connecter';
-    btnCompte.setAttribute('data-go', connecte ? '' : 'connexion');
+    // Le bouton du bandeau n'est plus un interrupteur de déconnexion déguisé : il
+    // ouvre le compte. On ne se déconnecte plus par mégarde en cherchant ses réglages.
+    btnCompte.textContent = connecte ? prenom : 'Se connecter';
+    btnCompte.setAttribute('data-go', connecte ? 'compte' : 'connexion');
+    var ct = document.getElementById('c-titre');
+    if(ct){ ct.textContent = prenom; }
+    var cp = document.getElementById('c-prenom');
+    if(cp && cp.value.trim() !== prenom){ cp.value = prenom; }
     if(!connecte && contactOuvert){
       contactOuvert.hidden = true;
       btnContacter.hidden = false;
     }
   }
-  btnCompte.addEventListener('click', function(e){
-    if(connecte){
-      e.stopPropagation();
-      connecte = false;
-      majCompte();
-      allerA('accueil');
-    }
-  });
+  var cDeco = document.getElementById('c-deconnexion');
+  if(cDeco){
+    cDeco.addEventListener('click', function(){
+      connecte = false; majCompte(); allerA('accueil');
+      dire('Vous êtes déconnecté. Vos annonces restent en ligne.');
+    });
+  }
+  var cPrenomChamp = document.getElementById('c-prenom');
+  if(cPrenomChamp){
+    cPrenomChamp.addEventListener('input', function(){
+      var v = cPrenomChamp.value.trim();
+      if(v){ prenom = v; majCompte(); }
+    });
+  }
 
   var creer = document.getElementById('creer-compte');
   var etapeCode = document.getElementById('etape-code');
@@ -2905,11 +2998,20 @@ button{cursor:pointer}
   toast.className = 'toast'; toast.setAttribute('role','status');
   document.body.appendChild(toast);
   var minuteur = null;
-  function dire(msg){
+  function dire(msg, libelle, action){
     toast.textContent = msg;
+    if(libelle && action){
+      var lien = document.createElement('b');
+      lien.className = 'lien'; lien.textContent = libelle;
+      lien.addEventListener('click', function(){
+        action();
+        toast.classList.remove('vu');
+      });
+      toast.appendChild(lien);
+    }
     toast.classList.add('vu');
     clearTimeout(minuteur);
-    minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 3600);
+    minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 5200);
   }
   document.addEventListener('click', function(e){
     var b = e.target.closest ? e.target.closest('.partage') : null;
@@ -3432,6 +3534,27 @@ button{cursor:pointer}
   var pPret = document.getElementById('p-pret');
 
   var pQuoiAutre = document.getElementById('p-quoi-autre');
+  // Les fruits qu'on suit se lisent dans le même catalogue : ajouter une entrée
+  // dans la console la propose aussitôt ici, sans seconde liste à tenir.
+  var cFruits = document.getElementById('c-fruits');
+  var SUIVIS = {'Mangues':1, 'Fruits à pain':1};
+  function remplirSuivis(){
+    if(!cFruits) return;
+    cFruits.innerHTML = CATALOGUE.map(function(f){
+      return '<button class="chip" type="button" aria-pressed="' + (SUIVIS[f.nom] ? 'true' : 'false') + '">' + f.nom + '</button>';
+    }).join('');
+  }
+  if(cFruits){
+    remplirSuivis();
+    document.addEventListener('click', function(e){
+      var c = e.target.closest ? e.target.closest('#c-fruits .chip') : null;
+      if(!c) return;
+      var n = c.textContent.trim();
+      if(c.getAttribute('aria-pressed') === 'true'){ SUIVIS[n] = 1; dire('On vous préviendra pour « ' + n + ' ».'); }
+      else { delete SUIVIS[n]; dire('Plus d\u2019alerte pour « ' + n + ' ».'); }
+    });
+  }
+
   function remplirSelecteur(){
     if(!pQuoi) return;
     var garde = pQuoi.value;
@@ -3672,7 +3795,7 @@ button{cursor:pointer}
   }
 
   function surEcran(nom){
-    if(nom === 'connexion' && window.__geoEveil){ setTimeout(window.__geoEveil, 60); }
+    if((nom === 'connexion' || nom === 'compte') && window.__geoEveil){ setTimeout(window.__geoEveil, 60); }
     if(nom !== 'mienne'){ clearTimeout(vieMinuteur); return; }
     var quand = document.getElementById('mienne-quand');
     if(!document.getElementById('v-vues')) return;
@@ -3842,10 +3965,13 @@ button{cursor:pointer}
     };
   }
 
-  var geoCarte = document.getElementById('geo-carte');
-  if(geoCarte){
-    var geoTuiles = document.getElementById('geo-tuiles');
-    var geoLu = document.getElementById('geo-lu');
+  // Deux écrans portent la même carte : l'inscription et le compte. Le code se
+  // monte par élément au lieu de s'accrocher à un identifiant unique.
+  window.__geoMontes = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.geo-carte'), function(geoCarte){
+    {
+    var geoTuiles = geoCarte.querySelector('.geo-tuiles');
+    var geoLu = geoCarte.parentNode.querySelector('.coord');
     // Centre de l'île. On ouvre assez large pour que chacun se retrouve, puis on zoome.
     var vue = {lat: 17.9000, lng: -62.8330, z: 14};
     var pose = false, ratés = 0, posées = 0;
@@ -3883,9 +4009,9 @@ button{cursor:pointer}
       });
       majLecture();
     }
-    var geoBandeau = document.getElementById('geo-bandeau');
-    var geoEtat = document.getElementById('geo-etat');
-    var geoPoser = document.getElementById('geo-poser');
+    var geoBandeau = geoCarte.parentNode.querySelector('.geo-lu');
+    var geoEtat = geoCarte.parentNode.querySelector('.etat');
+    var geoPoser = geoCarte.parentNode.querySelector('[data-geo="poser"], #geo-poser');
     var geoPin = geoCarte.querySelector('.geo-pin');
     function majLecture(){
       if(geoLu){ geoLu.textContent = pose ? (vue.lat.toFixed(5) + ', ' + vue.lng.toFixed(5)) : ''; }
@@ -3939,17 +4065,17 @@ button{cursor:pointer}
     geoCarte.addEventListener('pointerup', relacher);
     geoCarte.addEventListener('pointercancel', function(){ prise = null; geoCarte.classList.remove('prise'); dessiner(); });
 
-    document.getElementById('geo-plus').addEventListener('click', function(){
+    geoCarte.querySelector('[data-geo="plus"], #geo-plus').addEventListener('click', function(){
       if(vue.z < ZMAX){ vue.z++; dessiner(); }
     });
-    document.getElementById('geo-moins').addEventListener('click', function(){
+    geoCarte.querySelector('[data-geo="moins"], #geo-moins').addEventListener('click', function(){
       if(vue.z > ZMIN){ vue.z--; dessiner(); }
     });
-    document.getElementById('geo-poser').addEventListener('click', function(){
+    geoPoser.addEventListener('click', function(){
       confirmer();
       dire('Point enregistré. Il ne part avec une annonce que si vous le joignez.');
     });
-    document.getElementById('geo-ici').addEventListener('click', function(){
+    geoCarte.parentNode.querySelector('[data-geo="ici"], #geo-ici').addEventListener('click', function(){
       if(!navigator.geolocation){ dire('Cet appareil ne sait pas donner sa position.'); return; }
       navigator.geolocation.getCurrentPosition(function(p){
         vue.lat = p.coords.latitude; vue.lng = p.coords.longitude; vue.z = 18;
@@ -3962,11 +4088,85 @@ button{cursor:pointer}
     // On ne charge les tuiles qu'en arrivant sur l'écran : inutile d'appeler les
     // serveurs d'OpenStreetMap pour une carte que personne ne regardera.
     var dessinée = false;
-    window.__geoEveil = function(){
-      if(dessinée) return;
+    window.__geoMontes.push(function(){
+      if(dessinée || !geoCarte.clientWidth) return;
       dessinée = true;
       dessiner();
-    };
+    });
+    }
+  });
+  window.__geoEveil = function(){
+    window.__geoMontes.forEach(function(f){ f(); });
+  };
+
+  // --- LES BOUTONS DE LA CONSOLE. Ils étaient décoratifs : chaque ligne portait
+  // Modifier / Masquer / Supprimer sans le moindre gestionnaire. Un seul écouteur
+  // délégué sur la console suffit, et chaque action laisse une trace visible sur sa
+  // ligne — sinon on reste devant un bouton qui a l'air cassé.
+  var console_ = document.getElementById('s-admin');
+  if(console_){
+    var corbeille = [];
+    function ligneTitre(r){
+      var t = r.querySelector('.t');
+      return t ? t.textContent.trim() : 'cette entrée';
+    }
+    function etat(r, txt){
+      var sous = r.querySelector('.s');
+      if(sous){ sous.innerHTML = txt; }
+    }
+    console_.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('.mini') : null;
+      if(!b) return;
+      var r = b.closest('.row');
+      if(!r || b.hasAttribute('data-act')) return;   // les fruits ont leur propre code
+      var quoi = b.textContent.trim();
+      var titre = ligneTitre(r);
+
+      if(quoi === 'Masquer'){
+        r.classList.add('off');
+        b.textContent = 'Rendre visible';
+        etat(r, '<strong>Masquée</strong> — plus personne ne la voit');
+        dire('« ' + titre + ' » est masquée.');
+        return;
+      }
+      if(quoi === 'Rendre visible'){
+        r.classList.remove('off');
+        b.textContent = 'Masquer';
+        etat(r, 'De nouveau visible');
+        dire('« ' + titre + ' » est de nouveau visible.');
+        return;
+      }
+      if(quoi === 'Supprimer' || quoi === 'Refuser'){
+        var apres = r.nextSibling, parent = r.parentNode;
+        corbeille.push({n: r, apres: apres, parent: parent});
+        r.remove();
+        dire('« ' + titre + ' » : supprimée.', 'Annuler', function(){
+          var d = corbeille.pop();
+          if(d){ d.parent.insertBefore(d.n, d.apres); }
+        });
+        return;
+      }
+      if(quoi === 'Prolonger'){
+        etat(r, 'Prolongée &mdash; <strong>14 jours de plus</strong>');
+        b.disabled = true; b.textContent = 'Prolongée';
+        dire('« ' + titre + ' » court 14 jours de plus.');
+        return;
+      }
+      if(quoi === 'Publier'){
+        r.classList.remove('off');
+        etat(r, '<strong>Publiée</strong> — elle paraît dans Le jardin');
+        b.disabled = true; b.textContent = 'Publiée';
+        if(window.__pluie){ window.__pluie(); }
+        dire('« ' + titre + ' » est en ligne.');
+        return;
+      }
+      if(quoi === 'Modifier'){ allerA('publier'); return; }
+      if(quoi === "Écrire à l'auteur"){
+        dire('Un message part à l\u2019auteur de « ' + titre + ' ».');
+        return;
+      }
+      dire(quoi + ' : c\u2019est noté.');
+    });
   }
 
   // --- la console tient la liste des fruits et leurs photos
@@ -4018,7 +4218,7 @@ button{cursor:pointer}
       if(act === 'suppr'){
         var nom = CATALOGUE[i].nom;
         CATALOGUE.splice(i, 1);
-        rendreFruits(); remplirSelecteur();
+        rendreFruits(); remplirSelecteur(); remplirSuivis();
         dire('« ' + nom + ' » ne sera plus proposé.');
       }
     });
@@ -4031,7 +4231,7 @@ button{cursor:pointer}
         if(fruitParNom(n)){ dire('« ' + n + ' » est déjà dans la liste.'); return; }
         CATALOGUE.push({nom:n, teinte:'t-vert', icone:'#i-basilic', photo:null});
         champNeuf.value = '';
-        rendreFruits(); remplirSelecteur();
+        rendreFruits(); remplirSelecteur(); remplirSuivis();
         dire('« ' + n + ' » est proposé aux membres.');
       });
     }

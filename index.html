@@ -273,9 +273,10 @@ body.presentation .sortie-presentation{display:block}
 .ci-q.on{fill-opacity:.65}
 #isle .ci-q:focus, #isle .ci-q:focus-visible{outline:none}
 #isle .ci-q:focus-visible{fill-opacity:.8; stroke:var(--ink); stroke-width:1.4}
-/* LE POINT DE RENDEZ-VOUS, SUR VUE SATELLITE. À Saint-Barth une adresse ne veut
-   pas dire grand-chose : on se repère au toit, au portail, à l'arbre. D'où la
-   vue aérienne plutôt qu'un plan. Pas de bibliothèque de cartographie : une
+/* LE POINT DE RENDEZ-VOUS. À Saint-Barth une adresse ne veut pas dire grand-chose :
+   on se repère au quartier, à la route, au portail. Le fond de carte est celui de
+   Ti-Services — OpenStreetMap. La vue satellite a été essayée puis abandonnée : jolie,
+   mais on ne se repère pas sur une masse de végétation. Pas de bibliothèque : une
    grille de tuiles, un déplacement au doigt, deux boutons de zoom, et une épingle
    fixe au centre — c'est tout ce dont une carte de repérage a besoin, et ça tient
    dans le fichier unique sans dépendre d'un script extérieur. */
@@ -529,8 +530,13 @@ body.presentation .sortie-presentation{display:block}
 .creneau .jours{display:flex; gap:7px; flex-wrap:wrap}
 .creneau .jours .chip{min-width:52px; justify-content:center; text-align:center}
 .etiq-prix{
-  display:inline-flex; align-items:center; gap:5px; font-family:var(--display);
+  display:inline-flex; align-items:baseline; gap:7px; font-family:var(--display);
   font-weight:400; font-size:23px; line-height:1; color:var(--flam); letter-spacing:.01em;
+}
+/* Le mot compte autant que le chiffre : « 5 € » tout seul se lit « prix ». */
+.etiq-prix small{
+  font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-soft);
 }
 .etiq-don{
   display:inline-flex; align-items:center; gap:6px; font-size:12px; letter-spacing:.11em;
@@ -1341,7 +1347,7 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Cocos secs, une brouette pleine</h3>
-          <span class="etiq-prix">2 &euro;</span>
+          <span class="etiq-prix">2 &euro;<small>participation</small></span>
           <span class="meta"><span>Saint-Jean</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
         </span>
       </button>
@@ -1382,7 +1388,7 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois beaux corossols</h3>
-          <span class="etiq-prix">5 &euro;</span>
+          <span class="etiq-prix">5 &euro;<small>participation</small></span>
           <span class="meta"><span>Lurin</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
         </span>
       </button>
@@ -1406,7 +1412,7 @@ button{cursor:pointer}
       </div>
 
       <div class="kv">
-        <div><span class="k2">Prix</span><span class="v"><span class="etiq-don">À donner</span></span></div>
+        <div><span class="k2">Participation</span><span class="v"><span class="etiq-don">À donner</span></span></div>
         <div><span class="k2">Quantité</span><span class="v">Environ 10 kg</span></div>
         <div><span class="k2">Quartier</span><span class="v">Lorient</span></div>
         <div><span class="k2">Proposé par</span><span class="v">Marie-Claude</span></div>
@@ -1449,7 +1455,7 @@ button{cursor:pointer}
         <div class="seg">
           <button class="chip" aria-pressed="true">Ce n'est plus disponible</button>
           <button class="chip" aria-pressed="false">La photo ne correspond pas</button>
-          <button class="chip" aria-pressed="false">Le prix n'est pas celui de l'annonce</button>
+          <button class="chip" aria-pressed="false">On m'a demandé plus que l'annonce</button>
           <button class="chip" aria-pressed="false">Je n'ai pas eu de réponse</button>
           <button class="chip" aria-pressed="false">Comportement déplacé</button>
           <button class="chip" aria-pressed="false">Autre</button>
@@ -1498,7 +1504,7 @@ button{cursor:pointer}
 
     <div class="field">
       <span style="font-weight:600; font-size:16.5px">Le point où l'on vous trouve</span>
-      <span class="hint">Facultatif. Ici une adresse ne dit rien&nbsp;: c'est le toit qu'on reconnaît. Déplacez la carte pour amener l'épingle sur votre portail.</span>
+      <span class="hint">Facultatif. Ici une adresse ne dit pas grand-chose&nbsp;: déplacez la carte pour amener l'épingle sur votre portail.</span>
       <div class="geo">
         <div class="geo-carte" id="geo-carte">
           <div class="geo-tuiles" id="geo-tuiles"></div>
@@ -1510,8 +1516,8 @@ button{cursor:pointer}
             <button type="button" id="geo-plus" aria-label="Zoomer">+</button>
             <button type="button" id="geo-moins" aria-label="Dézoomer">&minus;</button>
           </div>
-          <span class="geo-credit">Vue aérienne</span>
-          <div class="geo-raté">La vue aérienne n'a pas pu se charger. Vous pourrez placer votre point plus tard, ou l'expliquer au téléphone.</div>
+          <span class="geo-credit">&copy; OpenStreetMap</span>
+          <div class="geo-raté">La carte n'a pas pu se charger. Vous pourrez placer votre point plus tard, ou l'expliquer au téléphone.</div>
         </div>
         <div class="geo-lu">
           <span class="k">Votre point</span>
@@ -1613,19 +1619,19 @@ button{cursor:pointer}
     </div>
 
     <div class="field">
-      <span style="font-weight:600; font-size:16.5px">À donner, ou à vendre&nbsp;?</span>
+      <span style="font-weight:600; font-size:16.5px">À donner, ou avec une participation&nbsp;?</span>
       <div class="don-vente">
         <div class="seg" id="p-don">
           <button class="chip" aria-pressed="true">À donner</button>
-          <button class="chip" aria-pressed="false">Je vends</button>
+          <button class="chip" aria-pressed="false">Participation aux frais</button>
         </div>
         <span class="prix-champ" id="p-prix-champ">
-          <label for="p-prix" class="sr">Prix demandé</label>
-          <input id="p-prix" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0">
+          <label for="p-prix" class="sr">Participation demandée, 20 € au maximum</label>
+          <input id="p-prix" type="number" inputmode="decimal" min="0" max="20" step="0.5" placeholder="0">
           <span class="euro">&euro;</span>
         </span>
       </div>
-      <span class="hint" id="p-don-hint">Ici la plupart des choses se donnent. Vous pouvez demander un prix&nbsp;: il s'affichera clairement sur l'annonce.</span>
+      <span class="hint" id="p-don-hint">Ici la plupart des choses se donnent. Si la récolte vous a coûté quelque chose, vous pouvez demander une participation.</span>
     </div>
 
     <div class="field">
@@ -3345,9 +3351,12 @@ button{cursor:pointer}
   var pPrixChamp = document.getElementById('p-prix-champ');
   var pPrix = document.getElementById('p-prix');
   var pDonHint = document.getElementById('p-don-hint');
+  // PLAFOND À 20 €. Ce n'est pas une place de marché : au-delà, on vend, et le
+  // site change de nature — obligations d'opérateur de plateforme comprises.
+  var PARTICIPATION_MAX = 20;
   function vend(){
     var c = document.querySelector('#p-don .chip[aria-pressed="true"]');
-    return !!c && c.textContent.trim() === 'Je vends';
+    return !!c && c.textContent.trim() !== 'À donner';
   }
   function majDon(){
     if(!pPrixChamp) return;
@@ -3355,10 +3364,20 @@ button{cursor:pointer}
     pPrixChamp.classList.toggle('vu', v);
     if(pDonHint){
       pDonHint.textContent = v
-        ? 'Le prix s\u2019affiche en clair sur l\u2019annonce. Vous vous arrangez directement : le site ne touche pas à l\u2019argent.'
-        : 'Ici la plupart des choses se donnent. Vous pouvez demander un prix : il s\u2019affichera clairement sur l\u2019annonce.';
+        ? 'Vingt euros au maximum : au-delà, ce n\u2019est plus une participation, c\u2019est une vente, et ce n\u2019est pas ce que fait ce site. Vous vous arrangez directement — le site ne touche jamais à l\u2019argent.'
+        : 'Ici la plupart des choses se donnent. Si la récolte vous a coûté quelque chose, vous pouvez demander une participation.';
     }
     if(v && pPrix){ pPrix.focus(); }
+  }
+
+  if(pPrix){
+    pPrix.addEventListener('input', function(){
+      var v = parseFloat(pPrix.value);
+      if(isFinite(v) && v > PARTICIPATION_MAX){
+        pPrix.value = PARTICIPATION_MAX;
+        dire('Vingt euros au maximum. Au-delà, ce serait une vente.');
+      }
+    });
   }
 
   var pCreneauLu = document.getElementById('p-creneau-lu');
@@ -3482,9 +3501,9 @@ button{cursor:pointer}
       if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
       var mPrix = document.getElementById('mienne-prix');
       if(mPrix){
-        var p = vend() ? (parseFloat(pPrix && pPrix.value) || 0) : 0;
+        var p = vend() ? Math.min(PARTICIPATION_MAX, parseFloat(pPrix && pPrix.value) || 0) : 0;
         mPrix.innerHTML = p > 0
-          ? '<span class="etiq-prix">' + String(p).replace('.', ',') + ' &euro;</span>'
+          ? '<span class="etiq-prix">' + String(p).replace('.', ',') + ' &euro;<small>participation</small></span>'
           : '<span class="etiq-don">À donner</span>';
       }
       var mQuand = document.getElementById('mienne-quand-txt');
@@ -3622,8 +3641,10 @@ button{cursor:pointer}
       for(var ty = ty0; ty <= ty1; ty++){
         for(var tx = tx0; tx <= tx1; tx++){
           if(tx < 0 || ty < 0 || tx > max || ty > max) continue;
-          var src = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/'
-                  + vue.z + '/' + ty + '/' + tx;
+          // Même fond que Ti-Services : OpenStreetMap. La vue aérienne était jolie et
+          // impraticable — on ne se repère pas sur une masse de végétation, alors qu'un
+          // nom de route et un trait de côte se lisent d'un coup d'œil.
+          var src = 'https://tile.openstreetmap.org/' + vue.z + '/' + tx + '/' + ty + '.png';
           html += '<img alt="" loading="lazy" src="' + src + '" style="left:'
                + Math.round(tx * TUILE - x0) + 'px; top:' + Math.round(ty * TUILE - y0) + 'px">';
         }
@@ -3692,8 +3713,8 @@ button{cursor:pointer}
       }, {enableHighAccuracy:true, timeout:8000, maximumAge:600000});
     });
 
-    // On ne charge les tuiles qu'en arrivant sur l'écran : personne ne paie pour une
-    // vue aérienne qu'il ne regardera pas.
+    // On ne charge les tuiles qu'en arrivant sur l'écran : inutile d'appeler les
+    // serveurs d'OpenStreetMap pour une carte que personne ne regardera.
     var dessinée = false;
     window.__geoEveil = function(){
       if(dessinée) return;

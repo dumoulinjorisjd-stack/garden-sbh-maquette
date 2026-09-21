@@ -22,20 +22,26 @@ img{max-width:100%}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Faustina:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
 :root{
-  --ground:#E4EDDC; --surface:#FCFEF9; --surface-2:#EAF0E2;
-  --ink:#1B231B; --ink-soft:#586254; --line:#D3DCC8;
-  --leaf:#1F5D3C; --leaf-soft:#E3EDE5;
-  --flam:#BE3E19; --flam-soft:#F8E6DF;
-  --mangue:#9C6410; --mangue-soft:#F6EAD3;
-  --btn-bg:#1F5D3C; --btn-ink:#FCFEF9; --btn-hover:#154028; --surf-hover:#E6EEDD;
+  /* LE TRONC ET LA FEUILLE, EN TROIS NIVEAUX. Autour de l'écran, la frondaison :
+     un vert de feuillage assez soutenu pour qu'on le voie. La page elle-même est
+     de la terre cuite — le tronc, le pot. Ce qui s'y pose (cartes, champs,
+     encadrés, barres) est une terre cuite plus claire, sinon tout se confond :
+     deux niveaux ne suffisaient pas, les cartes disparaissaient dans la page.
+     Le blanc a disparu : il faisait bureau, pas jardin. */
+  --ground:#D2E0C3; --page:#F4E3D5; --surface:#FDF6EF; --surface-2:#EFDAC8;
+  --ink:#241C15; --ink-soft:#5C5044; --line:#D6BCA2;
+  --leaf:#1F5D3C; --leaf-soft:#DFEADF;
+  --flam:#B23A16; --flam-soft:#F6DCCF;
+  --mangue:#8F5A0C; --mangue-soft:#F5E5C8;
+  --btn-bg:#1F5D3C; --btn-ink:#FDF6EF; --btn-hover:#154028; --surf-hover:#F3E3D4;
   --chrome:#2A2E27; --chrome-ink:#E6E3D7; --chrome-line:#464B41;
-  --shadow:0 1px 2px rgba(27,45,27,.07), 0 10px 30px rgba(27,45,27,.09);
+  --shadow:0 1px 2px rgba(74,48,28,.08), 0 10px 30px rgba(74,48,28,.10);
   --display:"Anton","Archivo Black",Impact,"Haettenschweiler",sans-serif;
   --serif:"Faustina",Georgia,"Times New Roman",serif;
   --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 :root[data-theme="dark"]{
-  --ground:#191509; --surface:#241F13; --surface-2:#30291A;
+  --ground:#191509; --page:#1F1A0F; --surface:#241F13; --surface-2:#30291A;
   --ink:#F6EEDC; --ink-soft:#B5AC96; --line:#443B28;
   --leaf:#8FD4A5; --leaf-soft:#22301F;
   --flam:#FF9C6B; --flam-soft:#39231A;
@@ -122,7 +128,7 @@ button,select,input,textarea{font:inherit; color:inherit}
 
 .stage{position:relative; z-index:1; padding-block:24px 48px; padding-left:16px; padding-right:16px; display:flex; justify-content:center}
 .device{
-  width:100%; max-width:420px; background:var(--surface);
+  width:100%; max-width:420px; background:var(--page);
   border:1px solid var(--line); border-radius:26px; box-shadow:var(--shadow);
   overflow:hidden; display:flex; flex-direction:column; min-height:720px;
 }

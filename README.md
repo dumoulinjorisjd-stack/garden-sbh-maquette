@@ -1233,3 +1233,47 @@ sous les aplats) :
 Trois annonces ne correspondent à aucune entrée du catalogue (tomates cerises,
 cocos secs, citronnelle). Elles portent une feuille, pas un fruit approchant :
 un piment dessiné sur des tomates est plus faux qu'une marque neutre.
+
+## Quatre dessins de plus, et une troisième catégorie (v64)
+
+### Les pastilles manquantes
+
+Trois annonces ne correspondaient à aucune entrée du catalogue — tomates cerises,
+cocos secs, citronnelle — et portaient donc une feuille générique. Une feuille ne
+dit rien de faux, mais elle ne dit rien du tout, et ces trois-là reviendront : on
+cultive des tomates cerises, on ramasse des cocos et on divise de la citronnelle
+toute l'année ici. Elles sont dessinées, entrées au catalogue, et donc proposées
+dans le sélecteur de publication comme les autres.
+
+La **bouture** portait le dessin du ti-basilic. Or une bouture n'est pas une
+plante, c'est une plante QUI A PRIS — d'où les racines dans le nouveau dessin.
+C'est la chose la plus échangée du site après les fruits ; elle méritait sa marque.
+
+Dix-sept dessins au total, vérifiés côte à côte sur une planche (`pastilles.mjs`)
+plutôt qu'un par un dans leur contexte, seule façon de voir s'ils tiennent
+ensemble.
+
+### « Je donne » sur une annonce à 5 €
+
+Deux étiquettes pour trois réalités : on donne, on demande une participation, on
+cherche. La deuxième portait le mot de la première — une annonce affichait
+« JE DONNE » juste au-dessus de « 5 € PARTICIPATION ».
+
+Ce n'est pas un problème de vocabulaire, c'est la catégorie qui manquait. C'est la
+conséquence, annoncée au moment où le prix a été introduit, d'avoir ouvert cette
+porte sur un site dont la promesse est que ça se partage.
+
+- **Trois étiquettes** : « Je donne » (vert), « Je propose » (ambre), « Je cherche »
+  (flamboyant). « Je propose » prend la couleur de l'étiquette de participation :
+  le mot et le montant se lisent comme un seul signal. Même cœur que « Je donne » :
+  c'est la même famille, pas une petite annonce.
+- **Trois filtres**, dont un qui manquait vraiment : montrer uniquement ce qui est
+  gratuit est une demande légitime sur un site qui promet le partage.
+- **La carte se relit elle-même** : si elle porte un montant, elle ne peut pas dire
+  « je donne ». La fiche et l'annonce publiée suivent la même règle.
+- **L'écran de publication le dit tout de suite** : cocher « participation aux
+  frais » fait passer le premier bouton du commutateur de « Je donne » à
+  « Je propose ». On ne découvre plus la contradiction une fois en ligne.
+
+Au passage : l'icône du cœur est ajoutée en JS *dans* l'étiquette ; réécrire
+celle-ci par `textContent` l'effaçait. On ne touche plus qu'au nœud de texte.

@@ -445,6 +445,9 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .kicker{display:inline-flex; align-self:flex-start; align-items:center; gap:6px; font-size:11.5px; letter-spacing:.11em;
   text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px}
 .k-donne{background:var(--leaf-soft); color:var(--leaf)}
+/* Le troisième état prend la couleur de l'étiquette de participation : le mot et
+   le montant se lisent comme un seul signal, pas comme deux informations. */
+.k-propose{background:var(--mangue-soft); color:var(--mangue)}
 .k-cherche{background:var(--flam-soft); color:var(--flam)}
 .k-conseil{background:var(--surface-2); color:var(--ink-soft)}
 .k-astuce{background:var(--mangue-soft); color:var(--mangue)}
@@ -1437,6 +1440,49 @@ button{cursor:pointer}
     <path d="M30 27c14-4 30 4 38 18 9 16 6 36-8 44-9 5-18 1-19-8-1-8 5-12 4-22-1-12-11-19-19-22-4-2-4-8 4-10z"/>
     <path d="M28 25c-6-4-6-12 0-16 6 3 9 9 7 15z"/>
   </symbol>
+  <!-- QUATRE DESSINS DE PLUS. Trois annonces ne correspondaient à aucune entrée du
+       catalogue : elles portaient une feuille générique. Une feuille ne dit rien de
+       faux, mais elle ne dit rien du tout, et ces trois-là reviendront — on cultive
+       des tomates cerises, on ramasse des cocos et on divise de la citronnelle toute
+       l'année ici. La bouture, elle, avait le dessin du ti-basilic : or une bouture
+       n'est pas une plante, c'est une plante QUI A PRIS — d'où les racines. -->
+  <symbol id="i-tomate" viewBox="0 0 100 100">
+    <path d="M50 28v9M50 32c-8 2-14 6-18 12M50 32c8 2 14 6 18 12" stroke="#4A7A32" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <circle cx="31" cy="60" r="14" fill="#E14B2D"/>
+    <circle cx="69" cy="60" r="14" fill="#BF3418"/>
+    <circle cx="50" cy="73" r="15" fill="#D33F22"/>
+    <ellipse cx="26" cy="54" rx="5" ry="3" fill="#F2937C" transform="rotate(-28 26 54)"/>
+    <path d="M42 24h16l-3 7H45z" fill="#2F7D4F"/>
+  </symbol>
+  <symbol id="i-coco" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="56" rx="30" ry="32" fill="#8A5A2B"/>
+    <path d="M50 24c17 0 30 14 30 32s-13 32-30 32c13-9 19-23 19-35 0-11-6-22-19-29z" fill="#6B4320"/>
+    <g stroke="#59371A" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".5">
+      <path d="M36 34c-4 12-4 26 0 40"/><path d="M50 30c-3 14-3 30 0 44"/><path d="M63 34c3 12 3 26 0 40"/>
+    </g>
+    <ellipse cx="34" cy="45" rx="7" ry="4.5" fill="#B07C46" transform="rotate(-28 34 45)"/>
+    <g fill="#3F2712"><circle cx="42" cy="39" r="3.4"/><circle cx="58" cy="39" r="3.4"/><circle cx="50" cy="49" r="3.4"/></g>
+  </symbol>
+  <symbol id="i-citronnelle" viewBox="0 0 100 100">
+    <g stroke-linecap="round" fill="none">
+      <path d="M50 82c-14-12-24-26-29-42" stroke="#7FC152" stroke-width="4.5"/>
+      <path d="M50 82c13-11 22-24 27-39" stroke="#5E9B3C" stroke-width="4.5"/>
+      <path d="M50 82c-9-16-14-34-16-51" stroke="#6FB544" stroke-width="5"/>
+      <path d="M50 82c8-16 13-32 15-49" stroke="#4A7A32" stroke-width="5"/>
+      <path d="M50 82c-3-18-3-38 1-55" stroke="#5E9B3C" stroke-width="5"/>
+    </g>
+    <path d="M38 79c0-5 5-8 12-8s12 3 12 8c0 6-5 10-12 10s-12-4-12-10z" fill="#CFE0A8"/>
+    <path d="M50 71c7 0 12 3 12 8 0 6-5 10-12 10 4-3 6-6 6-10s-2-6-6-8z" fill="#B3CA85"/>
+  </symbol>
+  <symbol id="i-bouture" viewBox="0 0 100 100">
+    <path d="M50 74V28" stroke="#4A7A32" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M50 46c-4-12-14-18-27-18 2 13 12 20 27 20z" fill="#5E9B3C"/>
+    <path d="M50 36c4-11 13-16 24-16-2 12-11 18-24 18z" fill="#6FB544"/>
+    <path d="M50 58c4-10 12-15 22-15-2 11-10 16-22 17z" fill="#2F7D4F"/>
+    <g stroke="#C9A97A" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M50 74c-7 4-11 10-12 17"/><path d="M50 74c7 4 11 10 12 17"/><path d="M50 74v18"/>
+    </g>
+  </symbol>
   <!-- LES QUATRE THÈMES DU JARDIN. Une note sans photo n'a rien à montrer : elle
        montre donc son sujet. Quatre dessins d'un seul tenant, lisibles à 34 px. -->
   <symbol id="t-goutte" viewBox="0 0 100 100" fill="currentColor">
@@ -1655,6 +1701,7 @@ button{cursor:pointer}
 
     <div class="filters" role="group" aria-label="Filtrer">
       <button class="chip" aria-pressed="false">Je donne</button>
+      <button class="chip" aria-pressed="false">Je propose</button>
       <button class="chip" aria-pressed="false">Je cherche</button>
     </div>
     <div class="seg" id="filtre-jour" data-multi role="group" aria-label="Filtrer par jour">
@@ -1697,7 +1744,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain" data-mesure="6 plants">
-        <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-terre" data-fruit="Tomates cerises"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Six plants de tomates cerises</h3>
@@ -1733,7 +1780,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="apres" data-mesure="1 brouette">
-        <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-terre" data-fruit="Cocos secs"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Cocos secs, une brouette pleine</h3>
@@ -1743,7 +1790,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Corossol" data-jour="demain" data-mesure="2 touffes">
-        <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-agrume" data-fruit="Citronnelle"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Citronnelle à diviser, deux belles touffes</h3>
@@ -2849,11 +2896,13 @@ button{cursor:pointer}
 
   var PAR_TYPE = {
     'k-donne':   {motif:'f-mangue', teinte:'rgba(240,167,44,.14)', couleur:'var(--mangue)', vide:'Sans photo'},
+    'k-propose': {motif:'f-mangue', teinte:'rgba(240,167,44,.14)', couleur:'var(--mangue)', vide:'Sans photo'},
     'k-cherche': {motif:'f-citron', teinte:'rgba(190,62,25,.10)',  couleur:'var(--flam)',   vide:''},
     'k-conseil': {motif:'f-feuille',teinte:'rgba(31,93,60,.10)',   couleur:'var(--leaf)',   vide:'Une note du jardin'}
   };
   var ICONES = {
     'k-donne':   'M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z',
+    'k-propose': 'M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z',
     'k-cherche': 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 17-4.5-4.5',
     'k-conseil': 'M12 21c0-7 4-11 9-12-1 7-5 11-9 12zM12 21c0-5-3-8-8-9 1 5 4 8 8 9z'
   };
@@ -3938,7 +3987,7 @@ button{cursor:pointer}
     });
   }
 
-  var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche'};
+  var TYPES = {'k-donne':'Je donne','k-propose':'Je propose','k-cherche':'Je cherche'};
   brancher('s-echanges', function(c){
     var k = c.querySelector('.kicker');
     if(!k) return '';
@@ -4052,7 +4101,10 @@ button{cursor:pointer}
     {nom:'Tamarins',       teinte:'t-terre',  icone:'#i-tamarin',  photo:null},
     {nom:'Piments',        teinte:'t-terre',  icone:'#i-piment',   photo:null},
     {nom:'Ti-basilic',     teinte:'t-vert',   icone:'#i-basilic',  photo:null},
-    {nom:'Boutures',       teinte:'t-vert',   icone:'#i-basilic',  photo:null}
+    {nom:'Boutures',       teinte:'t-vert',   icone:'#i-bouture',  photo:null},
+    {nom:'Tomates cerises',teinte:'t-terre',  icone:'#i-tomate',   photo:null},
+    {nom:'Cocos secs',     teinte:'t-terre',  icone:'#i-coco',     photo:null},
+    {nom:'Citronnelle',    teinte:'t-vert',   icone:'#i-citronnelle', photo:null}
   ];
   // LA PHOTO DU JARDINIER HABILLE LES ANNONCES À L'AFFICHAGE, pas seulement au
   // moment de publier. Le premier jet ne l'appliquait qu'à l'annonce qu'on venait
@@ -4153,6 +4205,21 @@ button{cursor:pointer}
       if(!aPhoto && !estNote && !c.classList.contains('demande')){
         var fr = fruitParNom(t.getAttribute('data-fruit'));
         marqueDans(t, fr ? fr.icone.replace('#','') : marqueParTeinte(t), true);
+      }
+
+      // Une annonce qui demande une participation ne donne pas. L'étiquette suit
+      // le montant plutôt que de le contredire.
+      var kk = c.querySelector('.kicker.k-donne, .kicker.k-propose');
+      if(kk){
+        var paye = !!c.querySelector('.etiq-prix');
+        var mot = null;
+        Array.prototype.forEach.call(kk.childNodes, function(n){
+          if(n.nodeType === 3 && n.nodeValue.trim()){ mot = n; }
+        });
+        if(mot){ mot.nodeValue = paye ? 'Je propose' : 'Je donne'; }
+        else { kk.appendChild(document.createTextNode(paye ? 'Je propose' : 'Je donne')); }
+        kk.classList.toggle('k-propose', paye);
+        kk.classList.toggle('k-donne', !paye);
       }
 
       // Les points médians étaient des éléments à part entière : ils se retrouvaient
@@ -4319,6 +4386,13 @@ button{cursor:pointer}
       pDonHint.textContent = v
         ? 'Vingt euros au maximum : au-delà, ce n\u2019est plus une participation, c\u2019est une vente, et ce n\u2019est pas ce que fait ce site. Vous vous arrangez directement — le site ne touche jamais à l\u2019argent.'
         : 'Ici la plupart des choses se donnent. Si la récolte vous a coûté quelque chose, vous pouvez demander une participation.';
+    }
+    // Le premier bouton du commutateur dit ce qu'on est en train d'annoncer. Cocher
+    // « participation aux frais » sans rien changer au mot « je donne » revenait à
+    // faire découvrir la contradiction une fois l'annonce en ligne.
+    var tc = document.querySelector('#p-type .chip');
+    if(tc && tc.textContent.trim() !== 'Je cherche'){
+      tc.textContent = v ? 'Je propose' : 'Je donne';
     }
     if(v && pPrix){ pPrix.focus(); }
   }
@@ -4559,7 +4633,8 @@ button{cursor:pointer}
         'Votre annonce · ' + quartier + ' · publiée à l’instant · 14 jours en ligne';
       var k = document.getElementById('mienne-kick');
       k.textContent = type;
-      k.className = 'kicker ' + (type === 'Je cherche' ? 'k-cherche' : 'k-donne');
+      k.className = 'kicker ' + (type === 'Je cherche' ? 'k-cherche'
+                                 : (type === 'Je propose' ? 'k-propose' : 'k-donne'));
       k.style.alignSelf = 'flex-start';
       document.getElementById('mienne-active').hidden = false;
       document.getElementById('mienne-close').hidden = true;
@@ -4953,8 +5028,8 @@ button{cursor:pointer}
     p('an-expire', reste ? ('Disparaît quand le délai « ' + reste + ' » sera passé.') : '');
 
     var k = document.getElementById('an-kick');
-    k.textContent = demande ? 'Je cherche' : 'Je donne';
-    k.className = 'kicker ' + (demande ? 'k-cherche' : 'k-donne');
+    k.textContent = demande ? 'Je cherche' : (prix ? 'Je propose' : 'Je donne');
+    k.className = 'kicker ' + (demande ? 'k-cherche' : (prix ? 'k-propose' : 'k-donne'));
     k.style.alignSelf = 'flex-start';
     document.getElementById('s-annonce').classList.toggle('demande', demande);
 

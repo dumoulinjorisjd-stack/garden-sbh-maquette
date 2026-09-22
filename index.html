@@ -2886,6 +2886,53 @@ button{cursor:pointer}
     });
   }
 
+  // LE PROFIL, SAISI UNE FOIS. Ce qu'on a rempli à l'inscription doit se retrouver
+  // dans ses réglages : redemander le quartier qu'on vient de choisir sur une carte
+  // est la façon la plus sûre de faire abandonner quelqu'un.
+  var PROFIL = {prenom:'', tel:'', mail:'', quartier:'', geo:null, rempli:false};
+  function lireInscription(){
+    var v = function(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+    PROFIL.prenom = v('f-prenom') || 'Armand';
+    PROFIL.tel = v('f-tel');
+    PROFIL.mail = v('f-mail');
+    var lec = document.getElementById('isle-read');
+    var sel = document.getElementById('f-quartier');
+    PROFIL.quartier = (lec && !lec.classList.contains('aucun') && sel) ? sel.value : '';
+    var g = geoDe('s-connexion');
+    PROFIL.geo = g ? g.lire() : null;
+    PROFIL.rempli = true;
+  }
+  function remplirCompte(){
+    // Tant que personne ne s'est inscrit, l'écran garde ses valeurs d'exemple. Dès
+    // qu'une inscription a eu lieu, il reflète EXACTEMENT ce qui a été saisi — y
+    // compris un champ laissé vide, sinon on affiche un faux numéro à quelqu'un qui
+    // n'en a pas donné.
+    if(!PROFIL.rempli) return;
+    var p = function(id, val){ var e = document.getElementById(id); if(e){ e.value = val || ''; } };
+    p('c-prenom', PROFIL.prenom);
+    p('c-tel', PROFIL.tel);
+    p('c-mail', PROFIL.mail);
+    var cq = document.getElementById('c-quartier');
+    if(cq && PROFIL.quartier){ cq.value = PROFIL.quartier; }
+    var g = geoDe('s-compte');
+    if(g && PROFIL.geo){ g.ecrire(PROFIL.geo); }
+  }
+  // Ce qu'on change dans son compte redevient le profil.
+  ['c-prenom','c-tel','c-mail'].forEach(function(id){
+    var e = document.getElementById(id);
+    if(!e) return;
+    e.addEventListener('input', function(){
+      PROFIL[id === 'c-prenom' ? 'prenom' : (id === 'c-tel' ? 'tel' : 'mail')] = e.value.trim();
+    });
+  });
+  var cQuartier = document.getElementById('c-quartier');
+  if(cQuartier){
+    cQuartier.addEventListener('change', function(){
+      PROFIL.quartier = cQuartier.value;
+      dire('Votre quartier : ' + cQuartier.value + '.');
+    });
+  }
+
   var creer = document.getElementById('creer-compte');
   var etapeCode = document.getElementById('etape-code');
   var sansMdp = document.getElementById('sans-mdp');
@@ -2908,7 +2955,10 @@ button{cursor:pointer}
   if(valider){
     valider.addEventListener('click', function(){
       connecte = true;
+      lireInscription();
+      prenom = PROFIL.prenom;
       majCompte();
+      remplirCompte();
       document.getElementById('bv-prenom').textContent = prenom;
       etapeCode.hidden = true;
       creer.hidden = false;
@@ -3820,6 +3870,7 @@ button{cursor:pointer}
 
   function surEcran(nom){
     if((nom === 'connexion' || nom === 'compte') && window.__geoEveil){ setTimeout(window.__geoEveil, 60); }
+    if(nom === 'compte' && typeof remplirCompte === 'function'){ remplirCompte(); }
     if(nom !== 'mienne'){ clearTimeout(vieMinuteur); return; }
     var quand = document.getElementById('mienne-quand');
     if(!document.getElementById('v-vues')) return;
@@ -4118,16 +4169,33 @@ button{cursor:pointer}
     // On ne charge les tuiles qu'en arrivant sur l'écran : inutile d'appeler les
     // serveurs d'OpenStreetMap pour une carte que personne ne regardera.
     var dessinée = false;
-    window.__geoMontes.push(function(){
-      if(dessinée || !geoCarte.clientWidth) return;
-      dessinée = true;
-      dessiner();
+    var ecran = geoCarte.closest('.screen');
+    window.__geoMontes.push({
+      ecran: ecran ? ecran.id : '',
+      eveil: function(){
+        if(dessinée || !geoCarte.clientWidth) return;
+        dessinée = true;
+        dessiner();
+      },
+      lire: function(){ return pose ? {lat: vue.lat, lng: vue.lng, z: vue.z} : null; },
+      ecrire: function(g){
+        if(!g) return;
+        vue.lat = g.lat; vue.lng = g.lng; vue.z = g.z || 18;
+        pose = true;
+        if(dessinée){ dessiner(); } else { majLecture(); }
+      }
     });
     }
   });
   window.__geoEveil = function(){
-    window.__geoMontes.forEach(function(f){ f(); });
+    window.__geoMontes.forEach(function(m){ m.eveil(); });
   };
+  function geoDe(idEcran){
+    for(var i = 0; i < window.__geoMontes.length; i++){
+      if(window.__geoMontes[i].ecran === idEcran){ return window.__geoMontes[i]; }
+    }
+    return null;
+  }
 
   // --- LES BOUTONS DE LA CONSOLE. Ils étaient décoratifs : chaque ligne portait
   // Modifier / Masquer / Supprimer sans le moindre gestionnaire. Un seul écouteur

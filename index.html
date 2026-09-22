@@ -673,6 +673,15 @@ body.presentation .sortie-presentation{display:block}
 /* Sur l'accueil, le mèsi dit aussi POUR QUOI il a été écrit : sans ça c'est un
    compliment flottant, avec ça c'est la preuve qu'un échange a eu lieu. */
 .merci-quoi{font-size:14px; color:var(--ink-soft); font-style:italic}
+/* Le nombre de mèsi se lit avant de les lire : c'est le signal, la lecture vient
+   après. Il vaut pour l'annonce comme pour la fiche du donneur. */
+.compte-mesi{
+  display:inline-flex; align-items:center; justify-content:center; min-width:26px;
+  height:26px; padding:0 8px; margin-left:7px; border-radius:999px; vertical-align:2px;
+  background:var(--mangue-soft); color:var(--mangue);
+  font-family:var(--sans); font-size:14px; font-weight:700;
+}
+.mercis .hint{margin-top:-2px}
 #accueil-mercis .merci{border-left-width:3px}
 #accueil-mercis .merci-photo{height:104px}
 .mercis h3{font-size:18px}
@@ -1576,7 +1585,21 @@ button{cursor:pointer}
 
       <div class="callout" id="merci-fait" hidden>
         <h3>Mèsi envoyé.</h3>
-        <p>Elle le verra sur son annonce.</p>
+        <p>Il paraît sous l'annonce, à la vue de tous.</p>
+      </div>
+
+      <div class="mercis" id="annonce-mercis">
+        <h3>Les mèsi <span class="compte-mesi" id="annonce-mesi-n">2</span></h3>
+        <article class="merci">
+          <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
+          <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
+        </article>
+        <article class="merci">
+          <div class="merci-photo t-vert"><span>Sa photo</span></div>
+          <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
+          <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
+        </article>
+        <p class="hint">Écrits par des gens qui sont venus chercher. Marie-Claude ne peut ni les modifier ni les effacer&nbsp;; le jardinier, oui, s'il y a un problème.</p>
       </div>
 
       <p class="expiry">Disparaît le 26 septembre si personne ne la prolonge.</p>
@@ -2101,6 +2124,16 @@ button{cursor:pointer}
       <div class="alert"><strong>1 signalement</strong> — annonce « Plants de piments », motif : photo floue et quantité invraisemblable.</div>
       <div class="alert"><strong>Un membre récolte des numéros</strong> — « Kevin », inscrit avant-hier, a ouvert 31 annonces sans en publier aucune. Personne ne cherche 31 récoltes en deux jours.</div>
       <div class="stack">
+          <div class="row">
+            <span class="main"><span class="t">« Mèsi anpil ! Les enfants en ont mangé trois… »</span>
+            <span class="s">Mèsi de Sylvère · sous « Mangues Julie » · hier</span></span>
+            <span class="acts"><button class="mini">Masquer</button><button class="mini danger">Supprimer</button></span>
+          </div>
+          <div class="row">
+            <span class="main"><span class="t">« Six pots de confiture. J'en garde un pour vous… »</span>
+            <span class="s">Mèsi de Ginette · sous « Mangues Julie » · il y a 2 jours</span></span>
+            <span class="acts"><button class="mini">Masquer</button><button class="mini danger">Supprimer</button></span>
+          </div>
         <div class="row">
           <span class="main"><span class="t">Mangues Julie, environ 10 kg</span>
           <span class="s">Lorient · Marie-Claude · il y a 2 jours · 7 contacts</span></span>
@@ -2383,7 +2416,7 @@ button{cursor:pointer}
       </div>
 
       <div class="mercis" id="mienne-mercis">
-        <h3>Les mèsi</h3>
+        <h3>Les mèsi <span class="compte-mesi" id="mienne-mesi-n">2</span></h3>
         <article class="merci">
           <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
           <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
@@ -4170,9 +4203,11 @@ button{cursor:pointer}
   }
 
   // --- la boucle se referme : celui qui prend dit mèsi
-  function ajouterMerci(qui, mot, src){
-    var liste = document.getElementById('mienne-mercis');
-    if(!liste) return;
+  // UN MÈSI EST ATTACHÉ À SON ANNONCE, comme un commentaire — mais écrit seulement
+  // par qui est venu chercher, et après coup. Il paraît à trois endroits : sous
+  // l'annonce, où il prouve que l'échange a eu lieu ; sur la fiche du donneur, qui
+  // le reçoit ; et sur l'accueil, où il sert de preuve au visiteur qui hésite.
+  function bloqMerci(qui, mot, src, quoi){
     var a = document.createElement('article');
     a.className = 'merci neuf';
     if(src){
@@ -4186,14 +4221,45 @@ button{cursor:pointer}
     }
     var h = document.createElement('div');
     h.className = 'merci-h';
-    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand">à l’instant</span>';
+    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand">à l\u2019instant</span>';
     h.querySelector('.pastille').textContent = qui.charAt(0).toUpperCase();
     h.querySelector('b').textContent = qui;
     a.appendChild(h);
     var t = document.createElement('p');
     t.textContent = mot;
     a.appendChild(t);
-    liste.insertBefore(a, liste.querySelector('h3').nextSibling);
+    if(quoi){
+      var q = document.createElement('span');
+      q.className = 'merci-quoi';
+      q.textContent = quoi;
+      a.appendChild(q);
+    }
+    return a;
+  }
+  function poserMerci(liste, noeud){
+    if(!liste) return;
+    var titre = liste.querySelector('h3');
+    if(titre){ liste.insertBefore(noeud, titre.nextSibling); }
+    else { liste.insertBefore(noeud, liste.firstChild); }
+    var cpt = liste.querySelector('.compte-mesi');
+    if(cpt){ cpt.textContent = liste.querySelectorAll('.merci').length; }
+  }
+  function ajouterMerci(qui, mot, src){
+    // Le contexte de l'annonce que l'on remercie.
+    var sec = document.getElementById('s-annonce');
+    var h = sec ? sec.querySelector('h1') : null;
+    var quoi = '';
+    if(h){
+      var lieu = '';
+      Array.prototype.forEach.call(sec.querySelectorAll('.kv div'), function(d){
+        var k = d.querySelector('.k2');
+        if(k && k.textContent.trim() === 'Quartier'){ lieu = d.querySelector('.v').textContent.trim(); }
+      });
+      quoi = 'pour « ' + h.textContent.trim() + ' »' + (lieu ? ', à ' + lieu : '');
+    }
+    poserMerci(document.getElementById('annonce-mercis'), bloqMerci(qui, mot, src, ''));
+    poserMerci(document.getElementById('mienne-mercis'), bloqMerci(qui, mot, src, ''));
+    poserMerci(document.getElementById('accueil-mercis'), bloqMerci(qui, mot, src, quoi));
   }
 
   var mEnv = document.getElementById('btn-merci-envoyer');
@@ -4420,8 +4486,8 @@ button{cursor:pointer}
       if(quoi === 'Masquer'){
         r.classList.add('off');
         b.textContent = 'Rendre visible';
-        etat(r, '<strong>Masquée</strong> — plus personne ne la voit');
-        dire('« ' + titre + ' » est masquée.');
+        etat(r, '<strong>Ne paraît plus</strong> — invisible pour tout le monde');
+        dire('« ' + titre + ' » ne paraît plus.');
         return;
       }
       if(quoi === 'Rendre visible'){
@@ -4435,22 +4501,22 @@ button{cursor:pointer}
         var apres = r.nextSibling, parent = r.parentNode;
         corbeille.push({n: r, apres: apres, parent: parent});
         r.remove();
-        dire('« ' + titre + ' » : supprimée.', 'Annuler', function(){
+        dire('« ' + titre + ' » : retiré du site.', 'Annuler', function(){
           var d = corbeille.pop();
           if(d){ d.parent.insertBefore(d.n, d.apres); }
         });
         return;
       }
       if(quoi === 'Prolonger'){
-        etat(r, 'Prolongée &mdash; <strong>14 jours de plus</strong>');
-        b.disabled = true; b.textContent = 'Prolongée';
+        etat(r, 'Prolongé &mdash; <strong>14 jours de plus</strong>');
+        b.disabled = true; b.textContent = 'Prolongé';
         dire('« ' + titre + ' » court 14 jours de plus.');
         return;
       }
       if(quoi === 'Publier'){
         r.classList.remove('off');
-        etat(r, '<strong>Publiée</strong> — elle paraît dans Le jardin');
-        b.disabled = true; b.textContent = 'Publiée';
+        etat(r, '<strong>En ligne</strong> — paraît dans Le jardin');
+        b.disabled = true; b.textContent = 'En ligne';
         if(window.__pluie){ window.__pluie(); }
         dire('« ' + titre + ' » est en ligne.');
         return;

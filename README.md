@@ -1122,3 +1122,52 @@ En mode présentation — celui qu'on montre — la pastille de sortie se posait
 barre d'onglets : « Réglages de la maquette » barrait « Accueil · Échanges ·
 Publier » sous les yeux de l'acheteur. Elle passe au-dessus de la barre, raccourcie
 à « Réglages ».
+
+## Le calendrier de saison : relevé, plus inventé (v62)
+
+L'ancien était écrit à la main, sans source, sur une île dont les habitants
+connaissent leurs arbres par cœur. Le premier jardinier qui l'ouvrait repérait
+l'erreur en trois secondes, et ce qu'il en concluait ne portait pas sur le
+calendrier mais sur le site entier.
+
+**Ce qui a changé.**
+
+- Les douze mois sont maintenant **construits à partir d'une table** (`SAISON`),
+  pas écrits en dur douze fois. La page publique, la porte de l'accueil et la
+  console lisent la même donnée : une correction se répercute partout.
+- **Les mois viennent de calendriers de saisonnalité de la Martinique et de la
+  Guadeloupe** (sources ci-dessous), pas de mon imagination. Là où les sources
+  divergent, on garde l'intersection plutôt que d'inventer de la précision.
+- **La page dit d'où elle tient ses dates** : « Repères relevés en Martinique et
+  en Guadeloupe. Saint-Barth est plus sèche : la saison y arrive souvent plus tard
+  et dure moins. Le jardinier corrige depuis sa console. » C'est la seule phrase
+  honnête possible : aucune source consultable ne parle de Saint-Barthélemy, et
+  l'île est l'une des plus sèches des Petites Antilles — carême de décembre à
+  avril. Un arbre qui a soif ne donne pas comme un arbre de Basse-Terre.
+- **La console du jardinier a une vraie grille** : une ligne par fruit, douze cases
+  à cocher. On coche ce qu'on constate, la page publique suit dans la seconde.
+  C'est le seul chemin vers un calendrier juste.
+- **Papaye, citron vert et fruit à pain sortent de la grille** : ils donnent toute
+  l'année, et les ranger dans quatre cases sur douze était une erreur de plus.
+  Ils ont leur bandeau « sans saison » au-dessus des mois.
+- **Le tamarin et le ti-basilic sont retirés du calendrier** : aucun mois trouvé
+  pour le premier, et le second est une herbe, qui n'a pas de saison. Ils restent
+  dans le catalogue des annonces. Mieux vaut un calendrier plus court qu'un
+  calendrier qui remplit ses trous.
+- Quatre mois sont vides (janvier, avril, novembre, décembre) et le disent :
+  « Rien de relevé. Papaye, citron vert, fruit à pain donnent quand même. »
+  Un trou visible est une invitation à le combler ; un trou bouché à l'invention
+  est un mensonge de plus.
+- Le ti-mot du jardinier annonçait « la saison des mangues démarre » un
+  14 septembre, alors que la mangue donne depuis mai. Corrigé en fin de saison.
+
+**Les sources.** Toutes portent sur la Martinique ou la Guadeloupe, jamais sur
+Saint-Barthélemy, et elles se contredisent par endroits — c'est précisément
+pourquoi la page l'écrit et pourquoi le jardinier a la main.
+
+- [Domaine Château Gaillard — Quand consommer les fruits et légumes de Martinique](https://www.domaine-chateau-gaillard.fr/blog-pepiniere-domaine-chateau-gaillard-trois-ilets/quand-consommer-les-fruits-et-legumes-de-martinique-calendrier)
+- [IGUAFLHOR — Fruits et légumes de Guadeloupe](https://iguaflhor.com/fruits-et-legumes-de-guadeloupe/)
+- [Caribfruits (CIRAD) — Quénette](http://caribfruits.cirad.fr/fruits_tropicaux/quenette) et [Mangue](http://caribfruits.cirad.fr/fruits_tropicaux/mangue)
+- [Vacances aux Antilles — calendrier de saison Guadeloupe](https://vacances-aux-antilles.com/guadeloupe/gastronomie-guadeloupe/fruits-legumes/)
+- [St Martin Week — la quénette, fruit d'été](https://www.stmartinweek.fr/quenette-ce-petit-fruit-des-antilles-quon-ne-trouve-que-lete-et-que-ceux-qui-y-ont-goute-ne-peuvent-plus-oublier/)
+- [Routard — climat de Saint-Barthélemy](https://www.routard.com/guide/saint_barth/2998/climat_et_meteo.htm) (carême de décembre à avril, île parmi les plus sèches des Petites Antilles)

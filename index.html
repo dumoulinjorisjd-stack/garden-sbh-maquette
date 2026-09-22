@@ -782,6 +782,46 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .month ul{list-style:none; margin:0; padding:0; font-size:16px; display:flex; flex-direction:column; gap:2px}
 .flag{font-size:14.5px; color:var(--ink-soft); border:1px dashed var(--line); border-radius:9px; padding:11px 13px; background:var(--surface-2)}
 
+/* SANS SAISON. La papaye, le citron vert et le fruit à pain donnent toute l'année ;
+   les ranger dans quatre cases sur douze était une erreur de plus. Ils sortent de
+   la grille et se posent au-dessus, avec la raison écrite à côté du nom. */
+.toute-annee{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  border:1px solid var(--line); border-radius:11px; background:var(--surface);
+  padding:11px 13px;
+}
+.toute-annee .k{
+  font-size:11.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:700;
+  color:var(--ink-soft); margin-right:4px;
+}
+.toute-annee .fruit{
+  width:auto; margin-left:0; padding:6px 11px; border:1px solid var(--line);
+  border-radius:999px; background:var(--surface-2); gap:6px;
+}
+.toute-annee .fruit > span{white-space:nowrap}
+.toute-annee .fruit small{font-size:13px; color:var(--ink-soft); font-weight:400}
+.toute-annee .fruit[aria-pressed="true"] small{color:var(--btn-ink); opacity:.85}
+.mois-vide{font-size:15px; color:var(--ink-soft); font-style:italic}
+
+/* LA CONSOLE DU CALENDRIER. Douze cases par fruit : on coche ce qu'on constate
+   dans son jardin, et la page publique suit dans la seconde. C'est le seul chemin
+   vers un calendrier juste — les listes trouvées ailleurs parlent d'îles plus
+   humides, à deux cent cinquante kilomètres d'ici. */
+.saison-ligne{align-items:flex-start}
+.mois-cases{display:flex; flex-wrap:wrap; gap:4px}
+.case-mois{
+  min-width:42px; height:36px; padding:0 6px;
+  border:1px solid var(--line); border-radius:8px;
+  background:var(--surface); color:var(--ink-soft); font-size:13px; font-weight:700;
+  cursor:pointer; font-variant-caps:all-small-caps; letter-spacing:.04em;
+}
+.ajout-saison .acts{gap:6px}
+.case-mois:hover{background:var(--surf-hover); border-color:var(--leaf)}
+.case-mois[aria-pressed="true"]{
+  background:var(--btn-bg); color:var(--btn-ink); border-color:var(--btn-bg);
+}
+.case-mois[aria-pressed="true"]:hover{background:var(--btn-hover); border-color:var(--btn-hover)}
+
 /* ---------- tabbar ---------- */
 .tabbar{
   display:flex; border-top:1px solid var(--line); background:var(--surface);
@@ -1348,7 +1388,7 @@ button{cursor:pointer}
 
     <div class="news">
       <span class="k">Le ti-mot du jardinier · 14 septembre</span>
-      <p>La saison des mangues démarre à Lorient. D'ici deux semaines ça va déborder — pensez à passer un coup de fil à vos voisins avant que ça tombe par terre.</p>
+      <p>Fin de saison des mangues à Lorient. C'est le moment ou jamais — pensez à passer un coup de fil à vos voisins avant que ça tombe par terre.</p>
     </div>
 
     <div class="feed-head">
@@ -1414,8 +1454,8 @@ button{cursor:pointer}
         <svg class="porte-motif" viewBox="0 0 100 100" aria-hidden="true"><use href="#f-citron" fill="currentColor"/></svg>
         <span class="porte-txt">
           <b>La saison</b>
-          <span class="porte-sous">Ce qui donne en septembre</span>
-          <span class="porte-gout">Mangue · Avocat · Fruit à pain · Citron vert</span>
+          <span class="porte-sous" id="porte-saison-mois">Ce qui donne en ce moment</span>
+          <span class="porte-gout" id="porte-saison-liste"></span>
         </span>
         <span class="porte-fleche" aria-hidden="true">→</span>
       </button>
@@ -1975,144 +2015,10 @@ button{cursor:pointer}
       <p class="hint" id="d-note">Un courriel au début de la saison, un autre si une annonce paraît.</p>
     </div>
 
-    <div class="months">
-      <div class="month">
-        <h3>Janvier</h3>
-        <ul><li><button class="fruit" data-f="Pomme-cannelle">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Pomme-cannelle</span></button></li><li><button class="fruit" data-f="Citron vert">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Citron vert</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Février</h3>
-        <ul><li><button class="fruit" data-f="Citron vert">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Citron vert</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li><li><button class="fruit" data-f="Cerise pays">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Cerise pays</span></button></li><li><button class="fruit" data-f="Tamarin">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Tamarin</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Mars</h3>
-        <ul><li><button class="fruit" data-f="Cerise pays">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Cerise pays</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li><li><button class="fruit" data-f="Ti-basilic">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Ti-basilic</span></button></li><li><button class="fruit" data-f="Tamarin">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Tamarin</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Avril</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li><li><button class="fruit" data-f="Ti-basilic">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Ti-basilic</span></button></li><li><button class="fruit" data-f="Tamarin">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Tamarin</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Mai</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Prune de Cythère">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Prune de Cythère</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Juin</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Fruit à pain">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Prune de Cythère">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Prune de Cythère</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Juillet</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Fruit à pain">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Corossol">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Corossol</span></button></li><li><button class="fruit" data-f="Quenette">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Quenette</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Août</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Avocat">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Avocat</span></button></li><li><button class="fruit" data-f="Fruit à pain">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Quenette">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Quenette</span></button></li></ul>
-      </div>
-      <div class="month now">
-        <h3>Septembre · en ce moment</h3>
-        <ul><li><button class="fruit" data-f="Mangue">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Mangue</span></button></li><li><button class="fruit" data-f="Avocat">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Avocat</span></button></li><li><button class="fruit" data-f="Fruit à pain">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Fruit à pain</span></button></li><li><button class="fruit" data-f="Citron vert">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Citron vert</span></button></li><li><button class="fruit" data-f="Quenette">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Quenette</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Octobre</h3>
-        <ul><li><button class="fruit" data-f="Avocat">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Avocat</span></button></li><li><button class="fruit" data-f="Corossol">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Corossol</span></button></li><li><button class="fruit" data-f="Citron vert">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Citron vert</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Novembre</h3>
-        <ul><li><button class="fruit" data-f="Corossol">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Corossol</span></button></li><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li><li><button class="fruit" data-f="Cerise pays">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Cerise pays</span></button></li></ul>
-      </div>
-      <div class="month">
-        <h3>Décembre</h3>
-        <ul><li><button class="fruit" data-f="Papaye">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Papaye</span></button></li><li><button class="fruit" data-f="Pomme-cannelle">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Pomme-cannelle</span></button></li><li><button class="fruit" data-f="Citron vert">
-            <svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
-            <span>Citron vert</span></button></li></ul>
-      </div>
-    </div>
+    <div class="toute-annee" id="toute-annee"></div>
+    <div class="months" id="mois-grille"></div>
 
-    <p class="flag">Calendrier d'exemple, à corriger par le jardinier : les dates varient d'un quartier et d'une année à l'autre.</p>
+    <p class="flag" id="saison-source"></p>
   </section>
 
   <!-- 9 ADMIN -->
@@ -2223,7 +2129,7 @@ button{cursor:pointer}
       </div>
       <div class="stack">
         <div class="row">
-          <span class="main"><span class="t">« La saison des mangues démarre à Lorient… »</span>
+          <span class="main"><span class="t">« Fin de saison des mangues à Lorient… »</span>
           <span class="s">En ligne · s'efface le 28 septembre</span></span>
           <span class="acts"><button class="mini">Modifier</button><button class="mini">Retirer</button></span>
         </div>
@@ -2270,60 +2176,10 @@ button{cursor:pointer}
 
     <div class="apanel" data-panel="saison" hidden>
       <div class="callout">
-        <h3>C'est vous qui remplissez ce calendrier</h3>
-        <p>Il alimente la page « La saison », où les gens s'abonnent à un fruit. Les dates d'ici ne ressemblent à aucune liste trouvée ailleurs.</p>
-        <button class="mini solid" style="align-self:flex-start">Ajouter un fruit à la liste</button>
+        <h3>Ce calendrier attend vos corrections</h3>
+        <p id="saison-aveu"></p>
       </div>
-      <div class="stack">
-      <div class="row">
-        <span class="main"><span class="t">Janvier</span><span class="s">Pomme-cannelle · Citron vert · Papaye</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Février</span><span class="s">Citron vert · Papaye · Cerise pays</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Mars</span><span class="s">Cerise pays · Papaye · Ti-basilic</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Avril</span><span class="s">Mangue · Papaye · Ti-basilic</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Mai</span><span class="s">Mangue · Prune de Cythère · Papaye</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Juin</span><span class="s">Mangue · Fruit à pain · Prune de Cythère</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Juillet</span><span class="s">Mangue · Fruit à pain · Corossol</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Août</span><span class="s">Mangue · Avocat · Fruit à pain</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Septembre</span><span class="s">Mangue · Avocat · Fruit à pain · Citron vert</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Octobre</span><span class="s">Avocat · Corossol · Citron vert</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Novembre</span><span class="s">Corossol · Papaye · Cerise pays</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      <div class="row">
-        <span class="main"><span class="t">Décembre</span><span class="s">Papaye · Pomme-cannelle · Citron vert</span></span>
-        <span class="acts"><button class="mini">Modifier</button></span>
-      </div>
-      </div>
+      <div class="stack" id="saison-console"></div>
     </div>
 
     <div class="apanel" data-panel="site" hidden>
@@ -2887,12 +2743,16 @@ button{cursor:pointer}
     }
   });
 
-  var moisNow = document.querySelector('.month.now');
-  if(moisNow && !moisNow.querySelector('.motif-mois')){
-    var sm = document.createElementNS(ns,'svg');
+  // La grille étant construite en JS, le motif du mois courant se pose au même
+  // moment qu'elle, pas au chargement du document.
+  function motifMoisCourant(){
+    var moisNow = document.querySelector('.month.now');
+    if(!moisNow || moisNow.querySelector('.motif-mois')) return;
+    var ns2 = 'http://www.w3.org/2000/svg';
+    var sm = document.createElementNS(ns2,'svg');
     sm.setAttribute('class','motif-mois'); sm.setAttribute('viewBox','0 0 100 100');
     sm.setAttribute('aria-hidden','true');
-    var um = document.createElementNS(ns,'use');
+    var um = document.createElementNS(ns2,'use');
     um.setAttribute('href','#f-mangue'); um.setAttribute('fill','currentColor');
     sm.appendChild(um); moisNow.appendChild(sm);
   }
@@ -2919,6 +2779,171 @@ button{cursor:pointer}
     var u = document.createElementNS(ns,'use');
     u.setAttribute('href','#'+id);
     sv.appendChild(u); t.insertBefore(sv, t.firstChild);
+  });
+
+  // ================= LE CALENDRIER DE SAISON =================
+  // L'ANCIEN ÉTAIT INVENTÉ. Douze mois écrits à la main, sans source, sur une île
+  // dont les habitants connaissent leurs arbres par cœur : le premier jardinier qui
+  // l'ouvrait repérait l'erreur en trois secondes, et ce qu'il en concluait ne
+  // portait pas sur le calendrier mais sur le site entier.
+  //
+  // Celui-ci est relevé, pas deviné. Les mois viennent des calendriers de
+  // saisonnalité de la Martinique et de la Guadeloupe (voir README pour les
+  // sources). Ce n'est PAS Saint-Barthélemy : l'île est l'une des plus sèches des
+  // Petites Antilles, carême de décembre à avril, et un arbre qui a soif donne plus
+  // tard et moins longtemps. On l'écrit à l'écran plutôt que de faire semblant,
+  // et le jardinier corrige depuis sa console — c'est lui qui sait.
+  //
+  // Deux fruits sont sortis de la grille : le tamarin, faute de mois trouvé nulle
+  // part, et le ti-basilic, qui est une herbe et n'a pas de saison. Mieux vaut un
+  // calendrier plus court qu'un calendrier qui remplit ses trous.
+  var MOIS_NOMS = ['Janvier','Février','Mars','Avril','Mai','Juin',
+                   'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  // Abréviations écrites à la main : une initiale ne suffit pas (juin/juillet,
+  // avril/août, mars/mai), et un raccourci ambigu dans une console est un piège.
+  var MOIS_COURT = ['jan','fév','mar','avr','mai','jun',
+                    'jul','aoû','sep','oct','nov','déc'];
+  var SAISON = [
+    {nom:'Mangue',           mois:[5,6,7,8,9]},
+    {nom:'Quenette',         mois:[6,7,8,9]},
+    {nom:'Avocat',           mois:[7,8,9]},
+    {nom:'Cerise pays',      mois:[5,6,7,8]},
+    {nom:'Pomme-cannelle',   mois:[8,9,10]},
+    {nom:'Corossol',         mois:[2,3,8,9]},
+    {nom:'Prune de Cythère', mois:[2,3,9,10]}
+  ];
+  // Mettre le citron vert dans quatre mois sur douze était une erreur de plus :
+  // il donne toute l'année. Un fruit sans saison a sa place hors de la grille.
+  var TOUTE_ANNEE = [
+    {nom:'Papaye',       note:'toute l’année'},
+    {nom:'Citron vert',  note:'toute l’année'},
+    {nom:'Fruit à pain', note:'presque toute l’année, surtout de novembre à juin'}
+  ];
+  var SOURCE_SAISON = 'Repères relevés en Martinique et en Guadeloupe. '
+    + 'Saint-Barth est plus sèche : la saison y arrive souvent plus tard et dure moins. '
+    + 'Le jardinier corrige depuis sa console.';
+
+  function cloche(){
+    return '<svg class="cloche" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+      + '<path d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>';
+  }
+  function fruitsDuMois(m){
+    var out = [];
+    SAISON.forEach(function(f){ if(f.mois.indexOf(m) !== -1){ out.push(f.nom); } });
+    return out;
+  }
+  function rendreSaison(){
+    var grille = document.getElementById('mois-grille');
+    if(!grille) return;
+    var courantMois = new Date().getMonth() + 1;
+    var html = '';
+    for(var m = 1; m <= 12; m++){
+      var noms = fruitsDuMois(m);
+      html += '<div class="month' + (m === courantMois ? ' now' : '') + '">'
+            + '<h3>' + MOIS_NOMS[m-1] + (m === courantMois ? ' · en ce moment' : '') + '</h3>';
+      html += noms.length
+        ? '<ul>' + noms.map(function(n){
+            return '<li><button class="fruit" data-f="' + n + '">' + cloche()
+                 + '<span>' + n + '</span></button></li>';
+          }).join('') + '</ul>'
+        : '<p class="mois-vide">Rien de relevé. ' + TOUTE_ANNEE.map(function(f, k){
+              return k === 0 ? f.nom : f.nom.charAt(0).toLowerCase() + f.nom.slice(1);
+            }).join(', ') + ' donnent quand même.</p>';
+      html += '</div>';
+      }
+    grille.innerHTML = html;
+
+    var band = document.getElementById('toute-annee');
+    if(band){
+      band.innerHTML = '<span class="k">Sans saison</span>'
+        + TOUTE_ANNEE.map(function(f){
+            return '<button class="fruit" data-f="' + f.nom + '">' + cloche()
+                 + '<span>' + f.nom + '</span><small>' + f.note + '</small></button>';
+          }).join('');
+    }
+    var src = document.getElementById('saison-source');
+    if(src){ src.textContent = SOURCE_SAISON; }
+    // L'accueil annonce le mois courant et ses fruits : une porte qui répète le
+    // calendrier à la main se désynchronise à la première correction.
+    var pm = document.getElementById('porte-saison-mois');
+    if(pm){ pm.textContent = 'Ce qui donne en ' + MOIS_NOMS[courantMois-1].toLowerCase(); }
+    var pl = document.getElementById('porte-saison-liste');
+    if(pl){
+      var liste = fruitsDuMois(courantMois).slice(0, 3);
+      TOUTE_ANNEE.slice(0, 1).forEach(function(f){ liste.push(f.nom); });
+      pl.textContent = liste.join(' · ');
+    }
+    var aveu = document.getElementById('saison-aveu');
+    if(aveu){
+      aveu.textContent = SOURCE_SAISON
+        + ' Cochez les mois que vous constatez dans votre jardin : la page « La saison » suit aussitôt.';
+    }
+    motifMoisCourant();
+    if(typeof rafraichir === 'function'){ rafraichir(); }
+  }
+
+  // LA CONSOLE : une ligne par fruit, douze cases à cocher. On coche ce qu'on
+  // constate, la page publique suit dans la seconde. C'est la seule façon d'avoir
+  // un jour un calendrier juste : personne d'autre que lui ne connaît ces arbres.
+  function rendreConsoleSaison(){
+    var c = document.getElementById('saison-console');
+    if(!c) return;
+    c.innerHTML = SAISON.map(function(f, i){
+      return '<div class="row saison-ligne">'
+        + '<span class="main"><span class="t">' + f.nom + '</span>'
+        + '<span class="s">' + (f.mois.length
+            ? f.mois.map(function(m){ return MOIS_NOMS[m-1]; }).join(' · ')
+            : 'aucun mois coché') + '</span></span>'
+        + '<span class="mois-cases">' + MOIS_NOMS.map(function(nm, k){
+            var m = k + 1;
+            return '<button class="case-mois" data-fruit="' + i + '" data-mois="' + m + '"'
+                 + ' aria-pressed="' + (f.mois.indexOf(m) !== -1) + '"'
+                 + ' aria-label="' + f.nom + ' en ' + nm.toLowerCase() + '"'
+                 + ' title="' + nm + '">' + MOIS_COURT[k] + '</button>';
+          }).join('') + '</span></div>';
+    }).join('');
+
+    // Le catalogue parle au pluriel (« Citrons verts »), le calendrier au singulier
+    // (« Citron vert »). Sans cette mise au même pas, la console proposait d'ajouter
+    // des fruits qui y étaient déjà.
+    var ausingulier = function(n){
+      return n.split(' ').map(function(m){ return m.replace(/s$/, ''); }).join(' ').toLowerCase();
+    };
+    var dedans = {};
+    SAISON.forEach(function(f){ dedans[ausingulier(f.nom)] = 1; });
+    TOUTE_ANNEE.forEach(function(f){ dedans[ausingulier(f.nom)] = 1; });
+    var absents = CATALOGUE.map(function(f){ return f.nom; }).filter(function(n){
+      return !dedans[ausingulier(n)];
+    });
+    if(absents.length){
+      c.insertAdjacentHTML('beforeend',
+        '<div class="row ajout-saison"><span class="main"><span class="t">Pas encore au calendrier</span>'
+        + '<span class="s">Touchez un nom pour lui ouvrir une ligne, puis cochez ses mois.</span></span>'
+        + '<span class="acts">' + absents.map(function(n){
+            return '<button class="mini" data-ajout-saison="' + n + '">' + n + '</button>';
+          }).join('') + '</span></div>');
+    }
+  }
+  document.addEventListener('click', function(e){
+    var aj = e.target.closest ? e.target.closest('[data-ajout-saison]') : null;
+    if(aj){
+      var nom = aj.getAttribute('data-ajout-saison');
+      SAISON.push({nom:nom, mois:[]});
+      rendreConsoleSaison(); rendreSaison();
+      dire(nom + ' est au calendrier. Cochez ses mois.');
+      return;
+    }
+    var b = e.target.closest ? e.target.closest('.case-mois') : null;
+    if(!b) return;
+    var f = SAISON[parseInt(b.getAttribute('data-fruit'), 10)];
+    var m = parseInt(b.getAttribute('data-mois'), 10);
+    if(!f) return;
+    var k = f.mois.indexOf(m);
+    if(k === -1){ f.mois.push(m); f.mois.sort(function(a,z){ return a - z; }); }
+    else { f.mois.splice(k, 1); }
+    rendreConsoleSaison();
+    rendreSaison();
+    dire(f.nom + ' : ' + (k === -1 ? 'ajouté en ' : 'retiré de ') + MOIS_NOMS[m-1].toLowerCase() + '.');
   });
 
   var STOCK = {'Mangue':1,'Citron vert':1,'Fruit à pain':1};
@@ -4830,6 +4855,8 @@ button{cursor:pointer}
     if(new URLSearchParams(location.search).has('presentation')){ presentation(true, true); }
   } catch(_){}
 
+  rendreSaison();
+  rendreConsoleSaison();
   rendreAccueilMesi();
   show((location.hash || '').slice(1) || 'accueil');
 })();

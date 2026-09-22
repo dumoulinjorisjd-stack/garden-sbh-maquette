@@ -352,7 +352,8 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
    le fil. Posée sur la vignette, elle donne à chaque carte une silhouette propre. */
 .etiq-mesure{
   position:absolute; left:0; right:0; bottom:0; padding:5px 8px 6px;
-  background:rgba(20,14,8,.42); color:#fff; text-align:center;
+  background:rgba(17,21,14,.60); color:#fff; text-align:center;
+  text-shadow:0 1px 2px rgba(0,0,0,.35);
   font-family:var(--display); font-weight:400; font-size:17px; line-height:1.05;
   letter-spacing:.015em; backdrop-filter:blur(2px);
 }
@@ -432,6 +433,13 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .thumb .kind{
   font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
   background:var(--surface); color:var(--ink); padding:4px 9px; border-radius:999px; border:1px solid var(--line);
+}
+/* Posée sur une vraie photo, l'étiquette ne doit pas ressembler à un label de
+   qualité : c'est un avertissement — « ce n'est pas la récolte que vous venez
+   chercher ». Sombre et translucide, elle se lit sans voler la photo. */
+.thumb[style*="url("] .kind{
+  background:rgba(17,21,14,.62); color:#fff; border-color:transparent; font-weight:600;
+  letter-spacing:.08em; backdrop-filter:blur(3px);
 }
 .thumb{overflow:hidden}
 .t-mangue{background:linear-gradient(145deg,#F3A72C,#D0661A)}
@@ -4280,10 +4288,10 @@ button{cursor:pointer}
         t.style.backgroundImage = 'url(' + f.photo + ')';
         t.style.backgroundSize = 'cover';
         t.style.backgroundPosition = f.cadre || 'center';
-        if(kind){ kind.textContent = 'Photo du jardinier'; }
+        if(kind){ kind.hidden = false; kind.textContent = 'Photo d\u2019illustration'; }
       } else {
         t.style.backgroundImage = '';
-        if(kind){ kind.textContent = 'Photo du jardin'; }
+        if(kind){ kind.hidden = false; kind.textContent = 'Photo du jardin'; }
       }
     });
     formerLesCartes();
@@ -4825,9 +4833,12 @@ button{cursor:pointer}
         ph2.style.backgroundPosition = cadreChoisi || 'center';
         if(cadreChoisi){ ph2.setAttribute('data-cadre', cadreChoisi); }
         else { ph2.removeAttribute('data-cadre'); }
+        // La photo prise par l'auteur n'a pas besoin d'étiquette : elle montre la
+        // chose. Seule l'illustration par défaut doit s'annoncer.
         if(kind){
-          kind.hidden = false;
-          kind.textContent = (vign && vign.src) ? 'Photo du jardin' : 'Photo du jardinier';
+          var perso = !!(vign && vign.src);
+          kind.hidden = perso;
+          kind.textContent = perso ? '' : 'Photo d\u2019illustration';
         }
       } else {
         ph2.style.backgroundImage = '';

@@ -1341,3 +1341,30 @@ Corrigé à la racine — la console porte maintenant son propre nom de classe
 `data-f` absent fait sortir la boucle. `console2.mjs` vérifie désormais, dans les
 deux formats, que la vignette est bien à côté du nom et que la ligne n'a pas de
 fond.
+
+## Ce qu'une vraie photo a révélé (v66)
+
+Le client a envoyé une photo de mangues. Deux défauts sont apparus aussitôt, que
+ni l'audit ni les dégradés de synthèse ne pouvaient montrer.
+
+**« PHOTO DU JARDIN » et « PHOTO DU JARDINIER »** : deux mots à une lettre près,
+qui veulent dire l'inverse l'un de l'autre. Le premier est la photo de l'annonce ;
+le second la photo par défaut que le jardinier a posée sur ce fruit — donc PAS la
+récolte de cette annonce-là. Personne ne fera la différence, et c'est exactement
+la différence qui compte pour quelqu'un qui va se déplacer : **est-ce que je vois
+ce que je viens chercher ?**
+
+Sur une vraie photo la règle devient évidente : **quand la photo EST la chose, il
+n'y a rien à dire** ; quand ce n'est qu'une illustration, il faut le dire, et le
+dire clairement. L'étiquette de la photo par défaut devient donc « Photo
+d'illustration », sombre et translucide pour se lire comme un avertissement et non
+comme un label de qualité ; la photo prise par l'auteur n'a plus d'étiquette du
+tout.
+
+**L'étiquette de quantité passait mal** sur une chair de mangue en plein soleil :
+fond renforcé et ombre portée sur le texte.
+
+**Ce que la photo a confirmé, en revanche** : le cadrage centré par défaut tombe
+juste sur une photo de fruits en paysage, sujet au centre. Le réglage manuel reste
+nécessaire pour l'autre cas — l'arbre photographié en portrait — mais il n'a pas
+besoin d'être touché pour une photo ordinaire.

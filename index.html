@@ -1360,7 +1360,7 @@ button{cursor:pointer}
 
     <div class="feed">
       <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
-        <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Mangues Julie, environ 10 kg</h3>
@@ -1368,7 +1368,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Corossol">
-        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-vert" data-fruit="Fruits à pain"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
@@ -1376,7 +1376,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Colombier">
-        <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-agrume" data-fruit="Citrons verts"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un cageot de citrons verts</h3>
@@ -1400,7 +1400,7 @@ button{cursor:pointer}
         </span>
       </button>
           <button class="card" data-go="annonce" data-q="Colombier">
-        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-vert" data-fruit="Quenettes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un sac de quenettes, l'arbre croule</h3>
@@ -1408,7 +1408,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Grand Fond">
-        <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-terre" data-fruit="Piments"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Piments végétariens, tout le pied</h3>
@@ -1441,7 +1441,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
-        <span class="thumb t-mangue"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-mangue" data-fruit="Papayes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Papayes mûres, à prendre avant les oiseaux</h3>
@@ -1457,7 +1457,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
-        <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-terre" data-fruit="Tamarins"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Tamarins, deux seaux</h3>
@@ -1465,7 +1465,7 @@ button{cursor:pointer}
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Lurin · Gouverneur">
-        <span class="thumb t-vert"><span class="kind">Photo du jardin</span></span>
+        <span class="thumb t-vert" data-fruit="Corossols"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois beaux corossols</h3>
@@ -1478,7 +1478,7 @@ button{cursor:pointer}
 
   <!-- 3 FICHE -->
   <section class="screen pad0" id="s-annonce" hidden>
-    <div class="thumb cover t-mangue"><span class="kind">Photo du jardin</span></div>
+    <div class="thumb cover t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></div>
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
         <span class="kicker k-donne" style="align-self:flex-start">Je donne</span>
@@ -3521,6 +3521,30 @@ button{cursor:pointer}
     {nom:'Ti-basilic',     teinte:'t-vert',   icone:'#i-basilic',  photo:null},
     {nom:'Boutures',       teinte:'t-vert',   icone:'#i-basilic',  photo:null}
   ];
+  // LA PHOTO DU JARDINIER HABILLE LES ANNONCES À L'AFFICHAGE, pas seulement au
+  // moment de publier. Le premier jet ne l'appliquait qu'à l'annonce qu'on venait
+  // d'écrire : le jardinier changeait la photo des mangues et les annonces de
+  // mangues déjà en ligne gardaient leur dégradé. Or c'est exactement l'inverse
+  // qu'on attend d'une illustration par défaut — elle vaut pour tout ce qui n'a
+  // pas sa propre photo, et à tout moment. Une annonce qui porte la photo de son
+  // auteur (`data-photo-perso`) n'est jamais recouverte.
+  function habillerAnnonces(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-fruit]'), function(t){
+      if(t.hasAttribute('data-photo-perso')) return;
+      var f = fruitParNom(t.getAttribute('data-fruit'));
+      var kind = t.querySelector('.kind');
+      if(f && f.photo){
+        t.style.backgroundImage = 'url(' + f.photo + ')';
+        t.style.backgroundSize = 'cover';
+        t.style.backgroundPosition = 'center';
+        if(kind){ kind.textContent = 'Photo du jardinier'; }
+      } else {
+        t.style.backgroundImage = '';
+        if(kind){ kind.textContent = 'Photo du jardin'; }
+      }
+    });
+  }
+
   function fruitParNom(n){
     for(var i = 0; i < CATALOGUE.length; i++){ if(CATALOGUE[i].nom === n){ return CATALOGUE[i]; } }
     return null;
@@ -3755,7 +3779,7 @@ button{cursor:pointer}
     });
   }
 
-  majMesure(); majDon(); majCreneau();
+  majMesure(); majDon(); majCreneau(); habillerAnnonces();
 
   // --- l'annonce vit : le donneur voit ce qu'elle produit
   var neuve = false;
@@ -3871,7 +3895,13 @@ button{cursor:pointer}
       if(f){
         ph2.className = 'thumb cover ' + f.teinte;
         ph2.id = 'mienne-photo';
+        ph2.setAttribute('data-fruit', f.nom);
+      } else {
+        ph2.removeAttribute('data-fruit');
       }
+      // Sa propre photo prime et ne doit pas être recouverte par celle du jardinier.
+      if(vign && vign.src){ ph2.setAttribute('data-photo-perso',''); }
+      else { ph2.removeAttribute('data-photo-perso'); }
       neuve = true;
       allerA('mienne');
       dire('En ligne. On regarde qui la voit.');
@@ -4203,7 +4233,7 @@ button{cursor:pointer}
       reduire(f, function(src){
         if(!src) return;
         CATALOGUE[cible].photo = src;
-        rendreFruits();
+        rendreFruits(); habillerAnnonces();
         dire('Photo posée sur « ' + CATALOGUE[cible].nom + ' ».');
       });
     });
@@ -4214,11 +4244,11 @@ button{cursor:pointer}
       var i = parseInt(ligne.getAttribute('data-i'), 10);
       var act = b.getAttribute('data-act');
       if(act === 'photo'){ cible = i; choixPhoto.click(); return; }
-      if(act === 'oter'){ CATALOGUE[i].photo = null; rendreFruits(); dire('Photo retirée.'); return; }
+      if(act === 'oter'){ CATALOGUE[i].photo = null; rendreFruits(); habillerAnnonces(); dire('Photo retirée.'); return; }
       if(act === 'suppr'){
         var nom = CATALOGUE[i].nom;
         CATALOGUE.splice(i, 1);
-        rendreFruits(); remplirSelecteur(); remplirSuivis();
+        rendreFruits(); remplirSelecteur(); remplirSuivis(); habillerAnnonces();
         dire('« ' + nom + ' » ne sera plus proposé.');
       }
     });
@@ -4231,7 +4261,7 @@ button{cursor:pointer}
         if(fruitParNom(n)){ dire('« ' + n + ' » est déjà dans la liste.'); return; }
         CATALOGUE.push({nom:n, teinte:'t-vert', icone:'#i-basilic', photo:null});
         champNeuf.value = '';
-        rendreFruits(); remplirSelecteur(); remplirSuivis();
+        rendreFruits(); remplirSelecteur(); remplirSuivis(); habillerAnnonces();
         dire('« ' + n + ' » est proposé aux membres.');
       });
     }

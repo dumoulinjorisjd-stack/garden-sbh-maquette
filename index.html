@@ -226,6 +226,14 @@ body.presentation .sortie-presentation{display:block}
 .card h3{font-size:20px}
 .card .meta{font-size:14.5px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:4px 10px}
 .card .excerpt{font-size:16px; color:var(--ink-soft)}
+/* Le créneau sur la carte : c'est l'information qui décide si l'on se déplace
+   aujourd'hui ou pas. Elle mérite d'être lue avant le reste de la méta. */
+.creneau-carte{
+  display:inline-flex; align-items:center; gap:6px; align-self:flex-start;
+  font-size:14px; font-weight:600; color:var(--leaf);
+  background:var(--leaf-soft); border-radius:999px; padding:4px 11px;
+}
+.card[data-jour="auj"] .creneau-carte{background:var(--mangue-soft); color:var(--mangue)}
 .thumb{height:150px; display:flex; align-items:flex-end; padding:10px; position:relative}
 .thumb .kind{
   font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
@@ -662,6 +670,11 @@ body.presentation .sortie-presentation{display:block}
 
 /* ---------- les mèsi ---------- */
 .mercis{display:flex; flex-direction:column; gap:12px}
+/* Sur l'accueil, le mèsi dit aussi POUR QUOI il a été écrit : sans ça c'est un
+   compliment flottant, avec ça c'est la preuve qu'un échange a eu lieu. */
+.merci-quoi{font-size:14px; color:var(--ink-soft); font-style:italic}
+#accueil-mercis .merci{border-left-width:3px}
+#accueil-mercis .merci-photo{height:104px}
 .mercis h3{font-size:18px}
 .merci{
   display:flex; flex-direction:column; gap:9px; padding:13px 14px;
@@ -1303,6 +1316,30 @@ button{cursor:pointer}
     </ol>
 
     <div class="feed-head">
+    <div class="feed-head" style="margin-top:4px">
+      <span class="filets" aria-hidden="true"><i></i><i></i></span>
+      <span class="eyebrow">Ce que ça donne</span>
+    </div>
+    <div class="mercis" id="accueil-mercis">
+      <article class="merci">
+        <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
+        <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
+        <span class="merci-quoi">pour des mangues, à Lorient</span>
+      </article>
+      <article class="merci">
+        <div class="merci-photo t-vert"><span>Sa photo</span></div>
+        <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
+        <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
+        <span class="merci-quoi">pour des mangues, à Lorient</span>
+      </article>
+      <article class="merci">
+        <div class="merci-h"><span class="pastille">B</span><b>Bébert</b><span class="quand">il y a 4 jours</span></div>
+        <p>Les boutures ont pris. Je vous en rendrai quand elles feront des petits.</p>
+        <span class="merci-quoi">pour du ti-basilic, à Gustavia</span>
+      </article>
+    </div>
+    <p class="hint" style="margin-top:-4px">Chaque mot vient de quelqu'un qui est passé chercher. C'est tout ce qu'on garde comme preuve.</p>
+
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
       <span class="eyebrow">Par où commencer</span>
     </div>
@@ -1357,30 +1394,36 @@ button{cursor:pointer}
       <button class="chip" aria-pressed="false">Je donne</button>
       <button class="chip" aria-pressed="false">Je cherche</button>
     </div>
+    <div class="seg" id="filtre-jour" data-multi role="group" aria-label="Filtrer par jour">
+      <button class="chip" id="f-auj" aria-pressed="false">À retirer aujourd'hui</button>
+    </div>
 
     <div class="feed">
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj">
         <span class="thumb t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Mangues Julie, environ 10 kg</h3>
-          <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
+          <span class="meta"><span>Lorient</span>
+          <span class="creneau-carte">Aujourd'hui · 14h – 18h</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Corossol">
+      <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj">
         <span class="thumb t-vert" data-fruit="Fruits à pain"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
-          <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="meta"><span>Corossol</span>
+          <span class="creneau-carte">Aujourd'hui · 7h – 11h</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Colombier">
+      <button class="card" data-go="annonce" data-q="Colombier" data-jour="demain">
         <span class="thumb t-agrume" data-fruit="Citrons verts"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un cageot de citrons verts</h3>
-          <span class="meta"><span>Colombier</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
+          <span class="meta"><span>Colombier</span>
+          <span class="creneau-carte">Demain · 16h – 19h</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Gustavia">
@@ -1390,29 +1433,32 @@ button{cursor:pointer}
           <span class="meta"><span>Gustavia</span><span>·</span><span>Armand</span><span>·</span><span>encore 13 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Saint-Jean">
+      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Six plants de tomates cerises</h3>
-          <span class="meta"><span>Saint-Jean</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="meta"><span>Saint-Jean</span>
+          <span class="creneau-carte">Demain · 9h – 12h</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
           <span class="excerpt">Si vous avez des piments végétariens à échanger je prends volontiers, sinon tant pis, c'est donné quand même.</span>
         </span>
       </button>
-          <button class="card" data-go="annonce" data-q="Colombier">
+          <button class="card" data-go="annonce" data-q="Colombier" data-jour="auj">
         <span class="thumb t-vert" data-fruit="Quenettes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un sac de quenettes, l'arbre croule</h3>
-          <span class="meta"><span>Colombier</span><span>·</span><span>Lucien</span><span>·</span><span>encore 6 jours</span></span>
+          <span class="meta"><span>Colombier</span>
+          <span class="creneau-carte">Aujourd'hui · 17h – 19h</span><span>·</span><span>Lucien</span><span>·</span><span>encore 6 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Grand Fond">
+      <button class="card" data-go="annonce" data-q="Grand Fond" data-jour="apres">
         <span class="thumb t-terre" data-fruit="Piments"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Piments végétariens, tout le pied</h3>
-          <span class="meta"><span>Grand Fond</span><span>·</span><span>Rosette</span><span>·</span><span>encore 11 jours</span></span>
+          <span class="meta"><span>Grand Fond</span>
+          <span class="creneau-carte">Samedi · 8h – 12h</span><span>·</span><span>Rosette</span><span>·</span><span>encore 11 jours</span></span>
           <span class="excerpt">Ça pique à peine. Venez avec un bocal, je vous en remplis un.</span>
         </span>
       </button>
@@ -1423,29 +1469,32 @@ button{cursor:pointer}
           <span class="meta"><span>Anse des Cayes</span><span>·</span><span>Mireille</span><span>·</span><span>encore 8 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Saint-Jean">
+      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="apres">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Cocos secs, une brouette pleine</h3>
           <span class="etiq-prix">2 &euro;<small>participation</small></span>
-          <span class="meta"><span>Saint-Jean</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
+          <span class="meta"><span>Saint-Jean</span>
+          <span class="creneau-carte">Dimanche · 9h – 13h</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Corossol">
+      <button class="card" data-go="annonce" data-q="Corossol" data-jour="demain">
         <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Citronnelle à diviser, deux belles touffes</h3>
-          <span class="meta"><span>Corossol</span><span>·</span><span>Solange</span><span>·</span><span>encore 13 jours</span></span>
+          <span class="meta"><span>Corossol</span>
+          <span class="creneau-carte">Demain · 15h – 18h</span><span>·</span><span>Solange</span><span>·</span><span>encore 13 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj">
         <span class="thumb t-mangue" data-fruit="Papayes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Papayes mûres, à prendre avant les oiseaux</h3>
-          <span class="meta"><span>Lorient</span><span>·</span><span>Gaëtan</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="meta"><span>Lorient</span>
+          <span class="creneau-carte">Aujourd'hui · 12h – 15h</span><span>·</span><span>Gaëtan</span><span>·</span><span>encore 2 jours</span></span>
           <span class="excerpt">Trois qui sont bonnes aujourd'hui, deux pour la semaine prochaine.</span>
         </span>
       </button>
@@ -1456,21 +1505,23 @@ button{cursor:pointer}
           <span class="meta"><span>Pointe Milou</span><span>·</span><span>Fabrice</span><span>·</span><span>encore 10 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="apres">
         <span class="thumb t-terre" data-fruit="Tamarins"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Tamarins, deux seaux</h3>
-          <span class="meta"><span>Lorient</span><span>·</span><span>Joséphine</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="meta"><span>Lorient</span>
+          <span class="creneau-carte">Samedi · 16h – 19h</span><span>·</span><span>Joséphine</span><span>·</span><span>encore 7 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur">
+      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain">
         <span class="thumb t-vert" data-fruit="Corossols"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois beaux corossols</h3>
           <span class="etiq-prix">5 &euro;<small>participation</small></span>
-          <span class="meta"><span>Lurin</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
+          <span class="meta"><span>Lurin</span>
+          <span class="creneau-carte">Demain · 7h30 – 10h</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
         </span>
       </button>
 </div>
@@ -1502,7 +1553,7 @@ button{cursor:pointer}
 
       <div class="duo">
         <button class="btn btn-primary" id="btn-contacter">Contacter</button>
-        <button class="btn btn-ghost partage" data-titre="Mangues Julie, environ 10 kg — à prendre à Lorient">
+        <button class="btn btn-ghost partage" data-image="#s-annonce" data-titre="Mangues Julie, environ 10 kg — à prendre à Lorient">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
           Partager
         </button>
@@ -3063,20 +3114,149 @@ button{cursor:pointer}
     clearTimeout(minuteur);
     minuteur = setTimeout(function(){ toast.classList.remove('vu'); }, 5200);
   }
+  // PARTAGER UNE IMAGE, PAS UN LIEN. Un lien nu collé dans un groupe Facebook ne
+  // convertit rien : il faut que la chose se voie avant qu'on clique. On fabrique
+  // donc une carte carrée — la photo, le titre, le quartier, le créneau, l'étiquette
+  // à donner — et on la partage en pièce jointe quand l'appareil sait le faire.
+  // Sinon on la télécharge et on copie le texte : le geste reste possible partout.
+  var TEINTES = {
+    't-mangue': ['#F3A72C', '#D0661A'], 't-vert': ['#42A470', '#1C6B42'],
+    't-agrume': ['#A6D341', '#549A1F'], 't-terre': ['#EE7A4C', '#BB3F27']
+  };
+  function lireAnnonce(sel){
+    var sec = document.querySelector(sel);
+    if(!sec) return null;
+    var h = sec.querySelector('h1');
+    var couv = sec.querySelector('[data-fruit], .thumb');
+    var quand = sec.querySelector('.quand b');
+    var prix = sec.querySelector('.etiq-don, .etiq-prix');
+    var lieu = '';
+    Array.prototype.forEach.call(sec.querySelectorAll('.kv div'), function(d){
+      var k = d.querySelector('.k2');
+      if(k && k.textContent.trim() === 'Quartier'){ lieu = d.querySelector('.v').textContent.trim(); }
+    });
+    var f = couv ? fruitParNom(couv.getAttribute('data-fruit')) : null;
+    var teinte = 't-vert';
+    if(couv){
+      for(var t in TEINTES){ if(couv.classList.contains(t)){ teinte = t; } }
+    }
+    return {
+      titre: h ? h.textContent.trim() : 'Une annonce',
+      lieu: lieu, quand: quand ? quand.textContent.trim() : '',
+      prix: prix ? prix.textContent.trim().replace(/\s+/g, ' ') : '',
+      photo: f && f.photo ? f.photo : null, teinte: teinte
+    };
+  }
+  function carteImage(a){
+    return new Promise(function(res){
+      var L = 1080, c = document.createElement('canvas');
+      c.width = L; c.height = L;
+      var g = c.getContext('2d');
+      var hautImage = 640;
+      function suite(){
+        // le bandeau du bas
+        g.fillStyle = '#F6EDDE'; g.fillRect(0, hautImage, L, L - hautImage);
+        g.fillStyle = '#1F5D3C'; g.fillRect(0, hautImage, L, 8);
+        // l'étiquette
+        if(a.prix){
+          var etq = a.prix.toUpperCase();
+          g.font = '700 30px "Source Sans 3", system-ui, sans-serif';
+          var w = g.measureText(etq).width + 44;
+          g.fillStyle = a.prix.indexOf('€') >= 0 ? '#B23A16' : '#1F5D3C';
+          var y = hautImage + 46;
+          g.beginPath();
+          if(g.roundRect){ g.roundRect(56, y, w, 52, 26); } else { g.rect(56, y, w, 52); }
+          g.fill();
+          g.fillStyle = '#FFFCF6'; g.textBaseline = 'middle';
+          g.fillText(etq, 78, y + 27);
+        }
+        // le titre, sur deux lignes au plus
+        g.fillStyle = '#241C15'; g.textBaseline = 'alphabetic';
+        g.font = '700 62px Faustina, Georgia, serif';
+        var mots = a.titre.split(' '), ligne = '', lignes = [];
+        mots.forEach(function(m){
+          var essai = ligne ? ligne + ' ' + m : m;
+          if(g.measureText(essai).width > L - 112 && ligne){ lignes.push(ligne); ligne = m; }
+          else { ligne = essai; }
+        });
+        if(ligne){ lignes.push(ligne); }
+        lignes = lignes.slice(0, 2);
+        lignes.forEach(function(l, i){ g.fillText(l, 56, hautImage + 160 + i * 74); });
+        // le lieu et le créneau
+        g.font = '400 36px "Source Sans 3", system-ui, sans-serif';
+        g.fillStyle = '#5C5044';
+        var bas = hautImage + 160 + lignes.length * 74 + 16;
+        if(a.lieu){ g.fillText(a.lieu, 56, bas); bas += 52; }
+        if(a.quand){ g.fillStyle = '#1F5D3C'; g.font = '600 36px "Source Sans 3", system-ui, sans-serif'; g.fillText(a.quand, 56, bas); }
+        // la signature
+        g.font = '400 30px Anton, Impact, sans-serif';
+        g.fillStyle = '#241C15';
+        g.fillText('LAKOU · SAINT-BARTHÉLEMY', 56, L - 46);
+        c.toBlob(function(b){ res(b); }, 'image/png');
+      }
+      if(a.photo){
+        var img = new Image();
+        img.onload = function(){
+          var r = Math.max(L / img.width, hautImage / img.height);
+          var w = img.width * r, h = img.height * r;
+          g.drawImage(img, (L - w) / 2, (hautImage - h) / 2, w, h);
+          suite();
+        };
+        img.onerror = suite;
+        img.src = a.photo;
+      } else {
+        var t = TEINTES[a.teinte] || TEINTES['t-vert'];
+        var deg = g.createLinearGradient(0, 0, L, hautImage);
+        deg.addColorStop(0, t[0]); deg.addColorStop(1, t[1]);
+        g.fillStyle = deg; g.fillRect(0, 0, L, hautImage);
+        suite();
+      }
+    });
+  }
+
   document.addEventListener('click', function(e){
     var b = e.target.closest ? e.target.closest('.partage') : null;
     if(!b) return;
     var titre = b.getAttribute('data-titre') || document.title;
     var lien = location.href;
-    if(navigator.share){
-      navigator.share({title:titre, url:lien}).catch(function(err){
-        if(err && err.name === 'AbortError') return;
-        copier(titre, lien);
-      });
+    var scope = b.getAttribute('data-image');
+    var a = scope ? lireAnnonce(scope) : null;
+    if(!a){
+      if(navigator.share){
+        navigator.share({title:titre, url:lien}).catch(function(err){
+          if(err && err.name === 'AbortError') return;
+          copier(titre, lien);
+        });
+        return;
+      }
+      copier(titre, lien);
       return;
     }
-    copier(titre, lien);
+    var prêt = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    prêt.then(function(){ return carteImage(a); }).then(function(blob){
+      var fichier = null;
+      try { fichier = new File([blob], 'lakou.png', {type:'image/png'}); } catch(_){}
+      if(fichier && navigator.canShare && navigator.canShare({files:[fichier]}) && navigator.share){
+        navigator.share({files:[fichier], title:titre, text:titre + '\n' + lien}).catch(function(err){
+          if(err && err.name === 'AbortError') return;
+          telecharger(blob, titre, lien);
+        });
+        return;
+      }
+      telecharger(blob, titre, lien);
+    }).catch(function(){ copier(titre, lien); });
   });
+  function telecharger(blob, titre, lien){
+    var u = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = u; a.download = 'lakou.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(u); }, 4000);
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(titre + '\n' + lien).catch(function(){});
+    }
+    dire('Image enregistrée, texte copié. Collez les deux dans le groupe.');
+  }
   function copier(titre, lien){
     var texte = titre + '\n' + lien;
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -3408,6 +3588,8 @@ button{cursor:pointer}
       Array.prototype.forEach.call(groupe.querySelectorAll('[aria-pressed]'), function(c){
         c.setAttribute('aria-pressed', c.textContent.trim() === 'Tout' ? 'true' : 'false');
       });
+      var ba = document.getElementById('f-auj');
+      if(ba){ ba.setAttribute('aria-pressed','false'); }
       appliquer();
     });
     entete.appendChild(compteur); entete.appendChild(remise);
@@ -3425,10 +3607,15 @@ button{cursor:pointer}
         if(t !== 'Tout'){ actifs.push(t); }
       });
       var q = (idSection === 's-echanges' && window.__quartierActif) ? window.__quartierActif() : null;
+      var bAuj = document.getElementById('f-auj');
+      var aujSeul = (idSection === 's-echanges') && !!bAuj && bAuj.getAttribute('aria-pressed') === 'true';
       var vus = 0;
       cartes.forEach(function(c){
+        // Le jour est un filtre indépendant du type : « je donne » et « à retirer
+        // aujourd'hui » se cumulent au lieu de s'exclure.
         var ok = (actifs.length === 0 || actifs.indexOf(lire(c)) !== -1)
-              && (!q || c.getAttribute('data-q') === q);
+              && (!q || c.getAttribute('data-q') === q)
+              && (!aujSeul || c.getAttribute('data-jour') === 'auj');
         c.hidden = !ok;
         if(ok){ vus++; }
       });
@@ -3437,14 +3624,17 @@ button{cursor:pointer}
         : (vus > 1 ? ' annonces' : ' annonce');
       var libelle = vus + mot;
       if(q){ libelle += ' à ' + q; }
+      if(aujSeul){ libelle += ' à retirer aujourd\u2019hui'; }
       if(actifs.length){ libelle += ' · ' + actifs.join(', '); }
-      if(!q && !actifs.length){ libelle += ' en tout'; }
+      if(!q && !actifs.length && !aujSeul){ libelle += ' en tout'; }
       compteur.textContent = libelle;
-      remise.hidden = (actifs.length === 0);
+      remise.hidden = (actifs.length === 0 && !aujSeul);
       fil.hidden = (vus === 0);
       vide.hidden = (vus > 0);
       if(vus === 0){
-        vide.textContent = 'Rien dans « ' + actifs.join(' », « ') + ' » en ce moment. Touchez à nouveau le filtre pour tout revoir.';
+        vide.textContent = aujSeul && !actifs.length
+          ? 'Rien à retirer aujourd\u2019hui. Touchez à nouveau le filtre pour voir les jours suivants.'
+          : 'Rien dans « ' + actifs.join(' », « ') + ' » en ce moment. Touchez à nouveau le filtre pour tout revoir.';
       }
     }
     document.addEventListener('click', function(e){
@@ -3453,6 +3643,13 @@ button{cursor:pointer}
     });
     appliquer();
     if(idSection === 's-echanges'){ window.__refiltrer = appliquer; }
+  }
+
+  var bAujFiltre = document.getElementById('f-auj');
+  if(bAujFiltre){
+    bAujFiltre.addEventListener('click', function(){
+      setTimeout(function(){ if(window.__refiltrer){ window.__refiltrer(); } }, 0);
+    });
   }
 
   var TYPES = {'k-donne':'Je donne','k-cherche':'Je cherche'};

@@ -1371,24 +1371,7 @@ button{cursor:pointer}
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
       <span class="eyebrow">Ce que ça donne</span>
     </div>
-    <div class="mercis" id="accueil-mercis">
-      <article class="merci">
-        <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
-        <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
-        <span class="merci-quoi">pour des mangues, à Lorient</span>
-      </article>
-      <article class="merci">
-        <div class="merci-photo t-vert"><span>Sa photo</span></div>
-        <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
-        <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
-        <span class="merci-quoi">pour des mangues, à Lorient</span>
-      </article>
-      <article class="merci">
-        <div class="merci-h"><span class="pastille">B</span><b>Bébert</b><span class="quand">il y a 4 jours</span></div>
-        <p>Les boutures ont pris. Je vous en rendrai quand elles feront des petits.</p>
-        <span class="merci-quoi">pour du ti-basilic, à Gustavia</span>
-      </article>
-    </div>
+    <div class="mercis" id="accueil-mercis"></div>
     <p class="hint" style="margin-top:-4px">Chaque mot vient de quelqu'un qui est passé chercher. C'est tout ce qu'on garde comme preuve.</p>
 
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
@@ -1628,19 +1611,7 @@ button{cursor:pointer}
         <p>Il paraît sous l'annonce, à la vue de tous.</p>
       </div>
 
-      <div class="mercis" id="annonce-mercis">
-        <h3>Les mèsi <span class="compte-mesi" id="annonce-mesi-n">2</span></h3>
-        <article class="merci">
-          <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
-          <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
-        </article>
-        <article class="merci">
-          <div class="merci-photo t-vert"><span>Sa photo</span></div>
-          <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
-          <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
-        </article>
-        <p class="hint">Écrits par des gens qui sont venus chercher. Marie-Claude ne peut ni les modifier ni les effacer&nbsp;; le jardinier, oui, s'il y a un problème.</p>
-      </div>
+      <div class="mercis" id="annonce-mercis" hidden></div>
 
       <p class="expiry" id="an-expire">Disparaît le 26 septembre si personne ne la prolonge.</p>
       <button class="linkish" id="btn-signaler" style="align-self:flex-start; padding-left:0">Signaler un problème</button>
@@ -2455,18 +2426,7 @@ button{cursor:pointer}
         <button class="btn btn-ghost" style="align-self:flex-start" data-go="publier">Republier</button>
       </div>
 
-      <div class="mercis" id="mienne-mercis">
-        <h3>Les mèsi <span class="compte-mesi" id="mienne-mesi-n">2</span></h3>
-        <article class="merci">
-          <div class="merci-h"><span class="pastille">S</span><b>Sylvère</b><span class="quand">hier</span></div>
-          <p>Mèsi anpil&nbsp;! Les enfants en ont mangé trois avant d'arriver à la maison.</p>
-        </article>
-        <article class="merci">
-          <div class="merci-photo"><span>Sa photo</span></div>
-          <div class="merci-h"><span class="pastille">G</span><b>Ginette</b><span class="quand">il y a 2 jours</span></div>
-          <p>Six pots de confiture. J'en garde un pour vous, passez quand vous voulez.</p>
-        </article>
-      </div>
+      <div class="mercis" id="mienne-mercis"></div>
 
       <p class="expiry">On vous demandera dans trois jours si c'est toujours là. Sans réponse, elle s'efface au bout de quatorze.</p>
     </div>
@@ -4168,6 +4128,10 @@ button{cursor:pointer}
   function surEcran(nom){
     if((nom === 'connexion' || nom === 'compte') && window.__geoEveil){ setTimeout(window.__geoEveil, 60); }
     if(nom === 'compte' && typeof remplirCompte === 'function'){ remplirCompte(); }
+    if(nom === 'mienne'){
+      var mt = document.getElementById('mienne-titre');
+      if(mt){ rendreMesi(document.getElementById('mienne-mercis'), mt.textContent.trim(), false); }
+    }
     if(nom !== 'mienne'){ clearTimeout(vieMinuteur); return; }
     var quand = document.getElementById('mienne-quand');
     if(!document.getElementById('v-vues')) return;
@@ -4271,29 +4235,53 @@ button{cursor:pointer}
 
   // --- la boucle se referme : celui qui prend dit mèsi
   // UN MÈSI EST ATTACHÉ À SON ANNONCE, comme un commentaire — mais écrit seulement
-  // par qui est venu chercher, et après coup. Il paraît à trois endroits : sous
-  // l'annonce, où il prouve que l'échange a eu lieu ; sur la fiche du donneur, qui
-  // le reçoit ; et sur l'accueil, où il sert de preuve au visiteur qui hésite.
-  function bloqMerci(qui, mot, src, quoi){
+  // par qui est venu chercher, et après coup. Les mèsi étaient du markup figé sur
+  // l'écran de détail : les mêmes deux paraissaient sous les quatorze annonces. Ils
+  // vivent maintenant dans une table, rangés par le titre de l'annonce, et l'écran
+  // se remplit à l'ouverture. La plupart des annonces n'en ont aucun, et c'est juste :
+  // un mèsi veut dire que quelqu'un est déjà venu.
+  var ORDRE_MESI = 100;
+  var MESI = {
+    'Mangues Julie, environ 10 kg': [
+      {ordre:5, qui:'Sylvère', quand:'hier', mot:'Mèsi anpil ! Les enfants en ont mangé trois avant d\u2019arriver à la maison.'},
+      {ordre:4, qui:'Ginette', quand:'il y a 2 jours', teinte:'t-vert', mot:'Six pots de confiture. J\u2019en garde un pour vous, passez quand vous voulez.'}
+    ],
+    'Un cageot de citrons verts': [
+      {ordre:3, qui:'Mireille', quand:'il y a 3 jours', mot:'Parfaits pour ma confiture de piment. Il en restait encore hier soir.'}
+    ],
+    'Piments végétariens, tout le pied': [
+      {ordre:6, qui:'Bébert', quand:'hier', teinte:'t-terre', mot:'Le pied a repris chez moi. Je vous en rendrai un quand il aura fait des petits.'}
+    ]
+  };
+  var CONTEXTE = {
+    'Mangues Julie, environ 10 kg': 'pour des mangues, à Lorient',
+    'Un cageot de citrons verts': 'pour des citrons verts, à Colombier',
+    'Piments végétariens, tout le pied': 'pour des piments, à Grand Fond'
+  };
+
+  function bloqMerci(m, quoi){
     var a = document.createElement('article');
-    a.className = 'merci neuf';
-    if(src){
+    a.className = 'merci' + (m.neuf ? ' neuf' : '');
+    if(m.photo || m.teinte){
       var ph = document.createElement('div');
-      ph.className = 'merci-photo';
-      ph.style.backgroundImage = 'url(' + src + ')';
-      ph.style.backgroundSize = 'cover';
-      ph.style.backgroundPosition = 'center';
+      ph.className = 'merci-photo' + (m.teinte ? ' ' + m.teinte : '');
+      if(m.photo){
+        ph.style.backgroundImage = 'url(' + m.photo + ')';
+        ph.style.backgroundSize = 'cover';
+        ph.style.backgroundPosition = 'center';
+      }
       ph.innerHTML = '<span>Sa photo</span>';
       a.appendChild(ph);
     }
     var h = document.createElement('div');
     h.className = 'merci-h';
-    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand">à l\u2019instant</span>';
-    h.querySelector('.pastille').textContent = qui.charAt(0).toUpperCase();
-    h.querySelector('b').textContent = qui;
+    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand"></span>';
+    h.querySelector('.pastille').textContent = m.qui.charAt(0).toUpperCase();
+    h.querySelector('b').textContent = m.qui;
+    h.querySelector('.quand').textContent = m.quand;
     a.appendChild(h);
     var t = document.createElement('p');
-    t.textContent = mot;
+    t.textContent = m.mot;
     a.appendChild(t);
     if(quoi){
       var q = document.createElement('span');
@@ -4303,30 +4291,53 @@ button{cursor:pointer}
     }
     return a;
   }
-  function poserMerci(liste, noeud){
-    if(!liste) return;
-    var titre = liste.querySelector('h3');
-    if(titre){ liste.insertBefore(noeud, titre.nextSibling); }
-    else { liste.insertBefore(noeud, liste.firstChild); }
-    var cpt = liste.querySelector('.compte-mesi');
-    if(cpt){ cpt.textContent = liste.querySelectorAll('.merci').length; }
+
+  function rendreMesi(liste, titre, avecContexte){
+    if(!liste) return 0;
+    var mm = MESI[titre] || [];
+    liste.innerHTML = '';
+    if(!mm.length){ return 0; }
+    var h3 = document.createElement('h3');
+    h3.innerHTML = 'Les mèsi <span class="compte-mesi">' + mm.length + '</span>';
+    liste.appendChild(h3);
+    mm.forEach(function(m){ liste.appendChild(bloqMerci(m, avecContexte ? (CONTEXTE[titre] || '') : '')); });
+    var note = document.createElement('p');
+    note.className = 'hint';
+    note.textContent = 'Écrits par des gens qui sont venus chercher. L\u2019auteur de l\u2019annonce ne peut ni les modifier ni les effacer ; le jardinier, oui, s\u2019il y a un problème.';
+    liste.appendChild(note);
+    return mm.length;
   }
+
+  // L'accueil montre les trois derniers, toutes annonces confondues.
+  function rendreAccueilMesi(){
+    var liste = document.getElementById('accueil-mercis');
+    if(!liste) return;
+    // Les TROIS DERNIERS, toutes annonces confondues. Sans ce tri, un mèsi tout
+    // neuf déposé sur une annonce ajoutée après coup restait invisible : l'ordre des
+    // clés de l'objet n'est pas l'ordre du temps.
+    var tout = [];
+    for(var t in MESI){ MESI[t].forEach(function(m){ tout.push({m:m, t:t}); }); }
+    tout.sort(function(a, b){ return (b.m.ordre || 0) - (a.m.ordre || 0); });
+    tout = tout.slice(0, 3);
+    liste.innerHTML = '';
+    tout.forEach(function(x){ liste.appendChild(bloqMerci(x.m, CONTEXTE[x.t] || '')); });
+  }
+
   function ajouterMerci(qui, mot, src){
-    // Le contexte de l'annonce que l'on remercie.
-    var sec = document.getElementById('s-annonce');
-    var h = sec ? sec.querySelector('h1') : null;
-    var quoi = '';
-    if(h){
-      var lieu = '';
-      Array.prototype.forEach.call(sec.querySelectorAll('.kv div'), function(d){
-        var k = d.querySelector('.k2');
-        if(k && k.textContent.trim() === 'Quartier'){ lieu = d.querySelector('.v').textContent.trim(); }
-      });
-      quoi = 'pour « ' + h.textContent.trim() + ' »' + (lieu ? ', à ' + lieu : '');
+    var h = document.getElementById('an-titre');
+    var titre = h ? h.textContent.trim() : '';
+    if(!titre) return;
+    if(!MESI[titre]){ MESI[titre] = []; }
+    MESI[titre].unshift({ordre: ++ORDRE_MESI, qui:qui, quand:'à l\u2019instant', mot:mot, photo:src || null, neuf:true});
+    if(!CONTEXTE[titre]){
+      var q = document.getElementById('an-quartier');
+      CONTEXTE[titre] = 'pour « ' + titre + ' »' + (q && q.textContent ? ', à ' + q.textContent.trim() : '');
     }
-    poserMerci(document.getElementById('annonce-mercis'), bloqMerci(qui, mot, src, ''));
-    poserMerci(document.getElementById('mienne-mercis'), bloqMerci(qui, mot, src, ''));
-    poserMerci(document.getElementById('accueil-mercis'), bloqMerci(qui, mot, src, quoi));
+    rendreMesi(document.getElementById('annonce-mercis'), titre, false);
+    document.getElementById('annonce-mercis').hidden = false;
+    var mt = document.getElementById('mienne-titre');
+    if(mt){ rendreMesi(document.getElementById('mienne-mercis'), mt.textContent.trim(), false); }
+    rendreAccueilMesi();
   }
 
   var mEnv = document.getElementById('btn-merci-envoyer');
@@ -4560,7 +4571,8 @@ button{cursor:pointer}
     var l = function(id, montrer){ var n = document.getElementById(id); if(n){ n.hidden = !montrer; } };
     l('an-l-prix', !demande);
     l('an-quand', !demande && !!creneau);
-    l('annonce-mercis', !demande);
+    var n = rendreMesi(document.getElementById('annonce-mercis'), titre, false);
+    l('annonce-mercis', !demande && n > 0);
     p('an-par-k', demande ? 'Demandé par' : 'Proposé par');
 
     document.getElementById('an-mot').textContent = mot || (demande
@@ -4762,6 +4774,7 @@ button{cursor:pointer}
     if(new URLSearchParams(location.search).has('presentation')){ presentation(true, true); }
   } catch(_){}
 
+  rendreAccueilMesi();
   show((location.hash || '').slice(1) || 'accueil');
 })();
 </script>

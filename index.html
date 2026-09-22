@@ -542,6 +542,10 @@ body.presentation .sortie-presentation{display:block}
 .btn-primary{background:var(--btn-bg); color:var(--btn-ink)}
 .btn-ghost{background:var(--surface); color:var(--ink); border-color:var(--line)}
 .btn-block{width:100%}
+/* Un bouton verrouillé doit se voir : sinon on appuie, rien ne bouge, et on croit
+   que le site est cassé plutôt que de comprendre qu'il manque une information. */
+.btn[disabled]{background:var(--surface-2); color:var(--ink-soft); border-color:var(--line); cursor:not-allowed}
+.btn[disabled]:hover{background:var(--surface-2); border-color:var(--line)}
 
 /* ---------- fiche ---------- */
 .cover{height:210px; margin:0}
@@ -1312,7 +1316,7 @@ button{cursor:pointer}
     </nav>
     <span class="spacer"></span>
     <button class="btn btn-primary navcta" data-go="publier">Publier</button>
-    <button class="linkish" id="btn-compte" data-go="connexion">Se connecter</button>
+    <button class="linkish" id="btn-compte" data-go="connexion" data-motif="compte">Se connecter</button>
   </header>
 
   <div class="screens">
@@ -1574,7 +1578,7 @@ button{cursor:pointer}
 
       <div class="quand" id="an-quand">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg>
-        <span><b id="an-quand-txt">Demain, de 14h à 18h</b><span class="sous" id="an-quand-sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez-la avant de passer.</span></span>
+        <span><b id="an-quand-txt">Demain, de 14h à 18h</b><span class="sous" id="an-quand-sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez avant de passer.</span></span>
       </div>
 
       <div class="kv">
@@ -1597,7 +1601,7 @@ button{cursor:pointer}
           <button class="btn btn-primary" id="btn-wa">Écrire sur WhatsApp au 0690 12 34 56</button>
           <button class="btn btn-ghost" id="btn-tel">Appeler le 0690 12 34 56</button>
         </div>
-        <p class="hint">Visible par les membres inscrits. Prévenez-la si vous ne venez plus.</p>
+        <p class="hint">Visible par les membres inscrits. Prévenez si vous ne venez plus.</p>
       </div>
 
       <div class="callout" id="bloc-merci" hidden>
@@ -1647,7 +1651,7 @@ button{cursor:pointer}
   <!-- 4 CONNEXION -->
   <section class="screen" id="s-connexion" hidden>
     <div class="wall">
-      <h2>Un compte est nécessaire pour contacter</h2>
+      <h2 id="cx-titre">Un compte est nécessaire pour contacter</h2>
       <p>Consulter est libre. Le compte ne sert qu'à publier et à contacter.</p>
     </div>
 
@@ -2509,8 +2513,8 @@ button{cursor:pointer}
   <section class="screen" id="s-merci" hidden>
     <div class="page-h">
       <span class="kicker k-donne" style="align-self:flex-start">Dire mèsi</span>
-      <h1>À Marie-Claude, pour les mangues</h1>
-      <span class="sub">Elle verra votre mot sur son annonce. Elle n'apprend rien d'autre sur vous.</span>
+      <h1 id="me-a">À Marie-Claude, pour les mangues</h1>
+      <span class="sub" id="me-sous">Votre mot paraîtra sur cette annonce. Rien d'autre sur vous n'est transmis.</span>
     </div>
 
     <div class="field">
@@ -2772,10 +2776,11 @@ button{cursor:pointer}
     if(el){
       var cible = el.getAttribute('data-go');
       if(!cible) return;
-      if(cible === 'publier' && !connecte){ allerA('connexion'); return; }
+      if(cible === 'publier' && !connecte){ motifCompte('publier'); allerA('connexion'); return; }
       // Une carte qui mène à l'annonce doit mener à LA SIENNE. L'écran de détail
       // était figé sur « Mangues Julie » : les quatorze cartes y tombaient, et le
       // décalage sautait aux yeux sur une demande, qui affichait soudain une offre.
+      if(cible === 'connexion' && el.getAttribute('data-motif')){ motifCompte(el.getAttribute('data-motif')); }
       if(cible === 'annonce' && el.classList.contains('card') && window.__ouvrirAnnonce){
         window.__ouvrirAnnonce(el);
       }
@@ -3044,6 +3049,16 @@ button{cursor:pointer}
     });
   }
 
+  // On arrive sur l'inscription par trois portes. Annoncer « pour contacter » à
+  // quelqu'un qui voulait publier, c'est lui dire qu'il s'est trompé de bouton.
+  function motifCompte(motif){
+    var t = document.getElementById('cx-titre');
+    if(!t) return;
+    t.textContent = motif === 'publier'
+      ? 'Un compte est nécessaire pour publier'
+      : (motif === 'contacter' ? 'Un compte est nécessaire pour contacter' : 'Créer votre compte');
+  }
+
   var creer = document.getElementById('creer-compte');
   var etapeCode = document.getElementById('etape-code');
   var sansMdp = document.getElementById('sans-mdp');
@@ -3131,6 +3146,7 @@ button{cursor:pointer}
         var bm = document.getElementById('bloc-merci');
         if(bm && document.getElementById('merci-fait').hidden){ bm.hidden = false; }
       } else {
+        motifCompte('contacter');
         allerA('connexion');
       }
     });
@@ -3916,9 +3932,13 @@ button{cursor:pointer}
     var aQuoi = !!quoiChoisi();
     var aPhoto = !!document.querySelector('#s-publier .vignette img[src]');
     pPret.classList.toggle('vu', aQuoi);
-    pPret.childNodes[pPret.childNodes.length - 1].nodeValue =
-      aQuoi && aPhoto ? ' Elle est prête, avec sa photo.' : ' Elle est prête.';
+    pPret.childNodes[pPret.childNodes.length - 1].nodeValue = !aQuoi
+      ? ' Il manque juste ce que c\u2019est.'
+      : (aPhoto ? ' Elle est prête, avec sa photo.' : ' Elle est prête.');
+    var bp = document.getElementById('btn-publier-annonce');
+    if(bp){ bp.disabled = !aQuoi; }
   }
+  majPret();
 
   document.addEventListener('click', function(e){
     var c = e.target.closest ? e.target.closest('.chip') : null;
@@ -4128,6 +4148,16 @@ button{cursor:pointer}
   function surEcran(nom){
     if((nom === 'connexion' || nom === 'compte') && window.__geoEveil){ setTimeout(window.__geoEveil, 60); }
     if(nom === 'compte' && typeof remplirCompte === 'function'){ remplirCompte(); }
+    if(nom === 'merci'){
+      var aQui = (document.getElementById('an-par') || {}).textContent || '';
+      var aQuoi = (document.getElementById('an-titre') || {}).textContent || '';
+      var h1 = document.getElementById('me-a');
+      if(h1){
+        h1.textContent = aQui
+          ? 'À ' + aQui.trim() + (aQuoi ? ', pour « ' + aQuoi.trim() + ' »' : '')
+          : 'Dire mèsi';
+      }
+    }
     if(nom === 'mienne'){
       var mt = document.getElementById('mienne-titre');
       if(mt){ rendreMesi(document.getElementById('mienne-mercis'), mt.textContent.trim(), false); }
@@ -4158,11 +4188,16 @@ button{cursor:pointer}
   if(pubAnnonce){
     pubAnnonce.addEventListener('click', function(){
       var quoi = quoiChoisi();
+      if(!quoi){
+        dire('Dites d\u2019abord ce que c\u2019est.');
+        if(pQuoi){ pQuoi.focus(); }
+        return;
+      }
       var combien = (pCombien && pCombien.value || '').trim();
       var quartier = pOu ? pOu.options[pOu.selectedIndex].text : 'Lorient · Camaruche';
       var tc = document.querySelector('#p-type .chip[aria-pressed="true"]');
       var type = tc ? tc.textContent.trim() : 'Je donne';
-      var titre = quoi || 'Mangues Julie';
+      var titre = quoi;
       if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
       var mPrix = document.getElementById('mienne-prix');
       if(mPrix){
@@ -4543,6 +4578,15 @@ button{cursor:pointer}
     var n = el.querySelector(sel);
     return n ? n.textContent.trim() : '';
   }
+  // Un numero stable par prenom : deux ouvertures de la meme annonce donnent le
+  // meme numero, et deux annonces differentes n'en partagent pas un seul.
+  function telDe(qui){
+    var n = 0, i;
+    for(i = 0; i < (qui || '').length; i++){ n = (n * 31 + qui.charCodeAt(i)) % 1000000; }
+    var s6 = String(100000 + (n % 900000));
+    return '0690 ' + s6.slice(0, 2) + ' ' + s6.slice(2, 4) + ' ' + s6.slice(4, 6);
+  }
+
   window.__ouvrirAnnonce = function(carte){
     var demande = carte.classList.contains('demande');
     var titre = texteDe(carte, 'h3');
@@ -4581,7 +4625,7 @@ button{cursor:pointer}
 
     if(creneau){
       p('an-quand-txt', creneau.replace(' \u00b7 ', ', de ').replace(' \u2013 ', ' à '));
-      p('an-quand-sous', (qui || 'La personne') + ' ne reçoit qu\u2019à ce moment-là. Prévenez-la avant de passer.');
+      p('an-quand-sous', (qui || 'La personne') + ' ne reçoit qu\u2019à ce moment-là. Prévenez avant de passer.');
     }
     var pr = document.getElementById('an-prix');
     if(pr){ pr.innerHTML = prix ? prix.outerHTML : '<span class="etiq-don">À donner</span>'; }
@@ -4602,6 +4646,11 @@ button{cursor:pointer}
 
     var ct = document.getElementById('an-contact-h');
     if(ct){ ct.textContent = (qui || 'Le membre') + ' \u00b7 ' + quartier; }
+    var tel = telDe(qui);
+    var bwa = document.getElementById('btn-wa');
+    if(bwa){ bwa.textContent = 'Écrire sur WhatsApp au ' + tel; }
+    var btel = document.getElementById('btn-tel');
+    if(btel){ btel.textContent = 'Appeler le ' + tel; }
     var mp = document.getElementById('an-merci-p');
     if(mp){ mp.textContent = (qui || 'Cette personne') + ' ne saura jamais ce que ça a donné si personne ne le lui dit.'; }
     var par = document.querySelector('#s-annonce .partage');

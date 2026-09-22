@@ -222,6 +222,39 @@ body.presentation .sortie-presentation{display:block}
   display:flex; flex-direction:column;
 }
 .card:hover{border-color:var(--leaf)}
+
+/* UNE DEMANDE N'EST PAS UNE OFFRE, ET ÇA DOIT SE VOIR À UN MÈTRE. Même géométrie
+   — la grille doit rester régulière, une demande n'est pas de seconde catégorie —
+   mais deux MATIÈRES. L'offre montre une chose qui existe : aplat plein, photo,
+   accent vert. La demande montre un manque : trait pointillé tout autour, tête
+   rayée, loupe dessinée au trait, accent flamboyant. Le pointillé est le mot juste
+   du dessin pour « pas encore là ». */
+.card.demande{
+  border:2px dashed var(--flam); background:var(--surface);
+}
+.card.demande:hover{border-color:var(--flam); background:var(--flam-soft)}
+.card.demande .thumb-vide{
+  border-bottom:2px dashed var(--flam);
+  background:
+    repeating-linear-gradient(-45deg,
+      transparent 0 9px,
+      rgba(178,58,22,.055) 9px 18px),
+    var(--flam-soft);
+}
+.card.demande .loupe{
+  width:74px; height:74px; color:var(--flam); opacity:.62;
+  transition:transform .25s ease, opacity .2s ease;
+}
+.card.demande:hover .loupe{opacity:.85; transform:rotate(-8deg) scale(1.06)}
+.card.demande .thumb-vide .kind{
+  background:var(--flam); color:var(--surface); border-color:var(--flam);
+  letter-spacing:.12em;
+}
+.card.demande h3{color:var(--ink)}
+.card.demande .kicker{background:var(--flam); color:var(--surface)}
+@media (prefers-reduced-motion: reduce){
+  .card.demande:hover .loupe{transform:none}
+}
 .card .body{padding:14px 15px 15px; display:flex; flex-direction:column; gap:7px}
 .card h3{font-size:20px}
 .card .meta{font-size:14.5px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:4px 10px}
@@ -1413,8 +1446,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Mangues Julie, environ 10 kg</h3>
-          <span class="meta"><span>Lorient</span>
-          <span class="creneau-carte">Aujourd'hui · 14h – 18h</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
+          <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
+          <span class="creneau-carte">Aujourd'hui · 14h – 18h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj">
@@ -1422,8 +1455,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
-          <span class="meta"><span>Corossol</span>
-          <span class="creneau-carte">Aujourd'hui · 7h – 11h</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="creneau-carte">Aujourd'hui · 7h – 11h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Colombier" data-jour="demain">
@@ -1431,8 +1464,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un cageot de citrons verts</h3>
-          <span class="meta"><span>Colombier</span>
-          <span class="creneau-carte">Demain · 16h – 19h</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
+          <span class="meta"><span>Colombier</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
+          <span class="creneau-carte">Demain · 16h – 19h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Gustavia">
@@ -1447,8 +1480,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Six plants de tomates cerises</h3>
-          <span class="meta"><span>Saint-Jean</span>
-          <span class="creneau-carte">Demain · 9h – 12h</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="meta"><span>Saint-Jean</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="creneau-carte">Demain · 9h – 12h</span>
           <span class="excerpt">Si vous avez des piments végétariens à échanger je prends volontiers, sinon tant pis, c'est donné quand même.</span>
         </span>
       </button>
@@ -1457,8 +1490,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Un sac de quenettes, l'arbre croule</h3>
-          <span class="meta"><span>Colombier</span>
-          <span class="creneau-carte">Aujourd'hui · 17h – 19h</span><span>·</span><span>Lucien</span><span>·</span><span>encore 6 jours</span></span>
+          <span class="meta"><span>Colombier</span><span>·</span><span>Lucien</span><span>·</span><span>encore 6 jours</span></span>
+          <span class="creneau-carte">Aujourd'hui · 17h – 19h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Grand Fond" data-jour="apres">
@@ -1466,8 +1499,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Piments végétariens, tout le pied</h3>
-          <span class="meta"><span>Grand Fond</span>
-          <span class="creneau-carte">Samedi · 8h – 12h</span><span>·</span><span>Rosette</span><span>·</span><span>encore 11 jours</span></span>
+          <span class="meta"><span>Grand Fond</span><span>·</span><span>Rosette</span><span>·</span><span>encore 11 jours</span></span>
+          <span class="creneau-carte">Samedi · 8h – 12h</span>
           <span class="excerpt">Ça pique à peine. Venez avec un bocal, je vous en remplis un.</span>
         </span>
       </button>
@@ -1484,8 +1517,8 @@ button{cursor:pointer}
           <span class="kicker k-donne">Je donne</span>
           <h3>Cocos secs, une brouette pleine</h3>
           <span class="etiq-prix">2 &euro;<small>participation</small></span>
-          <span class="meta"><span>Saint-Jean</span>
-          <span class="creneau-carte">Dimanche · 9h – 13h</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
+          <span class="meta"><span>Saint-Jean</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
+          <span class="creneau-carte">Dimanche · 9h – 13h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Corossol" data-jour="demain">
@@ -1493,8 +1526,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Citronnelle à diviser, deux belles touffes</h3>
-          <span class="meta"><span>Corossol</span>
-          <span class="creneau-carte">Demain · 15h – 18h</span><span>·</span><span>Solange</span><span>·</span><span>encore 13 jours</span></span>
+          <span class="meta"><span>Corossol</span><span>·</span><span>Solange</span><span>·</span><span>encore 13 jours</span></span>
+          <span class="creneau-carte">Demain · 15h – 18h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj">
@@ -1502,8 +1535,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Papayes mûres, à prendre avant les oiseaux</h3>
-          <span class="meta"><span>Lorient</span>
-          <span class="creneau-carte">Aujourd'hui · 12h – 15h</span><span>·</span><span>Gaëtan</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="meta"><span>Lorient</span><span>·</span><span>Gaëtan</span><span>·</span><span>encore 2 jours</span></span>
+          <span class="creneau-carte">Aujourd'hui · 12h – 15h</span>
           <span class="excerpt">Trois qui sont bonnes aujourd'hui, deux pour la semaine prochaine.</span>
         </span>
       </button>
@@ -1519,8 +1552,8 @@ button{cursor:pointer}
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
           <h3>Tamarins, deux seaux</h3>
-          <span class="meta"><span>Lorient</span>
-          <span class="creneau-carte">Samedi · 16h – 19h</span><span>·</span><span>Joséphine</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="meta"><span>Lorient</span><span>·</span><span>Joséphine</span><span>·</span><span>encore 7 jours</span></span>
+          <span class="creneau-carte">Samedi · 16h – 19h</span>
         </span>
       </button>
       <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain">
@@ -1529,8 +1562,8 @@ button{cursor:pointer}
           <span class="kicker k-donne">Je donne</span>
           <h3>Trois beaux corossols</h3>
           <span class="etiq-prix">5 &euro;<small>participation</small></span>
-          <span class="meta"><span>Lurin</span>
-          <span class="creneau-carte">Demain · 7h30 – 10h</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
+          <span class="meta"><span>Lurin</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
+          <span class="creneau-carte">Demain · 7h30 – 10h</span>
         </span>
       </button>
 </div>
@@ -2825,24 +2858,45 @@ button{cursor:pointer}
       ic.appendChild(d); k.insertBefore(ic, k.firstChild);
     }
 
+    // La matière dit le type avant que le texte ne le dise.
+    carte.classList.add(cle === 'k-cherche' ? 'demande' : 'offre');
+
     if(!carte.querySelector('.thumb')){
       var tete = document.createElement('span');
       tete.className = 'thumb thumb-vide';
       tete.style.setProperty('--teinte', PAR_TYPE[cle].teinte);
       tete.style.setProperty('--t-teint', PAR_TYPE[cle].couleur);
-      var sv = document.createElementNS(ns,'svg');
-      sv.setAttribute('class','thumb-motif'); sv.setAttribute('viewBox','0 0 100 100');
-      sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
-      var u = document.createElementNS(ns,'use');
-      u.setAttribute('href','#' + PAR_TYPE[cle].motif);
-      u.setAttribute('fill','currentColor');
-      sv.appendChild(u);
-      tete.appendChild(sv);
-      if(PAR_TYPE[cle].vide){
-        var lab = document.createElement('span');
-        lab.className = 'kind';
-        lab.textContent = PAR_TYPE[cle].vide;
-        tete.appendChild(lab);
+      if(cle === 'k-cherche'){
+        // Une loupe au trait : on cherche, on n'a pas. Le fruit en aplat aurait
+        // dit le contraire de ce que l'annonce demande.
+        var lp = document.createElementNS(ns,'svg');
+        lp.setAttribute('class','loupe'); lp.setAttribute('viewBox','0 0 24 24');
+        lp.setAttribute('fill','none'); lp.setAttribute('stroke','currentColor');
+        lp.setAttribute('stroke-width','1.7'); lp.setAttribute('stroke-linecap','round');
+        lp.setAttribute('aria-hidden','true'); lp.setAttribute('focusable','false');
+        var pd = document.createElementNS(ns,'path');
+        pd.setAttribute('d', ICONES['k-cherche']);
+        lp.appendChild(pd);
+        tete.appendChild(lp);
+        var lab2 = document.createElement('span');
+        lab2.className = 'kind';
+        lab2.textContent = 'On cherche';
+        tete.appendChild(lab2);
+      } else {
+        var sv = document.createElementNS(ns,'svg');
+        sv.setAttribute('class','thumb-motif'); sv.setAttribute('viewBox','0 0 100 100');
+        sv.setAttribute('aria-hidden','true'); sv.setAttribute('focusable','false');
+        var u = document.createElementNS(ns,'use');
+        u.setAttribute('href','#' + PAR_TYPE[cle].motif);
+        u.setAttribute('fill','currentColor');
+        sv.appendChild(u);
+        tete.appendChild(sv);
+        if(PAR_TYPE[cle].vide){
+          var lab = document.createElement('span');
+          lab.className = 'kind';
+          lab.textContent = PAR_TYPE[cle].vide;
+          tete.appendChild(lab);
+        }
       }
       carte.insertBefore(tete, carte.firstChild);
     }

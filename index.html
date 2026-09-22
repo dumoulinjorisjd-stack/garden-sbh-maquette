@@ -85,12 +85,19 @@ button,select,input,textarea{font:inherit; color:inherit}
 body.presentation .scaffold{display:none}
 body.presentation .stage{padding-block:0 0}
 .sortie-presentation{
-  position:fixed; left:12px; bottom:12px; z-index:60; display:none;
+  /* La pastille de sortie se posait sur la barre d'onglets : en mode présentation,
+     c'est-à-dire devant un acheteur, « Réglages de la maquette » barrait
+     « Accueil · Échanges · Publier ». Elle passe au-dessus de la barre, et
+     par-dessous en z, pour ne plus rien recouvrir. */
+  position:fixed; left:12px; z-index:55; display:none;
+  bottom:calc(76px + 12px + env(safe-area-inset-bottom,0px));
   border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
-  border-radius:999px; padding:7px 13px; font-size:13px; cursor:pointer;
-  opacity:.35; transition:opacity .15s ease;
+  border-radius:999px; padding:5px 11px; font-size:12px; cursor:pointer;
+  opacity:.28; transition:opacity .15s ease;
 }
 body.presentation .sortie-presentation{display:block}
+#device[data-view="desktop"] ~ .sortie-presentation,
+body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .sortie-presentation:hover,.sortie-presentation:focus-visible{opacity:1}
 .scaffold{
   position:sticky; top:env(safe-area-inset-top,0px); z-index:50;
@@ -1286,7 +1293,7 @@ button{cursor:pointer}
   </div>
 </div>
 
-<button class="sortie-presentation" id="sortie-presentation">Réglages de la maquette</button>
+<button class="sortie-presentation" id="sortie-presentation" aria-label="Revenir aux réglages de la maquette">Réglages</button>
 
 <div class="fond" aria-hidden="true"></div>
 </div>

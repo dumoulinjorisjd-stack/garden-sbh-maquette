@@ -1117,3 +1117,8 @@ sous les annonces de Lucien et de Bébert. Réécrites sans pronom plutôt que d
 `coherence.mjs` ouvre les quatorze annonces et compare la fiche à la carte :
 titre, auteur, quartier, type, participation, créneau, libellé du bouton.
 Quatorze sur quatorze cohérentes.
+
+En mode présentation — celui qu'on montre — la pastille de sortie se posait sur la
+barre d'onglets : « Réglages de la maquette » barrait « Accueil · Échanges ·
+Publier » sous les yeux de l'acheteur. Elle passe au-dessus de la barre, raccourcie
+à « Réglages ».

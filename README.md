@@ -1171,3 +1171,65 @@ pourquoi la page l'écrit et pourquoi le jardinier a la main.
 - [Vacances aux Antilles — calendrier de saison Guadeloupe](https://vacances-aux-antilles.com/guadeloupe/gastronomie-guadeloupe/fruits-legumes/)
 - [St Martin Week — la quénette, fruit d'été](https://www.stmartinweek.fr/quenette-ce-petit-fruit-des-antilles-quon-ne-trouve-que-lete-et-que-ceux-qui-y-ont-goute-ne-peuvent-plus-oublier/)
 - [Routard — climat de Saint-Barthélemy](https://www.routard.com/guide/saint_barth/2998/climat_et_meteo.htm) (carême de décembre à avril, île parmi les plus sèches des Petites Antilles)
+
+## Les annonces et les notes, sans compter sur les photos (v63)
+
+Le fil affichait quatorze bandeaux de 150 px de dégradé, étiquetés « PHOTO DU
+JARDIN » alors qu'aucune photo n'existait : une promesse démentie quatorze fois,
+et quarante pour cent de la hauteur donnée à du vide. Les notes du jardin faisaient
+pire — six aplats de couleur sans rapport avec le sujet (un vert pour les
+cochenilles, un orange pour le paillage), et une note sur six sans aplat du tout,
+si bien que le fil semblait cassé. Le comble : la carte la mieux dessinée était la
+DEMANDE — pointillé, hachures, loupe — parce qu'elle, au moins, assumait de n'avoir
+rien à montrer.
+
+**La règle : une carte gagne sa grande image le jour où elle en a une.**
+
+- **Pas de photo, pas de bandeau.** La carte passe en format compact : vignette à
+  gauche, texte à droite. Le fil des annonces passe de 9 000 px à 2 500 px de haut.
+- **La vignette devient un objet dessiné** : le dessin du fruit lui-même, en
+  couleurs, en grand, sur un aplat clair. Onze vignettes reconnaissables au lieu de
+  quatre silhouettes blanches. Un aplat saturé ne servait qu'à faire croire à une
+  photo absente.
+- **La quantité se pose comme une étiquette de cageot** sous la vignette : 10 kg,
+  1 cageot, 2 touffes, 1 brouette. C'est le seul chiffre qu'on cherche en
+  parcourant le fil, et il était enfermé dans le titre. Chaque carte a désormais
+  une silhouette propre.
+- **Le jour où le jardinier pose une vraie photo, la carte reprend d'elle-même le
+  grand format** — vérifié par `formes.mjs` : 14 cartes compactes, on pose une
+  photo sur les mangues depuis la console, la carte de mangues se déplie et la
+  fiche suit. La photo redevient le sujet, et elle ressort d'autant plus qu'elle
+  est entourée de compactes. **Photographier devient visiblement payant.**
+- **Les notes montrent leur sujet** : quatre dessins de thème (goutte, terreau,
+  bouture, coccinelle) sur l'aplat de leur rubrique, avec un filet de la même
+  couleur le long de la carte. On sait de quoi parle la note avant d'avoir lu le
+  titre.
+- **On voit qui parle** : le cachet du jardinier, ou la pastille à l'initiale du
+  membre. C'était écrit en gris, en petit, à la fin. L'astuce d'un voisin prend un
+  filet en pointillé — même règle que l'offre et la demande : même géométrie, deux
+  matières.
+- **Le mèsi sans photo n'a plus de cadre de photo.** Un aplat orange de 132 px
+  légendé « Sa photo » sous un mèsi qui n'en a pas, c'était le même mensonge en
+  plus petit, et il occupait la moitié du bloc. La teinte sert maintenant à colorer
+  le filet et la pastille : trois témoignages alignés, trois couleurs.
+
+**Quatre défauts réels mis au jour par la refonte** (ils étaient là avant, noyés
+sous les aplats) :
+
+- **La fiche n'héritait jamais du fruit de sa carte** : le code lisait `data-fruit`
+  sur la carte, alors qu'il est porté par la vignette. Invisible tant que la
+  couverture était un dégradé, flagrant depuis qu'elle montre un dessin.
+- **Collision de classes** : `.quand` désigne l'encadré du créneau de retrait,
+  cadre et filet vert compris. L'horodatage du mèsi portait le même nom et héritait
+  d'une boîte complète — un rectangle bordé autour de « hier ».
+- **Les marques de repli s'affichaient en blanc sur fond clair** : `.thumb .motif`
+  déclare `color:#fff`, et une déclaration propre bat toujours une couleur héritée,
+  si spécifique soit le parent.
+- **La méta cassait sur ses séparateurs** : « Lorient · Marie-Claude · » puis
+  « encore 12 jours » à la ligne, avec un point médian orphelin en bout de ligne.
+  Le séparateur voyage maintenant avec le mot qu'il précède, et le délai — qui dit
+  quand l'annonce s'efface, autre nature que le lieu — prend sa propre ligne.
+
+Trois annonces ne correspondent à aucune entrée du catalogue (tomates cerises,
+cocos secs, citronnelle). Elles portent une feuille, pas un fruit approchant :
+un piment dessiné sur des tomates est plus faux qu'une marque neutre.

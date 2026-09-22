@@ -272,8 +272,150 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   .card.demande:hover .loupe{transform:none}
 }
 .card .body{padding:14px 15px 15px; display:flex; flex-direction:column; gap:7px}
+
+/* ============ UNE CARTE GAGNE SA GRANDE IMAGE QUAND ELLE EN A UNE ============
+   Le fil affichait quatorze bandeaux de 150 px de dégradé, étiquetés « PHOTO DU
+   JARDIN » alors qu'aucune photo n'existait : une promesse démentie quatorze fois,
+   et quarante pour cent de la hauteur donnée à du vide. Le pire est que la carte
+   la mieux dessinée était la demande — pointillé, hachures, loupe — parce qu'elle,
+   au moins, assumait de n'avoir rien à montrer.
+
+   Désormais : pas de photo, pas de bandeau. La carte passe en format compact, la
+   vignette devient un objet dessiné — la marque du fruit, en grand, centrée, sur
+   son aplat — et la quantité s'y pose comme une étiquette de cageot. Le fil tient
+   sur trois écrans au lieu de dix, chaque carte porte un chiffre différent, et
+   l'œil a enfin où s'accrocher.
+
+   Et quand le jardinier posera ses vraies photos, la carte reprendra d'elle-même
+   le grand format : la photo redevient le sujet, et elle ressort d'autant plus
+   qu'elle est entourée de cartes compactes. Photographier devient visiblement
+   payant — c'est le but. */
+.card.sans-photo{flex-direction:row; align-items:stretch}
+.card.sans-photo .thumb{
+  flex:0 0 116px; width:116px; height:auto; min-height:116px;
+  align-items:center; justify-content:center; padding:0;
+  border-bottom:0; border-right:1px solid var(--line);
+}
+.card.sans-photo .thumb .kind{display:none}
+.card.sans-photo .thumb .motif{
+  position:static; width:76px; height:76px; right:auto; bottom:auto;
+  transform:none; opacity:1; color:inherit;
+}
+/* LA MARQUE EST LE SUJET, DONC ELLE DOIT ÊTRE JUSTE. Tant qu'elle était une
+   silhouette blanche de 138 px rognée dans un coin, personne ne voyait qu'elle
+   était choisie sur la TEINTE et non sur le fruit : un sac de quenettes portait
+   une feuille, des tamarins portaient un piment. Centrée à 76 px, l'erreur saute
+   aux yeux. On prend donc le dessin du fruit lui-même, en couleurs, posé sur un
+   aplat clair : onze vignettes différentes et reconnaissables au lieu de quatre
+   silhouettes. Un aplat saturé ne sert qu'à une chose ici — faire croire à une
+   photo qui n'existe pas. */
+.card.sans-photo .thumb.t-mangue{background:var(--mangue-soft); color:var(--mangue)}
+.card.sans-photo .thumb.t-vert{background:var(--leaf-soft); color:var(--leaf)}
+.card.sans-photo .thumb.t-agrume{background:#E8F2D2; color:#4A7C1C}
+.card.sans-photo .thumb.t-terre{background:var(--flam-soft); color:var(--flam)}
+:root[data-theme="dark"] .card.sans-photo .thumb.t-agrume{color:#A8D46A}
+:root[data-theme="dark"] .card.sans-photo .thumb.t-agrume{background:#1E2A14}
+/* L'étiquette reprend l'encre de la carte : un bandeau noir sur un aplat clair
+   ferait tache. */
+.card.sans-photo .etiq-mesure{
+  background:rgba(36,28,21,.10); color:var(--ink); backdrop-filter:none;
+}
+:root[data-theme="dark"] .card.sans-photo .etiq-mesure{background:rgba(255,255,255,.12)}
+
+/* La fiche fait la même chose : sans photo, un aplat clair et le dessin du fruit
+   en grand, plutôt qu'un dégradé étiqueté « photo du jardin ». */
+#s-annonce .thumb.cover.sans-image{
+  align-items:center; justify-content:center; height:190px;
+  border-bottom:1px solid var(--line);
+}
+#s-annonce .thumb.cover.sans-image.t-mangue,#mienne-photo.sans-image.t-mangue{background:var(--mangue-soft); color:var(--mangue)}
+#s-annonce .thumb.cover.sans-image.t-vert,#mienne-photo.sans-image.t-vert{background:var(--leaf-soft); color:var(--leaf)}
+#s-annonce .thumb.cover.sans-image.t-agrume,#mienne-photo.sans-image.t-agrume{background:#E8F2D2; color:#4A7C1C}
+#s-annonce .thumb.cover.sans-image.t-terre,#mienne-photo.sans-image.t-terre{background:var(--flam-soft); color:var(--flam)}
+#mienne-photo.sans-image{align-items:center; justify-content:center; border-bottom:1px solid var(--line)}
+#mienne-photo.sans-image .motif{position:static; width:112px; height:112px; right:auto; bottom:auto; transform:none; opacity:1; color:inherit}
+#mienne-photo.sans-image .kind{display:none}
+#s-annonce .thumb.cover.sans-image .motif{
+  position:static; width:116px; height:116px; right:auto; bottom:auto;
+  transform:none; opacity:1; color:inherit;
+}
+#s-annonce .thumb.cover.sans-image .kind{display:none}
+.card.sans-photo .card-motif{display:none}
+.card.sans-photo .body{padding:12px 14px; justify-content:center; gap:5px; min-width:0}
+.card.sans-photo h3{font-size:18px}
+.card.sans-photo .excerpt{display:none}
+.card.sans-photo .meta{font-size:14px; gap:3px 8px}
+/* L'étiquette de cageot : le seul chiffre qu'on cherche vraiment en parcourant
+   le fil. Posée sur la vignette, elle donne à chaque carte une silhouette propre. */
+.etiq-mesure{
+  position:absolute; left:0; right:0; bottom:0; padding:5px 8px 6px;
+  background:rgba(20,14,8,.42); color:#fff; text-align:center;
+  font-family:var(--display); font-weight:400; font-size:17px; line-height:1.05;
+  letter-spacing:.015em; backdrop-filter:blur(2px);
+}
+.card.demande.sans-photo .thumb-vide{border-right:2px dashed var(--flam); border-bottom:0}
+.card.demande.sans-photo .loupe{width:56px; height:56px}
+@media (max-width:360px){
+  .card.sans-photo .thumb{flex-basis:96px; width:96px; min-height:96px}
+  .card.sans-photo .thumb .motif{width:60px; height:60px}
+}
+/* En grille d'ordinateur, une carte compacte garde sa vignette à gauche : la
+   colonne est assez large, et l'alternance avec les cartes à photo fait le rythme. */
+#device[data-view="desktop"] .card.sans-photo .thumb{flex-basis:132px; width:132px; min-height:132px}
+
+/* ---- LES NOTES DU JARDIN ----
+   Même faute, aggravée : six notes, six aplats de couleur sans rapport avec le
+   sujet — un vert pour les cochenilles, un orange pour le paillage — étiquetés
+   « PHOTO PRISE SUR UN CHANTIER ». Et une note sur six n'en avait pas, si bien
+   que le fil semblait cassé.
+
+   Une note sans photo montre maintenant SON SUJET : l'un des quatre dessins de
+   thème, sur l'aplat de sa rubrique, avec un filet de la même couleur le long de
+   la carte. On sait de quoi parle la note avant d'avoir lu le titre. */
+.card.note{border-left:5px solid var(--t-rub, var(--line))}
+/* Relue et publiée par le jardinier, mais écrite par un voisin : le filet passe
+   en pointillé. Même règle que l'offre et la demande — même géométrie, deux
+   matières — pour qu'on sache qui parle sans lire la signature. */
+.card.note.astuce{border-left-style:dashed}
+.card.note.astuce .thumb{opacity:.82}
+.card.note.sans-photo .thumb{
+  background:var(--t-rub-doux, var(--surface-2));
+  border-right:1px solid var(--line);
+}
+.card.note.sans-photo .thumb .motif{
+  width:56px; height:56px; color:var(--t-rub, var(--ink-soft)); opacity:.85;
+}
+.card.note.sans-photo .excerpt{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.card.note .kicker.k-conseil{background:var(--t-rub-doux, var(--surface-2)); color:var(--t-rub, var(--ink-soft))}
+.r-arrosage{--t-rub:#1F5D3C; --t-rub-doux:#DFEADF}
+.r-sol{--t-rub:#8F5A0C; --t-rub-doux:#F5E5C8}
+.r-boutures{--t-rub:#2E6B7A; --t-rub-doux:#DCEAEE}
+.r-ravageurs{--t-rub:#B23A16; --t-rub-doux:#F6DCCF}
+:root[data-theme="dark"] .r-arrosage{--t-rub:#8FD4A5; --t-rub-doux:#22301F}
+:root[data-theme="dark"] .r-sol{--t-rub:#F6C25F; --t-rub-doux:#362A15}
+:root[data-theme="dark"] .r-boutures{--t-rub:#7FC4D6; --t-rub-doux:#18282D}
+:root[data-theme="dark"] .r-ravageurs{--t-rub:#FF9C6B; --t-rub-doux:#39231A}
+/* Qui parle. La note du jardinier porte son cachet ; l'astuce d'un membre porte
+   l'initiale de celui qui l'a envoyée. C'était écrit en gris, en petit, à la fin :
+   personne ne le lisait, et l'autorité du jardinier ne se voyait nulle part. */
+.card.note .byline{display:flex; align-items:center; gap:7px; font-size:13.5px}
+.sceau{
+  display:inline-flex; align-items:center; gap:5px; flex:0 0 auto;
+  font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  color:var(--leaf); background:var(--leaf-soft); border-radius:999px; padding:3px 9px;
+}
+.sceau svg{width:12px; height:12px}
+.pastille-membre{
+  width:23px; height:23px; flex:0 0 23px; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--surface-2); color:var(--ink-soft); font-size:12px; font-weight:700;
+}
 .card h3{font-size:20px}
-.card .meta{font-size:14.5px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:4px 10px}
+.card .meta{font-size:14.5px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:2px 9px}
+/* Le séparateur voyage avec le mot qu'il précède : plus de point médian orphelin
+   en fin de ligne quand la méta passe sur deux lignes. */
+.card .meta > span + span::before{content:"·"; margin-right:9px; opacity:.6}
+.card .delai{display:block; font-size:13.5px; color:var(--ink-soft); opacity:.85}
 .card .excerpt{font-size:16px; color:var(--ink-soft)}
 /* Le créneau sur la carte : c'est l'information qui décide si l'on se déplace
    aujourd'hui ou pas. Elle mérite d'être lue avant le reste de la méta. */
@@ -744,9 +886,16 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   border-radius:11px; background:var(--surface);
 }
 .merci.neuf{animation:arrive .5s both}
+/* La teinte colore le filet et la pastille, plus un rectangle de fausse photo. */
+.merci.t-vert{border-left-color:var(--leaf)}
+.merci.t-vert .pastille{background:var(--leaf-soft); color:var(--leaf)}
+.merci.t-terre{border-left-color:var(--flam)}
+.merci.t-terre .pastille{background:var(--flam-soft); color:var(--flam)}
+.merci.t-agrume{border-left-color:#4A7C1C}
+.merci.t-agrume .pastille{background:#E8F2D2; color:#3F6B17}
 .merci-h{display:flex; align-items:center; gap:9px; font-size:15.5px}
 .merci-h b{font-size:16.5px}
-.merci-h .quand{margin-left:auto; color:var(--ink-soft); font-size:14px}
+.merci-h .merci-quand{margin-left:auto; color:var(--ink-soft); font-size:14px; white-space:nowrap}
 .pastille{
   width:30px; height:30px; flex:0 0 30px; border-radius:50%; display:flex;
   align-items:center; justify-content:center; background:var(--mangue-soft);
@@ -1288,6 +1437,35 @@ button{cursor:pointer}
     <path d="M30 27c14-4 30 4 38 18 9 16 6 36-8 44-9 5-18 1-19-8-1-8 5-12 4-22-1-12-11-19-19-22-4-2-4-8 4-10z"/>
     <path d="M28 25c-6-4-6-12 0-16 6 3 9 9 7 15z"/>
   </symbol>
+  <!-- LES QUATRE THÈMES DU JARDIN. Une note sans photo n'a rien à montrer : elle
+       montre donc son sujet. Quatre dessins d'un seul tenant, lisibles à 34 px. -->
+  <symbol id="t-goutte" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M50 12c14 18 24 31 24 44a24 24 0 0 1-48 0c0-13 10-26 24-44z"/>
+    <path d="M50 88a24 24 0 0 1-24-24c0-4 1-8 3-12 2 17 11 28 26 31a24 24 0 0 1-5 5z" opacity=".45"/>
+  </symbol>
+  <symbol id="t-terreau" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M14 58h72c-3 19-18 30-36 30S17 77 14 58z"/>
+    <path d="M50 52c0-16 5-28 19-34 2 16-5 28-19 34z"/>
+    <path d="M47 52c0-14-4-24-17-30-2 14 4 25 17 30z"/>
+    <circle cx="30" cy="70" r="4" opacity=".4"/><circle cx="52" cy="76" r="5" opacity=".4"/>
+    <circle cx="70" cy="68" r="3.5" opacity=".4"/>
+  </symbol>
+  <symbol id="t-bouture" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M48 90V34h5v56z"/>
+    <path d="M51 46c0-15 7-25 22-29 2 15-7 26-22 29z"/>
+    <path d="M49 60c0-13-6-21-19-25-2 13 6 22 19 25z"/>
+    <path d="M30 86c0-7 9-11 21-11s21 4 21 11c0 4-9 6-21 6s-21-2-21-6z" opacity=".38"/>
+  </symbol>
+  <symbol id="t-insecte" viewBox="0 0 100 100" fill="currentColor">
+    <ellipse cx="50" cy="56" rx="24" ry="30"/>
+    <circle cx="50" cy="24" r="12"/>
+    <path d="M47 30v56h6V30z" fill="#fff" opacity=".55"/>
+    <circle cx="36" cy="46" r="5" fill="#fff" opacity=".55"/>
+    <circle cx="64" cy="46" r="5" fill="#fff" opacity=".55"/>
+    <circle cx="38" cy="66" r="4.5" fill="#fff" opacity=".55"/>
+    <circle cx="62" cy="66" r="4.5" fill="#fff" opacity=".55"/>
+    <path d="M44 14c-3-6-9-9-15-8 2 6 8 10 15 8zM56 14c3-6 9-9 15-8-2 6-8 10-15 8z"/>
+  </symbol>
 </svg>
 
 <div class="scaffold">
@@ -1484,7 +1662,7 @@ button{cursor:pointer}
     </div>
 
     <div class="feed">
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj" data-mesure="10 kg">
         <span class="thumb t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1493,7 +1671,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Aujourd'hui · 14h – 18h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj">
+      <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj" data-mesure="3">
         <span class="thumb t-vert" data-fruit="Fruits à pain"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1502,7 +1680,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Aujourd'hui · 7h – 11h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Colombier" data-jour="demain">
+      <button class="card" data-go="annonce" data-q="Colombier" data-jour="demain" data-mesure="1 cageot">
         <span class="thumb t-agrume" data-fruit="Citrons verts"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1518,7 +1696,7 @@ button{cursor:pointer}
           <span class="meta"><span>Gustavia</span><span>·</span><span>Armand</span><span>·</span><span>encore 13 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain">
+      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain" data-mesure="6 plants">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1528,7 +1706,7 @@ button{cursor:pointer}
           <span class="excerpt">Si vous avez des piments végétariens à échanger je prends volontiers, sinon tant pis, c'est donné quand même.</span>
         </span>
       </button>
-          <button class="card" data-go="annonce" data-q="Colombier" data-jour="auj">
+          <button class="card" data-go="annonce" data-q="Colombier" data-jour="auj" data-mesure="1 sac">
         <span class="thumb t-vert" data-fruit="Quenettes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1537,7 +1715,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Aujourd'hui · 17h – 19h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Grand Fond" data-jour="apres">
+      <button class="card" data-go="annonce" data-q="Grand Fond" data-jour="apres" data-mesure="1 pied">
         <span class="thumb t-terre" data-fruit="Piments"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1554,7 +1732,7 @@ button{cursor:pointer}
           <span class="meta"><span>Anse des Cayes</span><span>·</span><span>Mireille</span><span>·</span><span>encore 8 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="apres">
+      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="apres" data-mesure="1 brouette">
         <span class="thumb t-terre"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1564,7 +1742,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Dimanche · 9h – 13h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Corossol" data-jour="demain">
+      <button class="card" data-go="annonce" data-q="Corossol" data-jour="demain" data-mesure="2 touffes">
         <span class="thumb t-agrume"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1573,7 +1751,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Demain · 15h – 18h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj" data-mesure="5">
         <span class="thumb t-mangue" data-fruit="Papayes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1590,7 +1768,7 @@ button{cursor:pointer}
           <span class="meta"><span>Pointe Milou</span><span>·</span><span>Fabrice</span><span>·</span><span>encore 10 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="apres">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="apres" data-mesure="2 seaux">
         <span class="thumb t-terre" data-fruit="Tamarins"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1599,7 +1777,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Samedi · 16h – 19h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain">
+      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain" data-mesure="3">
         <span class="thumb t-vert" data-fruit="Corossols"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -3898,6 +4076,142 @@ button{cursor:pointer}
         if(kind){ kind.textContent = 'Photo du jardin'; }
       }
     });
+    formerLesCartes();
+  }
+
+  // ========= LE FIL SE REFORME SELON CE QU'IL A VRAIMENT À MONTRER =========
+  // Une carte qui porte une photo garde le grand format : la photo est le sujet.
+  // Une carte qui n'en a pas passe en compact et montre un objet dessiné plutôt
+  // qu'un aplat étiqueté « photo ». Comme le jardinier peut poser une photo sur un
+  // fruit depuis sa console, la décision se reprend à chaque habillage : le jour où
+  // il photographie ses mangues, toutes les cartes de mangues se déplient seules.
+  var THEMES = {
+    'arrosage':       {classe:'r-arrosage',  marque:'t-goutte'},
+    'sol et compost': {classe:'r-sol',       marque:'t-terreau'},
+    'boutures':       {classe:'r-boutures',  marque:'t-bouture'},
+    'ravageurs':      {classe:'r-ravageurs', marque:'t-insecte'}
+  };
+  var SCEAU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" '
+    + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5 5L20 6.5"/></svg>';
+
+  // Trois annonces ne correspondent à aucune entrée du catalogue (tomates cerises,
+  // cocos secs, citronnelle) : elles gardent un dessin générique plutôt qu'un
+  // fruit qui n'est pas le leur.
+  function marqueParTeinte(t){
+    // Un piment dessiné sur des tomates cerises, un citron sur de la citronnelle :
+    // choisir la marque sur la TEINTE donnait le mauvais fruit. Tant qu'on n'a pas
+    // le bon dessin, on met une feuille — elle ne dit rien de faux.
+    return 'f-feuille';
+  }
+
+  function marqueDans(vignette, id, taille){
+    var svg = vignette.querySelector('.motif');
+    if(!svg){
+      var ns = 'http://www.w3.org/2000/svg';
+      svg = document.createElementNS(ns,'svg');
+      svg.setAttribute('class','motif'); svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('aria-hidden','true'); svg.setAttribute('focusable','false');
+      svg.appendChild(document.createElementNS(ns,'use'));
+      vignette.insertBefore(svg, vignette.firstChild);
+    }
+    var u = svg.querySelector('use');
+    if(u && u.getAttribute('href') !== '#' + id){ u.setAttribute('href', '#' + id); }
+    if(taille){ u.setAttribute('fill','currentColor'); }
+  }
+
+  function formerLesCartes(){
+    // Les grandes couvertures — la fiche, et l'annonce qu'on vient de publier —
+    // suivent la même règle que les cartes : sans photo, un aplat clair et le
+    // dessin du fruit en grand, pas un dégradé qui se fait passer pour une photo.
+    ['an-photo','mienne-photo'].forEach(function(id){
+      var g = document.getElementById(id);
+      if(!g) return;
+      var img = !!(g.style.backgroundImage && g.style.backgroundImage !== 'none');
+      g.classList.toggle('sans-image', !img);
+      if(!img && !g.classList.contains('thumb-vide')){
+        var fr = fruitParNom(g.getAttribute('data-fruit'));
+        marqueDans(g, fr ? fr.icone.replace('#','') : marqueParTeinte(g), true);
+      }
+    });
+    // Une des six notes n'avait pas de vignette : le fil semblait cassé à cet
+    // endroit. Une carte de la même famille doit avoir la même anatomie.
+    Array.prototype.forEach.call(document.querySelectorAll('#s-conseils .feed .card'), function(c){
+      if(c.querySelector('.thumb')) return;
+      var v = document.createElement('span');
+      v.className = 'thumb t-vert';
+      c.insertBefore(v, c.firstChild);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.feed .card'), function(c){
+      var t = c.querySelector('.thumb');
+      if(!t) return;
+      var aPhoto = !!(t.style.backgroundImage && t.style.backgroundImage !== 'none');
+      c.classList.toggle('sans-photo', !aPhoto);
+
+      // Le dessin suit le FRUIT, pas la teinte. Le catalogue porte déjà l'icône de
+      // chacun ; il ne restait qu'à la demander.
+      var estNote = !!c.querySelector('.kicker.k-conseil, .kicker.k-astuce');
+      if(!aPhoto && !estNote && !c.classList.contains('demande')){
+        var fr = fruitParNom(t.getAttribute('data-fruit'));
+        marqueDans(t, fr ? fr.icone.replace('#','') : marqueParTeinte(t), true);
+      }
+
+      // Les points médians étaient des éléments à part entière : ils se retrouvaient
+      // seuls en bout de ligne. Ils redeviennent une décoration du mot suivant.
+      var meta = c.querySelector('.meta');
+      if(meta && !meta.hasAttribute('data-rangee')){
+        var mots = Array.prototype.map.call(meta.children, function(x){ return x.textContent.trim(); })
+                   .filter(function(x){ return x && x !== '\u00b7'; });
+        // « encore 12 jours » dit quand l'annonce s'efface : autre nature que le
+        // quartier et le prénom, donc autre ligne.
+        var delai = '';
+        mots = mots.filter(function(m){
+          if(/^encore /i.test(m)){ delai = m; return false; }
+          return true;
+        });
+        meta.innerHTML = mots.map(function(m){ return '<span>' + m + '</span>'; }).join('');
+        meta.setAttribute('data-rangee','1');
+        if(delai && !c.querySelector('.delai')){
+          var d = document.createElement('span');
+          d.className = 'delai'; d.textContent = delai;
+          meta.parentNode.insertBefore(d, meta.nextSibling);
+        }
+      }
+
+      // L'étiquette de cageot : le chiffre qu'on cherche en parcourant le fil.
+      var mes = c.getAttribute('data-mesure');
+      var et = t.querySelector('.etiq-mesure');
+      if(mes && !aPhoto){
+        if(!et){ et = document.createElement('span'); et.className = 'etiq-mesure'; t.appendChild(et); }
+        et.textContent = mes;
+      } else if(et){ et.remove(); }
+
+      // Une note montre son thème : on le lit sur son intitulé de rubrique, seul
+      // endroit où il était écrit, et on le rend visible.
+      var k = c.querySelector('.kicker.k-conseil, .kicker.k-astuce');
+      if(!k) return;
+      c.classList.add('note');
+      var rub = k.textContent.replace(/^astuce\s*·\s*/i, '').trim().toLowerCase();
+      var th = THEMES[rub];
+      Object.keys(THEMES).forEach(function(r){ c.classList.remove(THEMES[r].classe); });
+      c.classList.toggle('astuce', /^astuce/i.test(k.textContent.trim()));
+      if(th){
+        c.classList.add(th.classe);
+        if(!aPhoto){ marqueDans(t, th.marque, true); }
+      }
+
+      // Qui parle : le cachet du jardinier, ou l'initiale du membre.
+      var by = c.querySelector('.byline');
+      if(by && !by.querySelector('.sceau, .pastille-membre')){
+        var txt = by.textContent.trim();
+        if(/^le jardinier/i.test(txt)){
+          by.innerHTML = '<span class="sceau">' + SCEAU + 'Le jardinier</span>'
+            + '<span>' + txt.replace(/^le jardinier\s*·\s*/i, '') + '</span>';
+        } else {
+          by.innerHTML = '<span class="pastille-membre">' + txt.charAt(0).toUpperCase() + '</span>'
+            + '<span>' + txt + '</span>';
+        }
+      }
+    });
   }
 
   function fruitParNom(n){
@@ -4314,7 +4628,7 @@ button{cursor:pointer}
       {ordre:4, qui:'Ginette', quand:'il y a 2 jours', teinte:'t-vert', mot:'Six pots de confiture. J\u2019en garde un pour vous, passez quand vous voulez.'}
     ],
     'Un cageot de citrons verts': [
-      {ordre:3, qui:'Mireille', quand:'il y a 3 jours', mot:'Parfaits pour ma confiture de piment. Il en restait encore hier soir.'}
+      {ordre:3, qui:'Mireille', teinte:'t-agrume', quand:'il y a 3 jours', mot:'Parfaits pour ma confiture de piment. Il en restait encore hier soir.'}
     ],
     'Piments végétariens, tout le pied': [
       {ordre:6, qui:'Bébert', quand:'hier', teinte:'t-terre', mot:'Le pied a repris chez moi. Je vous en rendrai un quand il aura fait des petits.'}
@@ -4328,24 +4642,25 @@ button{cursor:pointer}
 
   function bloqMerci(m, quoi){
     var a = document.createElement('article');
-    a.className = 'merci' + (m.neuf ? ' neuf' : '');
-    if(m.photo || m.teinte){
+    a.className = 'merci' + (m.neuf ? ' neuf' : '') + (m.teinte ? ' ' + m.teinte : '');
+    // MÊME RÈGLE QUE LES CARTES : pas de photo, pas de cadre de photo. Un aplat
+    // orange de 132 px légendé « Sa photo » sous un mèsi qui n'en a pas est le
+    // même mensonge en plus petit — et il occupait la moitié du bloc.
+    if(m.photo){
       var ph = document.createElement('div');
       ph.className = 'merci-photo' + (m.teinte ? ' ' + m.teinte : '');
-      if(m.photo){
-        ph.style.backgroundImage = 'url(' + m.photo + ')';
-        ph.style.backgroundSize = 'cover';
-        ph.style.backgroundPosition = 'center';
-      }
+      ph.style.backgroundImage = 'url(' + m.photo + ')';
+      ph.style.backgroundSize = 'cover';
+      ph.style.backgroundPosition = 'center';
       ph.innerHTML = '<span>Sa photo</span>';
       a.appendChild(ph);
     }
     var h = document.createElement('div');
     h.className = 'merci-h';
-    h.innerHTML = '<span class="pastille"></span><b></b><span class="quand"></span>';
+    h.innerHTML = '<span class="pastille"></span><b></b><span class="merci-quand"></span>';
     h.querySelector('.pastille').textContent = m.qui.charAt(0).toUpperCase();
     h.querySelector('b').textContent = m.qui;
-    h.querySelector('.quand').textContent = m.quand;
+    h.querySelector('.merci-quand').textContent = m.quand;
     a.appendChild(h);
     var t = document.createElement('p');
     t.textContent = m.mot;
@@ -4669,7 +4984,10 @@ button{cursor:pointer}
       ['t-mangue','t-vert','t-agrume','t-terre'].forEach(function(t){
         if(tete.classList.contains(t)){ photo.classList.add(t); }
       });
-      if(carte.getAttribute('data-fruit')){ photo.setAttribute('data-fruit', carte.getAttribute('data-fruit')); }
+      // Le fruit est porté par la VIGNETTE de la carte, pas par la carte : la fiche
+      // n'en héritait donc jamais. Invisible tant que la couverture était un
+      // dégradé, flagrant depuis qu'elle montre le dessin du fruit.
+      if(tete.getAttribute('data-fruit')){ photo.setAttribute('data-fruit', tete.getAttribute('data-fruit')); }
       else { photo.removeAttribute('data-fruit'); }
       photo.style.backgroundImage = tete.style.backgroundImage || '';
       var kind = photo.querySelector('.kind');

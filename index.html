@@ -251,6 +251,15 @@ body.presentation .sortie-presentation{display:block}
   letter-spacing:.12em;
 }
 .card.demande h3{color:var(--ink)}
+/* La fiche reprend la matière de la carte : on doit reconnaître qu'on est sur une
+   demande sans relire l'étiquette. */
+#s-annonce.demande .thumb.cover{
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 11px, rgba(178,58,22,.06) 11px 22px),
+    var(--flam-soft);
+  border-bottom:2px dashed var(--flam);
+}
+#s-annonce.demande .thumb.cover .kind{background:var(--flam); color:var(--surface); border-color:var(--flam)}
 .card.demande .kicker{background:var(--flam); color:var(--surface)}
 @media (prefers-reduced-motion: reduce){
   .card.demande:hover .loupe{transform:none}
@@ -1571,26 +1580,24 @@ button{cursor:pointer}
 
   <!-- 3 FICHE -->
   <section class="screen pad0" id="s-annonce" hidden>
-    <div class="thumb cover t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></div>
+    <div class="thumb cover t-mangue" id="an-photo" data-fruit="Mangues"><span class="kind">Photo du jardin</span></div>
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
-        <span class="kicker k-donne" style="align-self:flex-start">Je donne</span>
-        <h1>Mangues Julie, environ 10 kg</h1>
+        <span class="kicker k-donne" id="an-kick" style="align-self:flex-start">Je donne</span>
+        <h1 id="an-titre">Mangues Julie, environ 10 kg</h1>
       </div>
 
-      <p style="font-size:17.5px">L'arbre a donné d'un coup. C'est bon à manger tout de suite, ça ne tiendra pas la semaine. Venez avec un sac, il y en a pour plusieurs personnes.</p>
+      <p id="an-mot" style="font-size:17.5px">L'arbre a donné d'un coup. C'est bon à manger tout de suite, ça ne tiendra pas la semaine. Venez avec un sac, il y en a pour plusieurs personnes.</p>
 
-      <div class="quand">
+      <div class="quand" id="an-quand">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg>
-        <span><b>Demain, de 14h à 18h</b><span class="sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez-la avant de passer.</span></span>
+        <span><b id="an-quand-txt">Demain, de 14h à 18h</b><span class="sous" id="an-quand-sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez-la avant de passer.</span></span>
       </div>
 
       <div class="kv">
-        <div><span class="k2">Participation</span><span class="v"><span class="etiq-don">À donner</span></span></div>
-        <div><span class="k2">Quantité</span><span class="v">Environ 10 kg</span></div>
-        <div><span class="k2">Quartier</span><span class="v">Lorient</span></div>
-        <div><span class="k2">Proposé par</span><span class="v">Marie-Claude</span></div>
-        <div><span class="k2">Publié</span><span class="v">le 12 septembre</span></div>
+        <div id="an-l-prix"><span class="k2">Participation</span><span class="v" id="an-prix"><span class="etiq-don">À donner</span></span></div>
+        <div><span class="k2">Quartier</span><span class="v" id="an-quartier">Lorient</span></div>
+        <div><span class="k2" id="an-par-k">Proposé par</span><span class="v" id="an-par">Marie-Claude</span></div>
       </div>
 
       <div class="duo">
@@ -1602,7 +1609,7 @@ button{cursor:pointer}
       </div>
 
       <div class="callout" id="contact-ouvert" hidden>
-        <h3>Marie-Claude · Lorient</h3>
+        <h3 id="an-contact-h">Marie-Claude · Lorient</h3>
         <div class="vide-acts">
           <button class="btn btn-primary" id="btn-wa">Écrire sur WhatsApp au 0690 12 34 56</button>
           <button class="btn btn-ghost" id="btn-tel">Appeler le 0690 12 34 56</button>
@@ -1612,7 +1619,7 @@ button{cursor:pointer}
 
       <div class="callout" id="bloc-merci" hidden>
         <h3>Vous êtes passé&nbsp;?</h3>
-        <p>Marie-Claude ne saura jamais ce que ses mangues sont devenues si personne ne le lui dit.</p>
+        <p id="an-merci-p">Marie-Claude ne saura jamais ce que ses mangues sont devenues si personne ne le lui dit.</p>
         <button class="btn btn-primary" style="align-self:flex-start" data-go="merci">Dire mèsi</button>
       </div>
 
@@ -1635,7 +1642,7 @@ button{cursor:pointer}
         <p class="hint">Écrits par des gens qui sont venus chercher. Marie-Claude ne peut ni les modifier ni les effacer&nbsp;; le jardinier, oui, s'il y a un problème.</p>
       </div>
 
-      <p class="expiry">Disparaît le 26 septembre si personne ne la prolonge.</p>
+      <p class="expiry" id="an-expire">Disparaît le 26 septembre si personne ne la prolonge.</p>
       <button class="linkish" id="btn-signaler" style="align-self:flex-start; padding-left:0">Signaler un problème</button>
 
       <div class="callout alerte" id="signal-form" hidden>
@@ -2806,6 +2813,12 @@ button{cursor:pointer}
       var cible = el.getAttribute('data-go');
       if(!cible) return;
       if(cible === 'publier' && !connecte){ allerA('connexion'); return; }
+      // Une carte qui mène à l'annonce doit mener à LA SIENNE. L'écran de détail
+      // était figé sur « Mangues Julie » : les quatorze cartes y tombaient, et le
+      // décalage sautait aux yeux sur une demande, qui affichait soudain une offre.
+      if(cible === 'annonce' && el.classList.contains('card') && window.__ouvrirAnnonce){
+        window.__ouvrirAnnonce(el);
+      }
       allerA(cible); return;
     }
     var chip = e.target.closest ? e.target.closest('.chip, .atab') : null;
@@ -4513,6 +4526,82 @@ button{cursor:pointer}
     }
     return null;
   }
+
+  // --- l'écran d'annonce se construit à partir de la carte cliquée
+  function texteDe(el, sel){
+    var n = el.querySelector(sel);
+    return n ? n.textContent.trim() : '';
+  }
+  window.__ouvrirAnnonce = function(carte){
+    var demande = carte.classList.contains('demande');
+    var titre = texteDe(carte, 'h3');
+    var metas = Array.prototype.map.call(carte.querySelectorAll('.meta > span'), function(x){ return x.textContent.trim(); })
+                .filter(function(x){ return x && x !== '\u00b7'; });
+    var quartier = carte.getAttribute('data-q') || metas[0] || '';
+    var qui = metas[1] || '';
+    var reste = metas[2] || '';
+    var creneau = texteDe(carte, '.creneau-carte');
+    var mot = texteDe(carte, '.excerpt');
+    var prix = carte.querySelector('.etiq-prix');
+
+    var p = function(id, v){ var n = document.getElementById(id); if(n){ n.textContent = v; } };
+    p('an-titre', titre);
+    p('an-quartier', quartier);
+    p('an-par', qui);
+    p('an-expire', reste ? ('Disparaît quand le délai « ' + reste + ' » sera passé.') : '');
+
+    var k = document.getElementById('an-kick');
+    k.textContent = demande ? 'Je cherche' : 'Je donne';
+    k.className = 'kicker ' + (demande ? 'k-cherche' : 'k-donne');
+    k.style.alignSelf = 'flex-start';
+    document.getElementById('s-annonce').classList.toggle('demande', demande);
+
+    // Ce qui n'a aucun sens sur une demande disparaît au lieu de mentir.
+    var l = function(id, montrer){ var n = document.getElementById(id); if(n){ n.hidden = !montrer; } };
+    l('an-l-prix', !demande);
+    l('an-quand', !demande && !!creneau);
+    l('annonce-mercis', !demande);
+    p('an-par-k', demande ? 'Demandé par' : 'Proposé par');
+
+    document.getElementById('an-mot').textContent = mot || (demande
+      ? 'Si vous en avez en trop, ' + (qui || 'cette personne') + ' est preneur. Un coup de fil suffit.'
+      : 'Passez quand ça vous arrange, dans le créneau indiqué.');
+
+    if(creneau){
+      p('an-quand-txt', creneau.replace(' \u00b7 ', ', de ').replace(' \u2013 ', ' à '));
+      p('an-quand-sous', (qui || 'La personne') + ' ne reçoit qu\u2019à ce moment-là. Prévenez-la avant de passer.');
+    }
+    var pr = document.getElementById('an-prix');
+    if(pr){ pr.innerHTML = prix ? prix.outerHTML : '<span class="etiq-don">À donner</span>'; }
+
+    var tete = carte.querySelector('.thumb');
+    var photo = document.getElementById('an-photo');
+    if(tete && photo){
+      photo.className = 'thumb cover' + (demande ? ' thumb-vide' : '');
+      ['t-mangue','t-vert','t-agrume','t-terre'].forEach(function(t){
+        if(tete.classList.contains(t)){ photo.classList.add(t); }
+      });
+      if(carte.getAttribute('data-fruit')){ photo.setAttribute('data-fruit', carte.getAttribute('data-fruit')); }
+      else { photo.removeAttribute('data-fruit'); }
+      photo.style.backgroundImage = tete.style.backgroundImage || '';
+      var kind = photo.querySelector('.kind');
+      if(kind){ kind.textContent = texteDe(tete, '.kind') || 'Photo du jardin'; }
+    }
+
+    var ct = document.getElementById('an-contact-h');
+    if(ct){ ct.textContent = (qui || 'Le membre') + ' \u00b7 ' + quartier; }
+    var mp = document.getElementById('an-merci-p');
+    if(mp){ mp.textContent = (qui || 'Cette personne') + ' ne saura jamais ce que ça a donné si personne ne le lui dit.'; }
+    var par = document.querySelector('#s-annonce .partage');
+    if(par){ par.setAttribute('data-titre', titre + (quartier ? ' \u2014 ' + (demande ? 'recherché à ' : 'à prendre à ') + quartier : '')); }
+
+    ['contact-ouvert','merci-fait','signal-form','signal-envoye','bloc-merci'].forEach(function(id){
+      var n = document.getElementById(id); if(n){ n.hidden = true; }
+    });
+    var bc = document.getElementById('btn-contacter');
+    if(bc){ bc.hidden = false; bc.textContent = demande ? 'Répondre' : 'Contacter'; }
+    if(typeof habillerAnnonces === 'function'){ habillerAnnonces(); }
+  };
 
   // --- LES BOUTONS DE LA CONSOLE. Ils étaient décoratifs : chaque ligne portait
   // Modifier / Masquer / Supprimer sans le moindre gestionnaire. Un seul écouteur

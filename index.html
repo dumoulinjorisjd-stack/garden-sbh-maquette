@@ -882,11 +882,11 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .kv .etiq-prix small{display:none}
 .card .etiq-don{font-size:10.5px; padding:3px 9px}
 .quand{
-  display:flex; align-items:flex-start; gap:10px; padding:12px 14px;
+  display:flex; align-items:center; gap:10px; padding:12px 14px;
   border:1px solid var(--line); border-left:4px solid var(--leaf);
   border-radius:11px; background:var(--surface); font-size:16px;
 }
-.quand svg{width:20px; height:20px; flex:0 0 20px; color:var(--leaf); margin-top:2px}
+.quand svg{width:20px; height:20px; flex:0 0 20px; color:var(--leaf)}
 .quand b{display:block}
 .quand .sous{color:var(--ink-soft); font-size:14.5px}
 /* ---------- publier vite ---------- */
@@ -1932,7 +1932,7 @@ button{cursor:pointer}
 
       <div class="quand" id="an-quand">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg>
-        <span><b id="an-quand-txt">Demain, de 14h à 18h</b><span class="sous" id="an-quand-sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez avant de passer.</span></span>
+        <b id="an-quand-txt">Demain, de 14h à 18h</b>
       </div>
 
       <!-- Dans ce tableau, l'intitulé de la ligne dit déjà « Participation » : le
@@ -2591,7 +2591,7 @@ button{cursor:pointer}
 
       <div class="quand">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg>
-        <span><b id="mienne-quand-txt">demain, de 14h à 18h</b><span class="sous">C'est le seul moment où l'on vous dérangera.</span></span>
+        <b id="mienne-quand-txt">demain, de 14h à 18h</b>
       </div>
 
       <div class="vitals" id="mienne-vitals">
@@ -5274,7 +5274,7 @@ button{cursor:pointer}
 
     if(creneau){
       p('an-quand-txt', creneau.replace(' \u00b7 ', ', de ').replace(' \u2013 ', ' à '));
-      p('an-quand-sous', (qui || 'La personne') + ' ne reçoit qu\u2019à ce moment-là. Prévenez avant de passer.');
+
     }
     var pr = document.getElementById('an-prix');
     if(pr){ pr.innerHTML = prix ? prix.outerHTML : '<span class="etiq-don">À donner</span>'; }

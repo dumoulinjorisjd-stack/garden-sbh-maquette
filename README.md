@@ -1412,3 +1412,14 @@ il ne traverse pas un seul mot.
 
 Les trois fruits dessinés sont retirés : dans une case sans marge à droite, ils
 tombaient sur la deuxième ligne de texte, et ils n'ajoutaient rien au numéro.
+
+### Le créneau se suffit (v68)
+
+Sous l'encadré du créneau, une phrase expliquait ce que l'encadré dit déjà :
+« Bébert ne reçoit qu'à ce moment-là. Prévenez avant de passer. » Une horloge, un
+jour, une plage horaire — il n'y a rien à ajouter, et la phrase revenait sur les
+quatorze annonces. Ce qu'elle apportait de neuf, « passez dans ce créneau », est
+déjà écrit deux lignes plus haut dans le mot de l'annonce.
+
+Retirée sur la fiche et sur sa propre annonce ; l'horloge se recentre sur la ligne
+unique. La fiche tient désormais sur un écran de téléphone jusqu'aux boutons.

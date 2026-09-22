@@ -552,7 +552,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 /* ---------- charte des icônes ---------- */
 .ico{width:1.5em; height:1.5em; flex:0 0 auto; vertical-align:-.36em}
 .fruit .ico{width:26px; height:26px; margin-right:1px}
-.etapes .ico-etape{position:absolute; right:12px; bottom:12px; width:52px; height:52px; opacity:.95}
+
 .porte .ico-porte{position:absolute; right:14px; bottom:14px; width:56px; height:56px; opacity:.95; z-index:1}
 .fruit-mois{width:30px; height:30px; flex:0 0 30px}
 .pluie svg{color:inherit}
@@ -594,21 +594,51 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 }
 
 /* ---------- accueil : étapes et portes ---------- */
-.etapes{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+/* TROIS CARTES QUI NE SONT PAS DES BOUTONS. Bordure, fond blanc, coins arrondis,
+   petite icône dans le coin : c'était la grammaire exacte d'une carte cliquable du
+   fil, et on avait envie d'appuyer dessus. Or ce n'est pas un choix, c'est une
+   explication en trois temps — un seul objet, pas trois.
+
+   L'explication devient donc UNE case : un cadre, un fond, et à l'intérieur trois
+   temps reliés par un trait. Les bordures individuelles disparaissent, les numéros
+   deviennent des pastilles posées sur le trait, et le contraste avec les vraies
+   portes cliquables juste dessous redevient net. */
+.etapes{
+  list-style:none; margin:0; padding:22px 20px 24px; display:grid; gap:22px;
+  position:relative; border:1px solid var(--line); border-radius:15px;
+  background:var(--surface);
+}
 .etapes li{
-  position:relative; overflow:hidden;
-  border:1px solid var(--line); border-radius:13px; background:var(--surface);
-  padding:16px 76px 18px 60px; display:flex; flex-direction:column; gap:4px;
+  position:relative; display:flex; flex-direction:column; gap:4px;
+  padding:0 0 0 52px;
 }
 .etapes .num{
-  position:absolute; left:16px; top:15px;
-  font-family:var(--display); font-weight:400; font-size:30px; line-height:1;
-  color:var(--leaf); opacity:.85;
+  position:absolute; left:0; top:-2px; z-index:1;
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--leaf); color:var(--btn-ink);
+  font-family:var(--sans); font-weight:700; font-size:16px; line-height:1;
 }
-.etapes .et-motif{position:absolute; right:-12px; bottom:-18px; width:86px; height:86px; opacity:.13; color:var(--leaf)}
+/* Le trait dit « puis », ce qu'une pile de cartes ne disait pas. Chaque étape
+   porte celui qui mène à la suivante : la dernière n'en a pas, sans quoi le trait
+   annoncerait une quatrième étape qui n'existe pas. */
+.etapes li:not(:last-child)::before{
+  content:""; position:absolute; left:16px; top:36px; bottom:-24px; width:2px;
+  background:var(--leaf); opacity:.2; border-radius:2px;
+}
+
 .etapes b{font-family:var(--serif); font-size:19px}
 .etapes span:not(.num){font-size:16.5px; color:var(--ink-soft); max-width:46ch}
-#device[data-view="desktop"] .etapes{grid-template-columns:repeat(3,1fr)}
+#device[data-view="desktop"] .etapes{
+  grid-template-columns:repeat(3,1fr); gap:34px; padding:26px 28px 28px;
+}
+#device[data-view="desktop"] .etapes li{padding:0; gap:6px}
+#device[data-view="desktop"] .etapes .num{position:static; margin-bottom:4px}
+/* En trois colonnes le trait devient horizontal, à la hauteur du centre des
+   pastilles, et franchit la gouttière jusqu'à la suivante. */
+#device[data-view="desktop"] .etapes li:not(:last-child)::before{
+  left:40px; right:-40px; top:16px; bottom:auto; width:auto; height:2px;
+}
 
 .portes{display:grid; gap:12px}
 #device[data-view="desktop"] .portes{grid-template-columns:repeat(3,1fr)}
@@ -849,6 +879,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   background:var(--leaf-soft); color:var(--leaf);
 }
 .card .etiq-prix{font-size:19px}
+.kv .etiq-prix small{display:none}
 .card .etiq-don{font-size:10.5px; padding:3px 9px}
 .quand{
   display:flex; align-items:flex-start; gap:10px; padding:12px 14px;
@@ -1687,7 +1718,11 @@ button{cursor:pointer}
       </li>
     </ol>
 
-    <div class="feed-head">
+    <!-- UNE BALISE OUVERTE EN DOUBLE. Un « div.feed-head » surnumeraire avalait le
+         bloc des mesi et le titre suivant. Comme « .feed-head » est un flex qui
+         ecarte ses enfants, l'accueil en vue ordinateur montrait une colonne gauche
+         vide, les mesi repousses a droite et « Par ou commencer » jete au bout de la
+         ligne. Invisible sur telephone, ou la colonne unique masquait la faute. -->
     <div class="feed-head" style="margin-top:4px">
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
       <span class="eyebrow">Ce que ça donne</span>
@@ -1695,6 +1730,7 @@ button{cursor:pointer}
     <div class="mercis" id="accueil-mercis"></div>
     <p class="hint" style="margin-top:-4px">Chaque mot vient de quelqu'un qui est passé chercher. C'est tout ce qu'on garde comme preuve.</p>
 
+    <div class="feed-head">
       <span class="filets" aria-hidden="true"><i></i><i></i></span>
       <span class="eyebrow">Par où commencer</span>
     </div>
@@ -1759,7 +1795,7 @@ button{cursor:pointer}
         <span class="thumb t-mangue" data-fruit="Mangues"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Mangues Julie, environ 10 kg</h3>
+          <h3>Mangues Julie, bien mûres</h3>
           <span class="meta"><span>Lorient</span><span>·</span><span>Marie-Claude</span><span>·</span><span>encore 12 jours</span></span>
           <span class="creneau-carte">Aujourd'hui · 14h – 18h</span>
         </span>
@@ -1768,7 +1804,7 @@ button{cursor:pointer}
         <span class="thumb t-vert" data-fruit="Fruits à pain"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Trois fruits à pain, à ramasser aujourd'hui</h3>
+          <h3>Fruits à pain, à ramasser aujourd'hui</h3>
           <span class="meta"><span>Corossol</span><span>·</span><span>Jean-Loup</span><span>·</span><span>encore 2 jours</span></span>
           <span class="creneau-carte">Aujourd'hui · 7h – 11h</span>
         </span>
@@ -1777,7 +1813,7 @@ button{cursor:pointer}
         <span class="thumb t-agrume" data-fruit="Citrons verts"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Un cageot de citrons verts</h3>
+          <h3>Citrons verts du jardin</h3>
           <span class="meta"><span>Colombier</span><span>·</span><span>Sylvie</span><span>·</span><span>encore 9 jours</span></span>
           <span class="creneau-carte">Demain · 16h – 19h</span>
         </span>
@@ -1793,7 +1829,7 @@ button{cursor:pointer}
         <span class="thumb t-terre" data-fruit="Tomates cerises"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Six plants de tomates cerises</h3>
+          <h3>Plants de tomates cerises</h3>
           <span class="meta"><span>Saint-Jean</span><span>·</span><span>Nadège</span><span>·</span><span>encore 7 jours</span></span>
           <span class="creneau-carte">Demain · 9h – 12h</span>
           <span class="excerpt">Si vous avez des piments végétariens à échanger je prends volontiers, sinon tant pis, c'est donné quand même.</span>
@@ -1803,7 +1839,7 @@ button{cursor:pointer}
         <span class="thumb t-vert" data-fruit="Quenettes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Un sac de quenettes, l'arbre croule</h3>
+          <h3>Quenettes, l'arbre croule</h3>
           <span class="meta"><span>Colombier</span><span>·</span><span>Lucien</span><span>·</span><span>encore 6 jours</span></span>
           <span class="creneau-carte">Aujourd'hui · 17h – 19h</span>
         </span>
@@ -1829,7 +1865,7 @@ button{cursor:pointer}
         <span class="thumb t-terre" data-fruit="Cocos secs"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Cocos secs, une brouette pleine</h3>
+          <h3>Cocos secs, bons à râper</h3>
           <span class="etiq-prix">2 &euro;<small>participation</small></span>
           <span class="meta"><span>Saint-Jean</span><span>·</span><span>Bébert</span><span>·</span><span>encore 4 jours</span></span>
           <span class="creneau-carte">Dimanche · 9h – 13h</span>
@@ -1839,7 +1875,7 @@ button{cursor:pointer}
         <span class="thumb t-agrume" data-fruit="Citronnelle"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Citronnelle à diviser, deux belles touffes</h3>
+          <h3>Citronnelle à diviser</h3>
           <span class="meta"><span>Corossol</span><span>·</span><span>Solange</span><span>·</span><span>encore 13 jours</span></span>
           <span class="creneau-carte">Demain · 15h – 18h</span>
         </span>
@@ -1865,7 +1901,7 @@ button{cursor:pointer}
         <span class="thumb t-terre" data-fruit="Tamarins"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Tamarins, deux seaux</h3>
+          <h3>Tamarins tombés cette semaine</h3>
           <span class="meta"><span>Lorient</span><span>·</span><span>Joséphine</span><span>·</span><span>encore 7 jours</span></span>
           <span class="creneau-carte">Samedi · 16h – 19h</span>
         </span>
@@ -1874,7 +1910,7 @@ button{cursor:pointer}
         <span class="thumb t-vert" data-fruit="Corossols"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
-          <h3>Trois beaux corossols</h3>
+          <h3>Corossols bien mûrs</h3>
           <span class="etiq-prix">5 &euro;<small>participation</small></span>
           <span class="meta"><span>Lurin</span><span>·</span><span>Léandre</span><span>·</span><span>encore 5 jours</span></span>
           <span class="creneau-carte">Demain · 7h30 – 10h</span>
@@ -1889,7 +1925,7 @@ button{cursor:pointer}
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
         <span class="kicker k-donne" id="an-kick" style="align-self:flex-start">Je donne</span>
-        <h1 id="an-titre">Mangues Julie, environ 10 kg</h1>
+        <h1 id="an-titre">Mangues Julie, bien mûres</h1>
       </div>
 
       <p id="an-mot" style="font-size:17.5px">L'arbre a donné d'un coup. C'est bon à manger tout de suite, ça ne tiendra pas la semaine. Venez avec un sac, il y en a pour plusieurs personnes.</p>
@@ -1899,7 +1935,11 @@ button{cursor:pointer}
         <span><b id="an-quand-txt">Demain, de 14h à 18h</b><span class="sous" id="an-quand-sous">Marie-Claude ne reçoit qu'à ce moment-là. Prévenez avant de passer.</span></span>
       </div>
 
+      <!-- Dans ce tableau, l'intitulé de la ligne dit déjà « Participation » : le
+           petit mot sous le montant le répéterait. Il n'a sa place que sur la carte,
+           où le montant est seul. -->
       <div class="kv">
+        <div id="an-l-combien"><span class="k2">Combien</span><span class="v" id="an-combien">10 kg</span></div>
         <div id="an-l-prix"><span class="k2">Participation</span><span class="v" id="an-prix"><span class="etiq-don">À donner</span></span></div>
         <div><span class="k2">Quartier</span><span class="v" id="an-quartier">Lorient</span></div>
         <div><span class="k2" id="an-par-k">Proposé par</span><span class="v" id="an-par">Marie-Claude</span></div>
@@ -1907,7 +1947,7 @@ button{cursor:pointer}
 
       <div class="duo">
         <button class="btn btn-primary" id="btn-contacter">Contacter</button>
-        <button class="btn btn-ghost partage" data-image="#s-annonce" data-titre="Mangues Julie, environ 10 kg — à prendre à Lorient">
+        <button class="btn btn-ghost partage" data-image="#s-annonce" data-titre="Mangues Julie, bien mûres — à prendre à Lorient">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
           Partager
         </button>
@@ -2347,12 +2387,12 @@ button{cursor:pointer}
             <span class="acts"><button class="mini">Masquer</button><button class="mini danger">Supprimer</button></span>
           </div>
         <div class="row">
-          <span class="main"><span class="t">Mangues Julie, environ 10 kg</span>
+          <span class="main"><span class="t">Mangues Julie, bien mûres</span>
           <span class="s">Lorient · Marie-Claude · il y a 2 jours · 7 contacts</span></span>
           <span class="acts"><button class="mini">Modifier</button><button class="mini">Masquer</button><button class="mini danger">Supprimer</button></span>
         </div>
         <div class="row">
-          <span class="main"><span class="t">Trois fruits à pain, à ramasser aujourd'hui</span>
+          <span class="main"><span class="t">Fruits à pain, à ramasser aujourd'hui</span>
           <span class="s">Corossol · Jean-Loup · expire dans 2 jours</span></span>
           <span class="acts"><button class="mini">Prolonger</button><button class="mini">Masquer</button></span>
         </div>
@@ -2362,7 +2402,7 @@ button{cursor:pointer}
           <span class="acts"><button class="mini">Écrire à l'auteur</button><button class="mini danger">Supprimer</button></span>
         </div>
         <div class="row">
-          <span class="main"><span class="t">Un cageot de citrons verts</span>
+          <span class="main"><span class="t">Citrons verts du jardin</span>
           <span class="s">Colombier · Sylvie · il y a 3 jours · 2 contacts</span></span>
           <span class="acts"><button class="mini">Modifier</button><button class="mini">Masquer</button></span>
         </div>
@@ -2543,7 +2583,7 @@ button{cursor:pointer}
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
         <span class="kicker k-donne" id="mienne-kick" style="align-self:flex-start">Je donne</span>
-        <h1 id="mienne-titre">Mangues Julie, environ 10 kg</h1>
+        <h1 id="mienne-titre">Mangues Julie, bien mûres</h1>
         <span class="sub" id="mienne-sub">Votre annonce · publiée il y a 2 jours · encore 12 jours en ligne</span>
       </div>
 
@@ -3725,7 +3765,8 @@ button{cursor:pointer}
   var ETAPES = ['#i-mangue','#i-citron','#i-basilic'];
   Array.prototype.forEach.call(document.querySelectorAll('.etapes li'), function(li, i){
     var vieux = li.querySelector('.et-motif'); if(vieux){ vieux.remove(); }
-    poserIcone(li, ETAPES[i] || '#i-citron', 'ico-etape');
+    // Plus d'icône par étape : dans la case unique, elle tombait sur le texte et
+    // n'ajoutait rien au numéro.
   });
   var PORTES = {'p-echanges':'#i-mangue','p-jardin':'#i-basilic','p-saison':'#i-corossol'};
   Array.prototype.forEach.call(document.querySelectorAll('.porte'), function(po){
@@ -4784,7 +4825,6 @@ button{cursor:pointer}
       var tc = document.querySelector('#p-type .chip[aria-pressed="true"]');
       var type = tc ? tc.textContent.trim() : 'Je donne';
       var titre = quoi;
-      if(combien){ titre += ', ' + combien.charAt(0).toLowerCase() + combien.slice(1); }
       var mPrix = document.getElementById('mienne-prix');
       if(mPrix){
         var p = vend() ? Math.min(PARTICIPATION_MAX, parseFloat(pPrix && pPrix.value) || 0) : 0;
@@ -4882,11 +4922,11 @@ button{cursor:pointer}
   // un mèsi veut dire que quelqu'un est déjà venu.
   var ORDRE_MESI = 100;
   var MESI = {
-    'Mangues Julie, environ 10 kg': [
+    'Mangues Julie, bien mûres': [
       {ordre:5, qui:'Sylvère', quand:'hier', mot:'Mèsi anpil ! Les enfants en ont mangé trois avant d\u2019arriver à la maison.'},
       {ordre:4, qui:'Ginette', quand:'il y a 2 jours', teinte:'t-vert', mot:'Six pots de confiture. J\u2019en garde un pour vous, passez quand vous voulez.'}
     ],
-    'Un cageot de citrons verts': [
+    'Citrons verts du jardin': [
       {ordre:3, qui:'Mireille', teinte:'t-agrume', quand:'il y a 3 jours', mot:'Parfaits pour ma confiture de piment. Il en restait encore hier soir.'}
     ],
     'Piments végétariens, tout le pied': [
@@ -4894,8 +4934,8 @@ button{cursor:pointer}
     ]
   };
   var CONTEXTE = {
-    'Mangues Julie, environ 10 kg': 'pour des mangues, à Lorient',
-    'Un cageot de citrons verts': 'pour des citrons verts, à Colombier',
+    'Mangues Julie, bien mûres': 'pour des mangues, à Lorient',
+    'Citrons verts du jardin': 'pour des citrons verts, à Colombier',
     'Piments végétariens, tout le pied': 'pour des piments, à Grand Fond'
   };
 
@@ -5219,6 +5259,9 @@ button{cursor:pointer}
 
     // Ce qui n'a aucun sens sur une demande disparaît au lieu de mentir.
     var l = function(id, montrer){ var n = document.getElementById(id); if(n){ n.hidden = !montrer; } };
+    var mesure = carte.getAttribute('data-mesure') || '';
+    p('an-combien', mesure);
+    l('an-l-combien', !!mesure);
     l('an-l-prix', !demande);
     l('an-quand', !demande && !!creneau);
     var n = rendreMesi(document.getElementById('annonce-mercis'), titre, false);

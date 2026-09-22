@@ -1368,3 +1368,47 @@ fond renforcé et ombre portée sur le texte.
 juste sur une photo de fruits en paysage, sujet au centre. Le réglage manuel reste
 nécessaire pour l'autre cas — l'arbre photographié en portrait — mais il n'a pas
 besoin d'être touché pour une photo ordinaire.
+
+## La quantité, l'accueil en vue ordinateur, et « comment ça marche » (v67)
+
+### La quantité n'était nulle part sur la fiche, et deux fois ailleurs
+
+La ligne « Quantité » avait été retirée à l'époque où elle affichait « Environ
+10 kg » pour les quatorze annonces : une ligne qui ment vaut moins que pas de
+ligne. Depuis, la quantité est une vraie donnée. **La ligne « Combien » revient, et
+dit vrai** — elle disparaît sur une demande, qui n'annonce pas de quantité.
+
+À l'inverse, la quantité était écrite **deux fois** ailleurs. Publier produisait
+« Mangues, 8 kg » comme titre ET « 8 kg » comme étiquette : l'application se
+répétait. Les titres d'exemple faisaient pareil — « une brouette pleine » sous une
+étiquette « 1 brouette ».
+
+Le titre ne porte donc plus la mesure. Il est là pour dire ce que c'est et pourquoi
+il faut venir : « Cocos secs, bons à râper », « Quenettes, l'arbre croule »,
+« Tamarins tombés cette semaine ». Onze titres réécrits, et les clés des mèsi avec
+eux. Au passage, la ligne « Participation » ne répète plus le mot sous le montant.
+
+### L'accueil en vue ordinateur : une balise ouverte en double
+
+Un `<div class="feed-head">` surnuméraire avalait le bloc des mèsi et le titre
+suivant. Comme `.feed-head` est un flex qui écarte ses enfants, la page montrait
+une colonne gauche vide, les mèsi repoussés à droite et « Par où commencer » jeté
+au bout de la ligne. **Invisible sur téléphone**, où la colonne unique masquait la
+faute — c'est pour ça qu'elle a tenu si longtemps.
+
+### « Comment ça marche » : une case, pas trois boutons
+
+Bordure, fond clair, coins arrondis, petite icône dans le coin : c'était la
+grammaire exacte d'une carte cliquable du fil. On avait envie d'appuyer dessus. Or
+ce n'est pas un choix, c'est une explication en trois temps — **un seul objet, pas
+trois**.
+
+L'explication devient une case unique : un cadre, un fond, et trois temps reliés
+par un trait. Chaque étape porte le trait qui mène à la suivante ; la dernière n'en
+a pas, sans quoi il annoncerait une quatrième étape. Les numéros deviennent des
+pastilles pleines posées sur le trait, qu'elles masquent au passage. En trois
+colonnes le numéro passe au-dessus du titre et le trait devient horizontal : ainsi
+il ne traverse pas un seul mot.
+
+Les trois fruits dessinés sont retirés : dans une case sans marge à droite, ils
+tombaient sur la deuxième ligne de texte, et ils n'ajoutaient rien au numéro.

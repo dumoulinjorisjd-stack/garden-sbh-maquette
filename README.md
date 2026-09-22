@@ -1277,3 +1277,67 @@ porte sur un site dont la promesse est que ça se partage.
 
 Au passage : l'icône du cœur est ajoutée en JS *dans* l'étiquette ; réécrire
 celle-ci par `textContent` l'effaçait. On ne touche plus qu'au nœud de texte.
+
+## Le cadrage des photos, et les quantités dans un seul système (v65)
+
+### Une photo personnelle ne tombe jamais dans le carré
+
+C'est le point qu'on rate facilement : la vignette carrée de 116 px ne sert que
+quand il n'y a PAS de photo. Dès qu'une photo existe, la carte reprend le grand
+format et la photo occupe un **bandeau large** — 150 px en tête de carte, 190 px en
+haut de la fiche. Un recadrage centré y coupe donc le haut et le bas : on
+photographie un manguier en portrait, l'annonce montre un bout de tronc.
+
+- **Une bande de cadrage à la vraie hauteur de l'annonce** apparaît dès qu'une
+  photo est choisie. Ce qu'on y voit est ce qui paraîtra — on ne l'imagine pas.
+- **On glisse la photo au doigt** (ou aux flèches du clavier, par pas de cinq
+  points). Deux filets aux tiers s'affichent pendant le geste pour poser le sujet.
+- Le geste est converti en pourcentage **à travers le débordement réel de l'image** :
+  sans ça, un même glissement déplacerait beaucoup une photo presque au format et à
+  peine une photo très haute, alors que c'est l'inverse qu'on attend.
+- **Le cadrage suit la photo partout** — carte, fiche, annonce publiée. Un couple de
+  pourcentages vaut pour n'importe quelle proportion de cadre, donc un seul réglage
+  sert le bandeau de 150 px comme la couverture de 190 px.
+- **La photo du jardinier a le même réglage** : sa vignette dans la console se
+  déplace au doigt, et les dizaines d'annonces qu'elle habille suivent aussitôt.
+  Sans ça, c'est lui qui se serait retrouvé avec des troncs.
+- Le cadrage s'efface avec la photo, et une nouvelle photo repart du centre.
+
+### Les quantités sortent du même système que le formulaire
+
+Publier impose désormais un nombre **et** une unité, ou un poids. Les étiquettes du
+fil étaient écrites à la main, hors de ce système : un nombre nu (« 3 »), une unité
+inexistante (« plants »), une mesure absente de la liste (« brouette »). Une
+étiquette doit être lisible comme le produit du formulaire.
+
+- Les onze étiquettes sont normalisées : `3 pièces`, `6 pieds`, `10 kg`, `1 cageot`…
+  Plus un seul nombre nu.
+- **`brouettes` et `touffes` entrent dans la liste des unités** : ce sont les mesures
+  qu'on emploie vraiment dans un jardin d'ici, et sans elles deux annonces du fil
+  n'étaient pas reproductibles par le formulaire.
+- **L'annonce qu'on vient de publier porte la même étiquette** que celles du fil :
+  on doit y reconnaître ce qu'on verra.
+
+### Un défaut que j'avais introduit, et que l'audit ne pouvait pas voir
+
+En ouvrant la console pour brancher le cadrage, les quinze lignes des fruits
+étaient **vertes pleines**, le nom chevauchant sa description. Cause : une
+deuxième collision de classes. `.fruit` désigne le bouton d'un fruit sur l'écran
+de la saison ; les lignes de la console portaient le même nom. Le rafraîchissement
+de la saison balayait donc aussi la console, et comme ces lignes n'ont pas de
+`data-f`, `getAttribute` renvoyait `null` — or le fruit sélectionné vaut `null`
+tant qu'on n'a rien touché, et `null === null` est vrai : chaque ligne s'allumait
+comme si elle était sélectionnée.
+
+Ce défaut date de la refonte du calendrier (v62) : c'est elle qui a mis ce
+rafraîchissement au démarrage, alors qu'il ne se déclenchait avant qu'au premier
+clic sur un fruit. **Aucun bouton n'étant mort, l'audit ne pouvait pas le voir** —
+il mesure l'effet d'un clic, pas la justesse d'un écran. C'est sa limite, et elle
+mérite d'être écrite : un écran peut être entièrement fonctionnel et entièrement
+faux.
+
+Corrigé à la racine — la console porte maintenant son propre nom de classe
+(`ligne-fruit`), le rafraîchissement de la saison est borné à `#s-saison`, et un
+`data-f` absent fait sortir la boucle. `console2.mjs` vérifie désormais, dans les
+deux formats, que la vignette est bien à côté du nom et que la ligne n'a pas de
+fond.

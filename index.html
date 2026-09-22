@@ -332,7 +332,10 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 #s-annonce .thumb.cover.sans-image.t-vert,#mienne-photo.sans-image.t-vert{background:var(--leaf-soft); color:var(--leaf)}
 #s-annonce .thumb.cover.sans-image.t-agrume,#mienne-photo.sans-image.t-agrume{background:#E8F2D2; color:#4A7C1C}
 #s-annonce .thumb.cover.sans-image.t-terre,#mienne-photo.sans-image.t-terre{background:var(--flam-soft); color:var(--flam)}
+#mienne-photo{position:relative}
 #mienne-photo.sans-image{align-items:center; justify-content:center; border-bottom:1px solid var(--line)}
+#mienne-photo .etiq-mesure{left:auto; right:0; width:auto; border-top-left-radius:9px; padding:6px 12px 7px}
+#mienne-photo.sans-image .etiq-mesure{background:rgba(36,28,21,.10); color:var(--ink); backdrop-filter:none}
 #mienne-photo.sans-image .motif{position:static; width:112px; height:112px; right:auto; bottom:auto; transform:none; opacity:1; color:inherit}
 #mienne-photo.sans-image .kind{display:none}
 #s-annonce .thumb.cover.sans-image .motif{
@@ -741,9 +744,17 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   display:flex; align-items:center; justify-content:center;
 }
 .fruit-vignette svg{width:34px; height:34px; opacity:.55}
+/* La vignette du jardinier se déplace au doigt : c'est la même photo qui habillera
+   des dizaines d'annonces, elle mérite le même réglage que celle d'un membre. */
+.fruit-vignette.cadrable{cursor:grab; touch-action:none; background-size:cover}
+.fruit-vignette.cadrable.prise{cursor:grabbing; box-shadow:0 0 0 2px var(--leaf)}
+.fruit-vignette.cadrable:focus-visible{outline:3px solid var(--leaf); outline-offset:2px}
 .fruit-vignette.t-mangue svg,.fruit-vignette.t-vert svg,.fruit-vignette.t-agrume svg,.fruit-vignette.t-terre svg{color:#fff; opacity:.8}
-.row .main.fruit{display:flex; align-items:center; gap:12px; flex:1 1 240px}
-.row .main.fruit .t{font-weight:600}
+/* « .row .main » impose flex-direction:column ; sans le redire ici, la vignette
+   se posait au-dessus du nom au lieu d'être à côté. */
+.row .main.ligne-fruit{display:flex; flex-direction:row; align-items:center; gap:12px; flex:1 1 240px}
+.row .main.ligne-fruit .t{font-weight:600; display:block}
+.row .main.ligne-fruit .s{display:block}
 
 .titre-section, .field .titre-section{
   display:block; font-family:var(--serif); font-weight:700;
@@ -1236,6 +1247,33 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .ajouter:hover{border-color:var(--leaf); background:var(--surf-hover); color:var(--ink)}
 .ajouter b{font-family:var(--display); font-weight:400; font-size:30px; line-height:1; color:var(--leaf)}
 .photo-max{font-size:14px; color:var(--ink-soft)}
+/* La bande de cadrage a exactement la hauteur du bandeau de l'annonce : ce qu'on
+   y voit est ce qui paraîtra, sans avoir à l'imaginer. */
+.cadrage{display:flex; flex-direction:column; gap:8px; margin-top:14px}
+.cadre-bande{
+  position:relative; height:150px; border:1px solid var(--line); border-radius:11px;
+  overflow:hidden; background:var(--surface-2) center/cover no-repeat;
+  cursor:grab; touch-action:none; user-select:none;
+}
+.cadre-bande.prise{cursor:grabbing}
+.cadre-bande:focus-visible{outline:3px solid var(--leaf); outline-offset:2px}
+.cadre-prise{
+  position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
+  font-size:13px; color:#fff; background:rgba(17,21,14,.55);
+  padding:4px 11px; border-radius:999px; pointer-events:none;
+  transition:opacity .18s ease;
+}
+.cadre-bande.prise .cadre-prise, .cadre-bande.bouge .cadre-prise{opacity:0}
+/* Les tiers : deux filets discrets pendant qu'on déplace, pour poser le sujet. */
+.cadre-bande::after{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
+  transition:opacity .18s ease;
+  background:
+    linear-gradient(to bottom, transparent calc(33.33% - 1px), rgba(255,255,255,.55) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)),
+    linear-gradient(to bottom, transparent calc(66.66% - 1px), rgba(255,255,255,.55) calc(66.66% - 1px) calc(66.66% + 1px), transparent calc(66.66% + 1px));
+}
+.cadre-bande.prise::after{opacity:1}
+
 .vignette{
   position:relative; width:118px; border:1px solid var(--line);
   border-radius:10px; overflow:hidden; background:var(--surface);
@@ -1718,7 +1756,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Aujourd'hui · 14h – 18h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj" data-mesure="3">
+      <button class="card" data-go="annonce" data-q="Corossol" data-jour="auj" data-mesure="3 pièces">
         <span class="thumb t-vert" data-fruit="Fruits à pain"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1743,7 +1781,7 @@ button{cursor:pointer}
           <span class="meta"><span>Gustavia</span><span>·</span><span>Armand</span><span>·</span><span>encore 13 jours</span></span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain" data-mesure="6 plants">
+      <button class="card" data-go="annonce" data-q="Saint-Jean" data-jour="demain" data-mesure="6 pieds">
         <span class="thumb t-terre" data-fruit="Tomates cerises"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1798,7 +1836,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Demain · 15h – 18h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj" data-mesure="5">
+      <button class="card" data-go="annonce" data-q="Lorient · Camaruche" data-jour="auj" data-mesure="5 pièces">
         <span class="thumb t-mangue" data-fruit="Papayes"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -1824,7 +1862,7 @@ button{cursor:pointer}
           <span class="creneau-carte">Samedi · 16h – 19h</span>
         </span>
       </button>
-      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain" data-mesure="3">
+      <button class="card" data-go="annonce" data-q="Lurin · Gouverneur" data-jour="demain" data-mesure="3 pièces">
         <span class="thumb t-vert" data-fruit="Corossols"><span class="kind">Photo du jardin</span></span>
         <span class="body">
           <span class="kicker k-donne">Je donne</span>
@@ -2033,6 +2071,19 @@ button{cursor:pointer}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.3-2h7.9l1.3 2h2.3A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/></svg>
         Photographiez ce que vous donnez
         <span class="sous">C'est ce qui fait partir une annonce</span>
+      </div>
+
+      <!-- LE CADRAGE. Une photo personnelle ne s'affiche jamais dans le carré de
+           la vignette : elle occupe un BANDEAU LARGE, en tête de carte et en haut
+           de la fiche. Un recadrage centré y coupe donc le haut et le bas — on
+           photographie un manguier, l'annonce montre un bout de tronc. Cette bande
+           est exactement celle de l'annonce : ce qu'on y voit est ce qui paraîtra. -->
+      <div class="cadrage" id="p-cadrage" hidden>
+        <span class="titre-section">Ce qu'on verra de votre photo</span>
+        <div class="cadre-bande" id="p-cadre" role="group" aria-label="Cadrage de la photo" tabindex="0">
+          <span class="cadre-prise">Glissez pour choisir</span>
+        </div>
+        <span class="hint">Glissez la photo vers le haut ou vers le bas. C'est cette bande qu'on verra dans le fil et en haut de l'annonce.</span>
       </div>
     </div>
 
@@ -3185,13 +3236,14 @@ button{cursor:pointer}
   var courant = null;
 
   function boutonsFruit(nom){
-    return Array.prototype.filter.call(document.querySelectorAll('.fruit'), function(f){
+    return Array.prototype.filter.call(document.querySelectorAll('#s-saison .fruit'), function(f){
       return f.getAttribute('data-f') === nom;
     });
   }
   function rafraichir(){
-    Array.prototype.forEach.call(document.querySelectorAll('.fruit'), function(f){
+    Array.prototype.forEach.call(document.querySelectorAll('#s-saison .fruit'), function(f){
       var nom = f.getAttribute('data-f');
+      if(!nom) return;
       f.setAttribute('aria-pressed', nom === courant ? 'true' : 'false');
       f.classList.toggle('suivi', suivis.indexOf(nom) !== -1);
     });
@@ -4000,6 +4052,86 @@ button{cursor:pointer}
   });
 
 
+  // ================== LE CADRAGE D'UNE PHOTO ==================
+  // « background-size: cover » recadre au centre. Sur un bandeau de 150 px, une
+  // photo de manguier prise en portrait perd son haut et son bas : il reste un bout
+  // de tronc. On laisse donc choisir le point qu'on garde, et ce point suit la photo
+  // partout où elle paraît — carte, fiche, annonce publiée — puisqu'un pourcentage
+  // vaut pour n'importe quelle proportion de cadre.
+  var CADRE_DEFAUT = '50% 50%';
+  function brancherCadrage(bande, quandChange){
+    if(!bande || bande.hasAttribute('data-branchee')) return;
+    bande.setAttribute('data-branchee','1');
+    var pris = false, departX = 0, departY = 0, xd = 50, yd = 50;
+
+    function lire(){
+      var p = (bande.getAttribute('data-cadre') || CADRE_DEFAUT).split(' ');
+      return [parseFloat(p[0]) || 50, parseFloat(p[1]) || 50];
+    }
+    function ecrire(x, y){
+      // Un dixième de point suffit : « 35,3 % » se relit, « 35,31211750306 % » non.
+      x = Math.round(Math.max(0, Math.min(100, x)) * 10) / 10;
+      y = Math.round(Math.max(0, Math.min(100, y)) * 10) / 10;
+      bande.setAttribute('data-cadre', x + '% ' + y + '%');
+      bande.style.backgroundPosition = x + '% ' + y + '%';
+      if(quandChange){ quandChange(x + '% ' + y + '%'); }
+    }
+    // De combien de pixels la photo déborde-t-elle du cadre ? C'est ce débordement
+    // qui convertit un geste en pourcentage : sans lui, un même glissement
+    // déplacerait beaucoup une photo presque au format et à peine une photo très
+    // haute, alors que c'est l'inverse qu'on attend.
+    function debord(){
+      var iw = parseFloat(bande.getAttribute('data-iw')) || 0;
+      var ih = parseFloat(bande.getAttribute('data-ih')) || 0;
+      var bw = bande.clientWidth, bh = bande.clientHeight;
+      if(!iw || !ih || !bw || !bh) return [0, 0];
+      var e = Math.max(bw / iw, bh / ih);
+      return [Math.max(0, iw * e - bw), Math.max(0, ih * e - bh)];
+    }
+    function prendre(e){
+      if(!bande.style.backgroundImage) return;
+      pris = true; bande.classList.add('prise', 'bouge');
+      departX = e.clientX; departY = e.clientY;
+      var p = lire(); xd = p[0]; yd = p[1];
+      if(bande.setPointerCapture && e.pointerId !== undefined){ bande.setPointerCapture(e.pointerId); }
+      e.preventDefault();
+    }
+    function bouger(e){
+      if(!pris) return;
+      var d = debord();
+      var nx = d[0] > 0 ? xd - (e.clientX - departX) / d[0] * 100 : xd;
+      var ny = d[1] > 0 ? yd - (e.clientY - departY) / d[1] * 100 : yd;
+      ecrire(nx, ny);
+    }
+    function lacher(){ pris = false; bande.classList.remove('prise'); }
+
+    bande.addEventListener('pointerdown', prendre);
+    bande.addEventListener('pointermove', bouger);
+    bande.addEventListener('pointerup', lacher);
+    bande.addEventListener('pointercancel', lacher);
+    // Au clavier : les flèches déplacent par pas de cinq points.
+    bande.addEventListener('keydown', function(e){
+      var p = lire(), pas = 5, fait = true;
+      if(e.key === 'ArrowUp'){ ecrire(p[0], p[1] - pas); }
+      else if(e.key === 'ArrowDown'){ ecrire(p[0], p[1] + pas); }
+      else if(e.key === 'ArrowLeft'){ ecrire(p[0] - pas, p[1]); }
+      else if(e.key === 'ArrowRight'){ ecrire(p[0] + pas, p[1]); }
+      else { fait = false; }
+      if(fait){ e.preventDefault(); bande.classList.add('bouge'); }
+    });
+  }
+  function poserDansCadre(bande, src, iw, ih){
+    if(!bande) return;
+    bande.style.backgroundImage = 'url(' + src + ')';
+    bande.setAttribute('data-iw', iw || 0);
+    bande.setAttribute('data-ih', ih || 0);
+    if(!bande.getAttribute('data-cadre')){
+      bande.setAttribute('data-cadre', CADRE_DEFAUT);
+      bande.style.backgroundPosition = CADRE_DEFAUT;
+    }
+    bande.classList.remove('bouge');
+  }
+
   // --- les zones photo prennent vraiment une photo
   function reduire(fichier, fait){
     var url = URL.createObjectURL(fichier);
@@ -4044,6 +4176,29 @@ button{cursor:pointer}
     apercu.appendChild(ajouter);
 
     function compte(){ return apercu.querySelectorAll('.vignette').length; }
+    // La bande de cadrage ne concerne que la PREMIÈRE photo : c'est elle qui
+    // devient le bandeau de l'annonce. Les autres n'ont pas de cadre à régler.
+    var cadrage = (zone.id === 'p-photo') ? document.getElementById('p-cadrage') : null;
+    var bande = cadrage ? document.getElementById('p-cadre') : null;
+    function majCadrage(){
+      if(!cadrage || !bande) return;
+      var v = apercu.querySelector('.vignette');
+      var im = v ? v.querySelector('img') : null;
+      if(im && im.src){
+        cadrage.hidden = false;
+        brancherCadrage(bande);
+        if(bande.getAttribute('data-src') !== im.src){
+          bande.setAttribute('data-src', im.src);
+          bande.removeAttribute('data-cadre');
+          poserDansCadre(bande, im.src, v.getAttribute('data-iw'), v.getAttribute('data-ih'));
+        }
+      } else {
+        cadrage.hidden = true;
+        bande.removeAttribute('data-src');
+        bande.removeAttribute('data-cadre');
+        bande.style.backgroundImage = '';
+      }
+    }
     function majZone(){
       var k = compte();
       zone.hidden = (k > 0);
@@ -4072,11 +4227,14 @@ button{cursor:pointer}
         apercu.insertBefore(v, ajouter);
         majZone();
         v.querySelector('.oter').addEventListener('click', function(){
-          v.remove(); majZone(); majPret();
+          v.remove(); majZone(); majCadrage(); majPret();
         });
-        reduire(f, function(src){
+        reduire(f, function(src, poids, iw, ih){
           if(!src){ v.remove(); majZone(); return; }
           v.querySelector('img').src = src;
+          v.setAttribute('data-iw', iw || 0);
+          v.setAttribute('data-ih', ih || 0);
+          majCadrage();
           majPret();
         });
       });
@@ -4121,7 +4279,7 @@ button{cursor:pointer}
       if(f && f.photo){
         t.style.backgroundImage = 'url(' + f.photo + ')';
         t.style.backgroundSize = 'cover';
-        t.style.backgroundPosition = 'center';
+        t.style.backgroundPosition = f.cadre || 'center';
         if(kind){ kind.textContent = 'Photo du jardinier'; }
       } else {
         t.style.backgroundImage = '';
@@ -4412,7 +4570,7 @@ button{cursor:pointer}
   var pUnite = document.getElementById('p-unite');
   var pMesureHint = document.getElementById('p-mesure-hint');
   var UNITES = {
-    nombre: ['pièces', 'sacs', 'cageots', 'seaux', 'bouquets', 'pots', 'pieds', 'bocaux'],
+    nombre: ['pièces', 'sacs', 'cageots', 'seaux', 'brouettes', 'bouquets', 'touffes', 'pots', 'pieds', 'bocaux'],
     poids:  ['kg', 'g']
   };
   function enPoids(){
@@ -4628,6 +4786,16 @@ button{cursor:pointer}
       }
       var mQuand = document.getElementById('mienne-quand-txt');
       if(mQuand && pCreneauLu){ mQuand.textContent = pCreneauLu.textContent.replace(/^[^:]*:\s*/, '').replace(/\.\s*$/, ''); }
+      // L'annonce qu'on vient de publier porte la même étiquette de cageot que les
+      // autres : on doit y reconnaître ce qu'on verra dans le fil.
+      var mPhoto = document.getElementById('mienne-photo');
+      if(mPhoto){
+        var me = mPhoto.querySelector('.etiq-mesure');
+        if(combien){
+          if(!me){ me = document.createElement('span'); me.className = 'etiq-mesure'; mPhoto.appendChild(me); }
+          me.textContent = combien;
+        } else if(me){ me.remove(); }
+      }
       document.getElementById('mienne-titre').textContent = titre;
       document.getElementById('mienne-sub').textContent =
         'Votre annonce · ' + quartier + ' · publiée à l’instant · 14 jours en ligne';
@@ -4648,10 +4816,15 @@ button{cursor:pointer}
       var f = fruitParNom(quoi);
       var src = (vign && vign.src) ? vign.src : (f && f.photo ? f.photo : '');
       var kind = ph2.querySelector('.kind');
+      var bandeCadre = document.getElementById('p-cadre');
+      var cadreChoisi = (vign && vign.src && bandeCadre && bandeCadre.getAttribute('data-src') === vign.src)
+        ? (bandeCadre.getAttribute('data-cadre') || CADRE_DEFAUT) : null;
       if(src){
         ph2.style.backgroundImage = 'url(' + src + ')';
         ph2.style.backgroundSize = 'cover';
-        ph2.style.backgroundPosition = 'center';
+        ph2.style.backgroundPosition = cadreChoisi || 'center';
+        if(cadreChoisi){ ph2.setAttribute('data-cadre', cadreChoisi); }
+        else { ph2.removeAttribute('data-cadre'); }
         if(kind){
           kind.hidden = false;
           kind.textContent = (vign && vign.src) ? 'Photo du jardin' : 'Photo du jardinier';
@@ -5161,24 +5334,34 @@ button{cursor:pointer}
 
   // --- la console tient la liste des fruits et leurs photos
   var adminFruits = document.getElementById('admin-fruits');
-  function vignetteHtml(f){
+  function vignetteHtml(f, i){
     return f.photo
-      ? '<span class="fruit-vignette" style="background-image:url(' + f.photo + ')"></span>'
+      ? '<span class="fruit-vignette cadrable" data-i="' + i + '" tabindex="0"'
+        + ' role="group" aria-label="Cadrage de la photo de ' + f.nom + '"'
+        + ' data-iw="' + (f.iw || 0) + '" data-ih="' + (f.ih || 0) + '"'
+        + ' data-cadre="' + (f.cadre || CADRE_DEFAUT) + '"'
+        + ' style="background-image:url(' + f.photo + '); background-position:' + (f.cadre || CADRE_DEFAUT) + '"></span>'
       : '<span class="fruit-vignette ' + f.teinte + '" style="background-image:none"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="' + f.icone + '" fill="currentColor"/></svg></span>';
   }
   function rendreFruits(){
     if(!adminFruits) return;
     adminFruits.innerHTML = CATALOGUE.map(function(f, i){
       return '<div class="row" data-i="' + i + '">'
-        + '<span class="main fruit">' + vignetteHtml(f)
+        + '<span class="main ligne-fruit">' + vignetteHtml(f, i)
         + '<span><span class="t">' + f.nom + '</span>'
-        + '<span class="s">' + (f.photo ? 'Photo posée' : 'Pas de photo — les annonces sans photo montrent le dessin') + '</span></span></span>'
+        + '<span class="s">' + (f.photo ? 'Photo posée — glissez la vignette pour la cadrer' : 'Pas de photo — les annonces sans photo montrent le dessin') + '</span></span></span>'
         + '<span class="acts">'
         + '<button class="mini solid" data-act="photo">' + (f.photo ? 'Changer la photo' : 'Poser une photo') + '</button>'
         + (f.photo ? '<button class="mini" data-act="oter">Retirer la photo</button>' : '')
         + '<button class="mini danger" data-act="suppr">Retirer de la liste</button>'
         + '</span></div>';
     }).join('');
+    Array.prototype.forEach.call(adminFruits.querySelectorAll('.cadrable'), function(v){
+      brancherCadrage(v, function(cadre){
+        CATALOGUE[parseInt(v.getAttribute('data-i'), 10)].cadre = cadre;
+        habillerAnnonces();
+      });
+    });
   }
   if(adminFruits){
     rendreFruits();
@@ -5190,11 +5373,13 @@ button{cursor:pointer}
       var f = choixPhoto.files && choixPhoto.files[0];
       choixPhoto.value = '';
       if(!f || cible < 0) return;
-      reduire(f, function(src){
+      reduire(f, function(src, poids, iw, ih){
         if(!src) return;
         CATALOGUE[cible].photo = src;
+        CATALOGUE[cible].iw = iw; CATALOGUE[cible].ih = ih;
+        CATALOGUE[cible].cadre = CADRE_DEFAUT;
         rendreFruits(); habillerAnnonces();
-        dire('Photo posée sur « ' + CATALOGUE[cible].nom + ' ».');
+        dire('Photo posée sur « ' + CATALOGUE[cible].nom + ' ». Glissez la vignette pour la cadrer.');
       });
     });
     adminFruits.addEventListener('click', function(e){
@@ -5204,7 +5389,10 @@ button{cursor:pointer}
       var i = parseInt(ligne.getAttribute('data-i'), 10);
       var act = b.getAttribute('data-act');
       if(act === 'photo'){ cible = i; choixPhoto.click(); return; }
-      if(act === 'oter'){ CATALOGUE[i].photo = null; rendreFruits(); habillerAnnonces(); dire('Photo retirée.'); return; }
+      if(act === 'oter'){
+        CATALOGUE[i].photo = null; CATALOGUE[i].cadre = null;
+        rendreFruits(); habillerAnnonces(); dire('Photo retirée.'); return;
+      }
       if(act === 'suppr'){
         var nom = CATALOGUE[i].nom;
         CATALOGUE.splice(i, 1);

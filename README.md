@@ -1628,9 +1628,88 @@ fruit est le sujet**, et l'aplat fait plat. Un filtre SVG déplace légèrement 
 bords par turbulence et casse la netteté vectorielle d'un quart de pixel de flou :
 le même dessin, peint. Plus une ombre portée douce, pour le décoller de la page.
 
-Un seul filtre pour les dix-sept fruits, appliqué **uniquement à la pluie**, et
-gratuit à l'usage : `perf.mjs` mesure toujours 60 images par seconde, pire image à
-17 ms, avec 26 fruits.
+**Cette version a été jugée insuffisante par le client, à raison.** Voir la
+section suivante.
+
+### La vraie aquarelle, et pourquoi il fallait d'abord agrandir (v75)
+
+Reproche du client sur la v74 : « ils sont petits et pas esthétiquement très
+travaillés ». Les deux moitiés de la phrase sont justes, et **la première
+explique la seconde**.
+
+**Ce qui a été mesuré d'abord.** Quatre planches de comparaison rendues à
+l'identique (`aqua/essai.png`, `essai2.png`, `essai3.png`, `lumiere.png`), chaque
+traitement montré à 210, 96, 54 et 30 px. Le résultat est sans appel : **en
+dessous de 100 px, aucun travail de texture ne se voit.** À 30 px, le fruit
+« aquarelle » et le fruit en aplats sont la même image. La v74 peignait des
+fruits de 20 à 54 px : elle payait un filtre que personne ne pouvait voir.
+
+Donc : **agrandir d'abord** (46 à 120 px, contre 20 à 54), peindre ensuite.
+
+**Ce qui bloquait l'agrandissement.** Le coût. Mesuré sur 26 fruits de 46 à
+120 px, en rendu logiciel :
+
+| | images/s | image médiane |
+|---|---|---|
+| filtre appliqué en direct au SVG animé | **9,3** | 150 ms |
+| fruit peint une fois, puis image PNG | **58,6** | 16,7 ms |
+
+D'où l'**atelier** (`dessinAquarelle`) : au démarrage, pendant que le visiteur
+lit l'accueil, chaque fruit est sérialisé avec son filtre dans un petit document
+SVG, chargé comme une image, peint dans un canvas, et gardé en PNG. Tout se passe
+dans la page — aucun fichier, aucun réseau. L'averse ne manipule plus que des
+images : 60,7 images par seconde mesurées, pire image à 16,8 ms, sur les
+14 fruits d'un écran de téléphone. Si la peinture rate, la pluie retombe sur les
+aplats sans filtre : mieux vaut un fruit plat qui tombe bien qu'un beau fruit qui
+saccade.
+
+**La recette, et les quatre essais qu'il a fallu jeter.**
+
+1. **Le bord mouillé** (turbulence + déplacement). Le vecteur a des bords
+   parfaits, le pinceau chargé d'eau non.
+2. **Le volume**, et c'est ce qui manquait vraiment. On floute la silhouette pour
+   en faire une carte de relief, on l'éclaire, on multiplie. Le fruit devient
+   rond **sans qu'un seul dégradé ait été dessiné** : le relief sort de la forme
+   elle-même, donc les dix-sept fruits en profitent sans être redessinés.
+   *Jeté une fois :* une lumière brute va de 0 à 1 et ne peut donc
+   qu'**assombrir**. La mangue virait à l'ocre brun. On remappe la lumière sur
+   0,74 → 1,16 : l'ombre descend un peu, la lumière remonte un peu, la couleur
+   d'origine reste au milieu.
+3. **La granulation** : les auréoles claires, là où l'eau repousse le pigment.
+   *Jeté une fois :* à pleine force, les taches brunes font un fruit **moisi**.
+   Sur un site de partage de nourriture, c'est disqualifiant. Réglée au tiers.
+4. **Le liseré**, le dépôt de pigment sur le bord, **à l'intérieur** du contour.
+   *Jeté une fois :* posé à l'extérieur, ça ne faisait pas une aquarelle, ça
+   faisait un halo flou.
+5. **Les arêtes internes.** *Trouvé en regardant le rendu à 120 px :* chaque
+   fruit porte un aplat d'ombre au tracé net, juste sur une vignette, mais qui à
+   cette taille ne lit plus comme une ombre — il lit comme un **pli**. On floute
+   la couleur et on recolle l'alpha d'origine par-dessus : les bords internes
+   fondent, la silhouette reste franche.
+
+Un essai de **grain de papier** a aussi été rendu puis jeté : à l'écran, ça ne
+fait pas du papier, ça fait du bruit de compression.
+
+**Trois dessins repris, parce que la taille les a dénoncés.** Ce que 26 px
+cachait, 115 px l'expose :
+
+- **La noix de coco avait un visage.** Ses trois pores étaient à (42,39), (58,39)
+  et (50,49) : deux yeux et une bouche, par construction. Regroupés en triangle
+  près du pédoncule, comme sur une vraie noix.
+- **Le piment était une limace.** Un crochet épais et d'épaisseur constante. Il
+  fuselle maintenant vers la pointe. Son pédoncule, au passage, mord franchement
+  dans le corps : la turbulence du filtre déplace les bords de ±4 unités, et deux
+  formes qui se touchaient juste finissaient séparées en vol.
+- **Le corossol avait cinq gros piquants.** Il en a quatorze, plus petits,
+  répartis.
+
+**Ce qui reste faible, et que je ne sais pas corriger en tapant des courbes de
+Bézier.** J'ai dessiné quatre silhouettes de mangue de rechange (`aqua/formes.png`) :
+les quatre lisent comme des **oranges**. Le filtre sait donner du volume, de la
+matière et un bord peint à n'importe quelle forme ; il ne sait pas rendre juste
+une forme fausse. L'avocat et la noix de coco restent les deux maillons faibles.
+Si le registre aquarelle du pack montré par le client est le but, **le chemin
+honnête est d'acheter des dessins**, pas de me faire deviner des courbes.
 
 **Sur les visages.** Le client a montré une planche de fruits à frimousses et
 voulait ce registre. Trois objections, dans l'ordre où elles comptent :
@@ -1638,11 +1717,16 @@ voulait ce registre. Trois objections, dans l'ordre où elles comptent :
 1. **La planche montrée est sous licence, filigranée « DESIGN HART CLIPART ».**
    Elle ne peut pas être utilisée telle quelle. Si le pack est acheté, les PNG
    peuvent remplacer les dessins ; sinon, non.
-2. **Ça ne lit pas à cette taille.** Les fruits tombent entre 20 et 54 px. Un œil
-   y fait trois pixels et demi : les visages deviennent des salissures sombres qui
-   embrouillent chaque fruit. Comparaison rendue à l'identique dans
-   `rev/vis-avec-visage.png` et `rev/vis-sans-visage.png` — ce n'est pas un
-   désaccord de goût, c'est lisible sur les deux images.
+2. **Ça ne lit pas à cette taille — argument désormais À MOITIÉ CADUC, et je le
+   dis plutôt que de le laisser traîner.** Il valait quand les fruits tombaient
+   entre 20 et 54 px : un œil y faisait trois pixels et demi, et les visages
+   devenaient des salissures sombres. Comparaison rendue à l'identique dans
+   `rev/vis-avec-visage.png` et `rev/vis-sans-visage.png`. Mais depuis la v75 les
+   fruits tombent **entre 46 et 120 px**. Sur les plus gros, un œil ferait huit
+   pixels : **il lirait.** L'objection ne tient donc plus que pour la moitié
+   basse de l'averse. Si le client veut trancher pour les visages, il ne faut
+   plus lui opposer cette raison-là — il reste la licence (point 1) et le
+   registre (point 3), qui sont les deux vraies.
 3. **Ce n'est pas le registre du site.** Anton, Faustina, une carte de quartiers,
    un ton qui parle de mentions légales et de participation aux frais : ce site
    s'adresse à des adultes qui donnent des mangues. Une frimousse sur un fruit dit

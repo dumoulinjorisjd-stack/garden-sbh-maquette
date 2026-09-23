@@ -1519,3 +1519,36 @@ un piège tendu au client.
 **Les quartiers ne sont pas librement modifiables**, et la console le dit : les
 seize sont dessinés un par un sur la carte de l'île. On peut les renommer, pas en
 ajouter. Mieux vaut l'écrire que laisser découvrir la limite.
+
+## L'ouverture : « l'arbre a donné d'un coup » (v72)
+
+Une animation de démarrage est exactement le genre de chose qui séduit à la démo
+et qu'on arrache six mois plus tard. Trois précautions, donc, et elles sont dans
+le code :
+
+**1. Elle ne bloque rien.** Pas d'écran d'accueil posé par-dessus : la page est là,
+complète et cliquable, et les fruits tombent AU-DESSUS. Celui qui ouvre le site
+pour voir s'il y a des mangues n'attend pas une seconde de plus. Vérifié : on clique
+« Faire le tour des jardins » pendant la chute, on arrive sur les échanges et
+l'animation disparaît.
+
+**2. Elle ne répète pas la pluie des mèsi.** Les fruits pleuvent déjà quand on
+donne et quand on remercie — c'est une récompense. La même image au démarrage, et
+elle ne veut plus rien dire nulle part. Ici les fruits ne pleuvent pas : **ils
+tombent sur la carte, un par quartier où il se passe quelque chose, et allument ce
+quartier en touchant.** L'animation explique la carte au lieu de la décorer.
+
+**3. Elle s'arrête au premier geste** — clic, touche, défilement — et le jardinier
+peut l'éteindre.
+
+Le rebond suit une courbe d'écrasement : le fruit touche, s'aplatit, se remet. Sans
+ça, une chute linéaire fait « objet qui traverse » et non « fruit qui tombe ».
+
+**Le réglage est dans la console**, avec trois états et un avis assumé dans les
+sous-titres : « À chaque ouverture — pour montrer le site », « Une fois par
+personne — le bon réglage en vrai », « Jamais ». C'est au jardinier de trancher
+entre l'effet et la répétition. Un bouton « Revoir l'ouverture » permet de la
+rejouer sans recharger.
+
+`prefers-reduced-motion` la supprime entièrement, et deux rideaux ne peuvent pas se
+superposer.

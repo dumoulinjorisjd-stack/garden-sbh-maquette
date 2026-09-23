@@ -593,6 +593,50 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   10%{opacity:.9}
   100%{opacity:0; transform:translateY(112vh) rotate(var(--tour))}
 }
+/* ============ « L'ARBRE A DONNÉ D'UN COUP » ============
+   L'ouverture du site. Trois précautions valent d'être écrites, parce qu'une
+   animation de démarrage est exactement le genre de chose qui séduit à la démo
+   et qu'on arrache six mois plus tard :
+
+   1. ELLE NE BLOQUE RIEN. Pas d'écran d'accueil posé par-dessus : la page est
+      là, complète et cliquable, et les fruits tombent AU-DESSUS. Celui qui
+      vient voir s'il y a des mangues n'attend pas une seconde de plus.
+   2. ELLE NE RÉPÈTE PAS LA PLUIE DES MÈSI. Les fruits tombent déjà quand on
+      donne et quand on remercie : c'est une récompense. La même image au
+      démarrage, et elle ne veut plus rien dire nulle part. Ici les fruits ne
+      pleuvent pas, ils TOMBENT SUR LA CARTE — un par quartier qui bouge — et
+      allument ce quartier en touchant. L'animation explique la carte.
+   3. ELLE S'ARRÊTE AU PREMIER GESTE, et le jardinier peut l'éteindre.
+
+   Le rebond suit une courbe d'écrasement : le fruit touche, s'aplatit un peu,
+   se remet. Sans ça une chute linéaire fait « objet qui traverse » et non
+   « fruit qui tombe ». */
+.chute{position:fixed; inset:0; z-index:140; pointer-events:none; overflow:hidden}
+.chute svg{
+  position:absolute; width:var(--t); height:var(--t);
+  left:var(--x); top:var(--y);
+  margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);
+  animation:tombe-pose var(--d) cubic-bezier(.45,.05,.55,.95) var(--r) both;
+}
+@keyframes tombe-pose{
+  0%{opacity:0; transform:translateY(-62vh) rotate(var(--tour)) scale(.86)}
+  8%{opacity:1}
+  64%{transform:translateY(0) rotate(0deg) scale(1)}
+  72%{transform:translateY(0) rotate(0deg) scale(1.16, .84)}
+  82%{transform:translateY(-14%) rotate(0deg) scale(.94, 1.06)}
+  92%{transform:translateY(0) rotate(0deg) scale(1.04, .96)}
+  100%{opacity:1; transform:translateY(0) rotate(0deg) scale(1)}
+}
+.chute svg.partie{animation:pose-fond .45s ease forwards}
+@keyframes pose-fond{to{opacity:0; transform:translateY(0) scale(.7)}}
+/* Le quartier touché s'allume d'un coup, puis revient à son intensité. */
+@keyframes touche{
+  0%{fill-opacity:var(--fo,.42)}
+  30%{fill-opacity:.95}
+  100%{fill-opacity:var(--fo,.42)}
+}
+.hero-map .ci-q.touchee{animation:touche .7s ease both}
+
 .pluie{position:fixed; inset:0; z-index:150; pointer-events:none; overflow:hidden}
 .pluie svg{
   position:absolute; top:0; width:var(--t); height:var(--t); color:var(--c);
@@ -2588,6 +2632,14 @@ button{cursor:pointer}
           <span class="hint">Trois accords composés d'avance. Il n'y a pas de choix libre des couleurs, et c'est volontaire : une palette se règle à trois valeurs près, et le site y perd plus qu'il n'y gagne.</span>
           <div class="ambiances" id="cfg-ambiances" role="group" aria-label="Ambiance du site"></div>
         </div>
+
+        <div class="field section">
+          <span class="titre-section">L'ouverture</span>
+          <span class="hint">Un fruit tombe sur chaque quartier où il se passe quelque chose, et l'allume en touchant. La page reste utilisable pendant la chute, et le premier geste l'interrompt.</span>
+          <div class="seg" id="cfg-ouverture" role="group" aria-label="Animation d'ouverture"></div>
+          <span class="hint" id="cfg-ouverture-hint"></span>
+          <button class="mini" id="cfg-ouverture-revoir" style="align-self:flex-start">Revoir l'ouverture</button>
+        </div>
       </div>
 
       <div class="stack" style="margin-top:18px">
@@ -4082,6 +4134,136 @@ button{cursor:pointer}
     setTimeout(function(){ ciel.remove(); }, 3000);
   }
   window.__pluie = pluieDeFruits;
+
+  // ============ L'OUVERTURE : « l'arbre a donné d'un coup » ============
+  // Un fruit par quartier qui bouge, lâché au-dessus de la carte, qui l'allume
+  // en touchant. La page reste utilisable pendant toute la chute.
+  var OUVERTURE = 'toujours';   // toujours · une-fois · jamais
+
+  function ouvertureLue(){
+    // Le « une fois par visiteur » n'a de sens que si le navigateur veut bien se
+    // souvenir. En navigation privée il refuse : on retombe alors sur « toujours »
+    // plutôt que de ne rien montrer du tout.
+    try { return localStorage.getItem('lakou-ouverture') === 'vue'; } catch(_){ return false; }
+  }
+  function marquerOuverture(){
+    try { localStorage.setItem('lakou-ouverture','vue'); } catch(_){}
+  }
+
+  function ouvertureFruits(){
+    if(doux || OUVERTURE === 'jamais') return;
+    if(OUVERTURE === 'une-fois' && ouvertureLue()) return;
+    // Deux rideaux superposés donneraient dix fruits et un rangement qui se
+    // marche dessus : on ne lance pas si un est déjà en l'air.
+    if(document.querySelector('.chute')) return;
+    var carte = document.getElementById('heromap');
+    if(!carte) return;
+    var svg = carte.querySelector('svg');
+    if(!svg) return;
+
+    // On vise les quartiers où il se passe quelque chose, les plus actifs d'abord.
+    var zones = Array.prototype.slice.call(svg.querySelectorAll('.ci-q.has'));
+    if(!zones.length) return;
+    zones.sort(function(a, b){
+      return (b.classList.contains('has-3') ? 2 : b.classList.contains('has-2') ? 1 : 0)
+           - (a.classList.contains('has-3') ? 2 : a.classList.contains('has-2') ? 1 : 0);
+    });
+    zones = zones.slice(0, 5);
+
+    var ciel = document.createElement('div');
+    ciel.className = 'chute'; ciel.setAttribute('aria-hidden','true');
+    var ns = 'http://www.w3.org/2000/svg';
+    var fini = 0, fruits = [];
+
+    zones.forEach(function(z, i){
+      // Le centre visible du quartier, dans la page : c'est là que le fruit se pose.
+      var r = z.getBoundingClientRect();
+      if(!r.width || !r.height) return;
+      var sv = document.createElementNS(ns,'svg');
+      sv.setAttribute('viewBox','0 0 100 100');
+      var taille = 30 + Math.random() * 12;
+      sv.style.setProperty('--t', taille.toFixed(0) + 'px');
+      sv.style.setProperty('--x', (r.left + r.width / 2).toFixed(0) + 'px');
+      sv.style.setProperty('--y', (r.top + r.height / 2).toFixed(0) + 'px');
+      sv.style.setProperty('--d', (0.82 + Math.random() * 0.2).toFixed(2) + 's');
+      sv.style.setProperty('--r', (i * 0.11).toFixed(2) + 's');
+      sv.style.setProperty('--tour', (Math.random() * 40 - 20).toFixed(0) + 'deg');
+      var u = document.createElementNS(ns,'use');
+      u.setAttribute('href', FRUITS[i % FRUITS.length]);
+      sv.appendChild(u);
+      ciel.appendChild(sv);
+      fruits.push(sv);
+
+      // Au moment où il touche, le quartier s'allume.
+      var quand = (i * 110) + 0.64 * 900;
+      setTimeout(function(){
+        if(!document.body.contains(ciel)) return;
+        z.classList.add('touchee');
+        setTimeout(function(){ z.classList.remove('touchee'); }, 720);
+      }, quand);
+
+      sv.addEventListener('animationend', function(){
+        sv.classList.add('partie');
+        if(++fini >= fruits.length){ setTimeout(ranger, 460); }
+      });
+    });
+
+    if(!fruits.length) return;
+    document.body.appendChild(ciel);
+    marquerOuverture();
+
+    function ranger(){
+      if(ciel.parentNode){ ciel.remove(); }
+      document.removeEventListener('pointerdown', couper, true);
+      document.removeEventListener('keydown', couper, true);
+      window.removeEventListener('scroll', couper, true);
+    }
+    // Au premier geste, on s'efface : personne ne doit attendre une animation.
+    function couper(){ ranger(); }
+    document.addEventListener('pointerdown', couper, true);
+    document.addEventListener('keydown', couper, true);
+    window.addEventListener('scroll', couper, true);
+    setTimeout(ranger, 2600);
+  }
+  window.__ouverture = ouvertureFruits;
+
+  // Le réglage, dans la console : c'est au jardinier de trancher entre l'effet
+  // et la répétition, pas à moi.
+  var OUV_CHOIX = [
+    {cle:'toujours', nom:'À chaque ouverture', sous:'Pour montrer le site'},
+    {cle:'une-fois', nom:'Une fois par personne', sous:'Le bon réglage en vrai'},
+    {cle:'jamais',   nom:'Jamais', sous:'Rien du tout'}
+  ];
+  function rendreOuverture(){
+    var z = document.getElementById('cfg-ouverture');
+    if(!z) return;
+    z.innerHTML = OUV_CHOIX.map(function(o){
+      return '<button class="chip" type="button" data-ouv="' + o.cle + '"'
+        + ' aria-pressed="' + (o.cle === OUVERTURE) + '">' + o.nom + '</button>';
+    }).join('');
+    var h = document.getElementById('cfg-ouverture-hint');
+    if(h){
+      var cur = OUV_CHOIX.filter(function(o){ return o.cle === OUVERTURE; })[0];
+      h.textContent = cur ? cur.sous + '.' : '';
+    }
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-ouv]') : null;
+    if(!b) return;
+    OUVERTURE = b.getAttribute('data-ouv');
+    try { localStorage.removeItem('lakou-ouverture'); } catch(_){}
+    rendreOuverture();
+    if(OUVERTURE === 'jamais'){ dire('Plus d\u2019animation à l\u2019ouverture.'); }
+    else { dire('Regardez la carte de l\u2019accueil.'); }
+  });
+  var revoir = document.getElementById('cfg-ouverture-revoir');
+  if(revoir){
+    revoir.addEventListener('click', function(){
+      try { localStorage.removeItem('lakou-ouverture'); } catch(_){}
+      allerA('accueil');
+      setTimeout(ouvertureFruits, 420);
+    });
+  }
 
   // --- le fruit du mois
   var fm = document.getElementById('fruit-mois');
@@ -5786,10 +5968,16 @@ button{cursor:pointer}
   } catch(_){}
 
   rendreAmbiances();
+  rendreOuverture();
   rendreSaison();
   rendreConsoleSaison();
   rendreAccueilMesi();
   show((location.hash || '').slice(1) || 'accueil');
+  // L'ouverture attend que la carte soit posée : on vise les quartiers à leur
+  // place réelle, pas à celle qu'ils avaient avant la mise en page.
+  if(ecranCourant === 'accueil'){
+    requestAnimationFrame(function(){ setTimeout(ouvertureFruits, 260); });
+  }
 })();
 </script>
 

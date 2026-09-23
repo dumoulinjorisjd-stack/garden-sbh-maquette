@@ -1552,3 +1552,25 @@ rejouer sans recharger.
 
 `prefers-reduced-motion` la supprime entièrement, et deux rideaux ne peuvent pas se
 superposer.
+
+## Une régression typographique que je ne pouvais pas voir (v73)
+
+En passant « comment ça marche » d'une pile de cartes à une case unique, j'ai
+remplacé les chiffres — **Anton, 30 px**, un des rares endroits où la police
+d'affichage se voyait — par du 16 px en sans dans un rond vert. C'était pratique
+pour faire passer le trait derrière ; c'était une perte sèche de caractère. Le fond
+gagnait ce que la forme perdait.
+
+Le chiffre redevient ce qu'il était, en plus grand (34 px sur téléphone, 38 en
+trois colonnes). **C'est le trait qui s'écarte, pas lui** : il part maintenant
+après le glyphe au lieu de passer dessous. En colonne, le chiffre a fallu le
+resserrer avec `align-self:flex-start` — sans ça son cadre occupe toute la largeur
+et le trait semble sortir de dessous lui.
+
+**Une limite qu'il faut écrire** : les requêtes vers Google Fonts échouent depuis
+le conteneur où je travaille. Anton, Faustina et Source Sans ne se chargent jamais,
+et **toutes mes captures montrent une police de repli**. Je n'ai jamais vu la vraie
+typographie de cette maquette ; le client, lui, la voit sur son téléphone. C'est
+pour ça que cette régression m'a échappé, et c'est pour ça que les vérifications
+typographiques d'ici portent sur la GÉOMÉTRIE (le trait croise-t-il un mot,
+l'élément déborde-t-il) et jamais sur le dessin des lettres.

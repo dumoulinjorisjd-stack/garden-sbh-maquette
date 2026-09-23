@@ -679,17 +679,15 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   padding:0 0 0 52px;
 }
 .etapes .num{
-  position:absolute; left:0; top:-2px; z-index:1;
-  width:34px; height:34px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  background:var(--leaf); color:var(--btn-ink);
-  font-family:var(--sans); font-weight:700; font-size:16px; line-height:1;
+  position:absolute; left:0; top:-6px; z-index:1;
+  font-family:var(--display); font-weight:400; font-size:34px; line-height:1;
+  color:var(--leaf); opacity:.9; letter-spacing:.01em;
 }
 /* Le trait dit « puis », ce qu'une pile de cartes ne disait pas. Chaque étape
    porte celui qui mène à la suivante : la dernière n'en a pas, sans quoi le trait
    annoncerait une quatrième étape qui n'existe pas. */
 .etapes li:not(:last-child)::before{
-  content:""; position:absolute; left:16px; top:36px; bottom:-24px; width:2px;
+  content:""; position:absolute; left:9px; top:34px; bottom:-24px; width:2px;
   background:var(--leaf); opacity:.2; border-radius:2px;
 }
 
@@ -699,11 +697,17 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   grid-template-columns:repeat(3,1fr); gap:34px; padding:26px 28px 28px;
 }
 #device[data-view="desktop"] .etapes li{padding:0; gap:6px}
-#device[data-view="desktop"] .etapes .num{position:static; margin-bottom:4px}
+/* En colonne, le chiffre est un bloc : sans « align-self », son cadre occupe
+   toute la largeur et le trait semble partir de dessous lui. */
+#device[data-view="desktop"] .etapes .num{
+  position:static; align-self:flex-start; margin-bottom:2px; font-size:38px;
+}
 /* En trois colonnes le trait devient horizontal, à la hauteur du centre des
    pastilles, et franchit la gouttière jusqu'à la suivante. */
+/* Le trait part APRÈS le chiffre : il ne le traverse jamais, quelle que soit la
+   largeur du glyphe. */
 #device[data-view="desktop"] .etapes li:not(:last-child)::before{
-  left:40px; right:-40px; top:16px; bottom:auto; width:auto; height:2px;
+  left:44px; right:-40px; top:19px; bottom:auto; width:auto; height:2px;
 }
 
 .portes{display:grid; gap:12px}

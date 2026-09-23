@@ -1574,3 +1574,48 @@ typographie de cette maquette ; le client, lui, la voit sur son téléphone. C'e
 pour ça que cette régression m'a échappé, et c'est pour ça que les vérifications
 typographiques d'ici portent sur la GÉOMÉTRIE (le trait croise-t-il un mot,
 l'élément déborde-t-il) et jamais sur le dessin des lettres.
+
+## La pluie de fruits : quatre erreurs de physique dans une ligne (v74)
+
+Ce qu'elle faisait : chaque fruit descendait d'une hauteur fixe à une autre, **en
+ligne droite, à vitesse constante**, en tournant linéairement, puis disparaissait
+en traversant le bas de l'écran. Quatre erreurs dans une seule ligne
+d'images-clés — et c'est exactement ce qui fait « particules » au lieu de
+« fruits » :
+
+- **un objet qui tombe accélère.** À vitesse constante, il flotte.
+- **il dérive.** Une mangue n'est pas une goutte de pluie : elle part de côté,
+  l'air la freine, elle se redresse.
+- **il touche le sol.** Traverser le bas de l'écran, c'est dire au spectateur
+  qu'il regardait des images et non des choses.
+- **il s'écrase à l'impact et rebondit moins haut.** C'est ce moment-là, et lui
+  seul, qui donne le poids.
+
+Les images-clés CSS sont remplacées par une boucle de rendu : gravité, frottement
+de l'air, restitution au rebond (0,42), écrasement quadratique qui se résorbe en
+un quart de seconde. Trente lignes, aucune bibliothèque, rien que des `transform` —
+le navigateur compose sans recalculer la mise en page.
+
+Trois choix qui font la différence :
+
+- **La taille fait la profondeur.** Un gros fruit est près de nous : il tombe plus
+  vite, plus droit, plus opaque. Un petit traîne et pâlit. La parallaxe coûte deux
+  lignes et donne tout le volume.
+- **Chacun a son propre sol**, sinon les vingt-six s'alignent au cordeau et on voit
+  la règle au lieu de voir des fruits.
+- **Le sol, c'est le haut de la barre d'onglets** : les fruits se posent dessus
+  comme sur une étagère au lieu de la recouvrir. À l'arrivée, la rangée se lit
+  comme une récolte.
+
+Dix fruits différents au lieu de six, tirés au hasard.
+
+**Deux défauts trouvés en mesurant, pas en regardant.** En relevant la position de
+chaque fruit toutes les 180 ms : à 0,55 × la hauteur d'écran de décalage au départ,
+trois d'entre eux volaient encore à deux secondes et s'évaporaient en plein vol.
+Départ resserré à 0,26 et gravité portée à 1500–2900 : tout est posé à 1,5 s. Le
+relevé montre maintenant le profil d'un rebond — 12 écrasements d'un coup à 600 ms,
+puis la moyenne qui REMONTE de 784 à 695 (ils rebondissent), puis se repose.
+
+`perf.mjs` compte les images : **60 par seconde sur téléphone comme sur
+ordinateur, pire image à 17 ms**, avec 18 et 26 fruits. Une animation qui rame est
+pire que pas d'animation.

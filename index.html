@@ -588,11 +588,9 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 }
 .cachet-donne{animation:tampon .42s cubic-bezier(.3,1.2,.4,1) both}
 
-@keyframes tombe{
-  0%{opacity:0; transform:translateY(-14vh) rotate(0deg)}
-  10%{opacity:.9}
-  100%{opacity:0; transform:translateY(112vh) rotate(var(--tour))}
-}
+/* La pluie n'a plus d'images-clés : sa position est calculée à chaque image par
+   une petite boucle de physique — gravité, frottement de l'air, restitution au
+   rebond, écrasement à l'impact. Voir « pluieDeFruits » dans le script. */
 /* ============ « L'ARBRE A DONNÉ D'UN COUP » ============
    L'ouverture du site. Trois précautions valent d'être écrites, parce qu'une
    animation de démarrage est exactement le genre de chose qui séduit à la démo
@@ -639,9 +637,11 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 
 .pluie{position:fixed; inset:0; z-index:150; pointer-events:none; overflow:hidden}
 .pluie svg{
-  position:absolute; top:0; width:var(--t); height:var(--t); color:var(--c);
-  animation:tombe var(--d) linear var(--r) both;
+  position:absolute; left:0; top:0; width:var(--t); height:var(--t);
+  margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);
+  will-change:transform, opacity;
 }
+.pluie.sortie svg{transition:opacity .55s ease; opacity:0}
 
 .fruit-mois{
   width:26px; height:26px; flex:0 0 26px; color:var(--mangue); cursor:default;
@@ -4114,28 +4114,153 @@ button{cursor:pointer}
     if(!isNaN(v)){ el.textContent = '0'; setTimeout(function(){ monter(el, v); }, 520); }
   });
 
-  // --- une pluie de fruits quand on donne
-  var FRUITS = ['#i-mangue','#i-citron','#i-avocat','#i-piment','#i-cerise','#i-papaye'];
+  // ================== LA PLUIE DE FRUITS ==================
+  // Elle se déclenche à deux moments qui comptent : quand on marque une annonce
+  // comme donnée, et quand on envoie un mèsi. C'est une récompense, elle a donc
+  // le droit d'être généreuse — mais elle doit être JUSTE, sinon elle sonne faux.
+  //
+  // Ce qu'elle faisait avant : chaque fruit descendait d'une hauteur fixe à une
+  // autre, en ligne droite, à vitesse constante, en tournant linéairement, puis
+  // disparaissait en traversant le bas de l'écran. Quatre erreurs de physique dans
+  // une seule ligne d'images-clés — et c'est exactement ce qui fait « particules »
+  // au lieu de « fruits » :
+  //
+  //   · un objet qui tombe ACCÉLÈRE. À vitesse constante, il flotte.
+  //   · il DÉRIVE. Une mangue n'est pas une goutte de pluie : elle part de côté,
+  //     l'air la freine, elle se redresse.
+  //   · il TOUCHE LE SOL. Traverser le bas de l'écran, c'est dire au spectateur
+  //     qu'il regardait des images et non des choses.
+  //   · il S'ÉCRASE à l'impact et REBONDIT moins haut. C'est ce moment-là, et lui
+  //     seul, qui donne le poids.
+  //
+  // D'où une vraie boucle de rendu. Trente lignes, aucune bibliothèque, et rien
+  // que des « transform » : le navigateur compose sans recalculer la mise en page.
+  var FRUITS = ['#i-mangue','#i-citron','#i-avocat','#i-piment','#i-cerise','#i-papaye',
+                '#i-quenette','#i-corossol','#i-tomate','#i-coco'];
+
   function pluieDeFruits(){
     if(doux) return;
+    if(document.querySelector('.pluie')) return;   // pas deux averses à la fois
+
     var ciel = document.createElement('div');
     ciel.className = 'pluie'; ciel.setAttribute('aria-hidden','true');
     var ns = 'http://www.w3.org/2000/svg';
-    for(var i = 0; i < 16; i++){
+    var L = window.innerWidth, H = window.innerHeight;
+    // Le sol, c'est le haut de la barre d'onglets quand elle est là : les fruits
+    // se posent DESSUS comme sur une étagère, au lieu de la recouvrir.
+    var barre = document.querySelector('.tabbar');
+    var solBase = H;
+    if(barre && !barre.hidden){
+      var rb = barre.getBoundingClientRect();
+      if(rb.height && rb.top > H * 0.5){ solBase = rb.top + 6; }
+    }
+    // Moins de fruits sur un petit écran : la générosité, ce n'est pas le nombre.
+    var combien = L < 520 ? 18 : 26;
+    var g = [];
+
+    for(var i = 0; i < combien; i++){
       var sv = document.createElementNS(ns,'svg');
       sv.setAttribute('viewBox','0 0 100 100');
-      var taille = 22 + Math.random() * 30;
-      sv.style.setProperty('--t', taille + 'px');
-      sv.style.setProperty('--d', (1.5 + Math.random() * 1.1) + 's');
-      sv.style.setProperty('--r', (Math.random() * 0.5) + 's');
-      sv.style.setProperty('--tour', (Math.random() * 720 - 360) + 'deg');
-      sv.style.left = (Math.random() * 94) + '%';
+      // La taille fait la profondeur : un gros fruit est près de nous, il tombe
+      // plus vite et plus droit ; un petit est loin, il traîne et pâlit.
+      var prof = Math.random();
+      var taille = 20 + prof * 34;
+      sv.style.setProperty('--t', taille.toFixed(0) + 'px');
+      sv.style.opacity = (0.55 + prof * 0.45).toFixed(2);
       var u = document.createElementNS(ns,'use');
-      u.setAttribute('href', FRUITS[i % FRUITS.length]);
-      sv.appendChild(u); ciel.appendChild(sv);
+      u.setAttribute('href', FRUITS[(Math.random() * FRUITS.length) | 0]);
+      sv.appendChild(u);
+      ciel.appendChild(sv);
+
+      // Tout part d'une bande au-dessus du haut de l'écran, avec un élan latéral
+      // qui s'éloigne du centre : l'arbre a lâché d'un coup, ça s'écarte.
+      var x = L * (0.08 + Math.random() * 0.84);
+      g.push({
+        el: sv,
+        x: x,
+        // Le décalage de départ reste court : au-delà, les derniers n'ont pas fini
+        // de tomber quand le rideau s'efface, et on voit des fruits s'évaporer en
+        // plein vol. Mesuré : à 0,55 × la hauteur d'écran, trois d'entre eux
+        // volaient encore à deux secondes.
+        y: -taille - Math.random() * H * 0.26,
+        vx: (x - L / 2) / L * (30 + Math.random() * 70),
+        vy: 120 + Math.random() * 220,
+        a: Math.random() * 360,
+        va: (Math.random() * 300 - 150) * (0.5 + prof),
+        t: taille,
+        // Chacun a son sol : sinon les vingt-six s'alignent au cordeau en bas,
+        // et on voit la règle au lieu de voir des fruits.
+        sol: solBase - taille * (0.18 + Math.random() * 0.42),
+        // Plus un fruit est proche, plus il tombe vite : c'est la profondeur qui
+        // donne la vitesse, pas le hasard seul.
+        g: 1500 + prof * 1400,
+        rebonds: 0,
+        max: 1 + ((Math.random() * 2) | 0),
+        ecras: 0,
+        pose: false
+      });
     }
+
     document.body.appendChild(ciel);
-    setTimeout(function(){ ciel.remove(); }, 3000);
+
+    var t0 = performance.now(), dernier = t0, brut = null;
+    function image(t){
+      var dt = Math.min((t - dernier) / 1000, 0.05);   // un onglet réveillé ne saute pas
+      dernier = t;
+      var vivants = 0;
+
+      for(var k = 0; k < g.length; k++){
+        var f = g[k];
+        if(!f.pose){
+          f.vy += f.g * dt;
+          f.vx *= (1 - 0.7 * dt);        // l'air freine le déplacement latéral
+          f.x += f.vx * dt;
+          f.y += f.vy * dt;
+          f.a += f.va * dt;
+
+          if(f.y >= f.sol){
+            f.y = f.sol;
+            if(f.rebonds < f.max && f.vy > 90){
+              f.rebonds++;
+              f.vy = -f.vy * 0.42;        // restitution : il remonte moins haut
+              f.vx *= 0.55;
+              f.va *= 0.45;
+              f.ecras = 1;                // l'écrasement part de l'impact
+            } else {
+              f.pose = true;
+              f.vy = 0; f.vx = 0; f.va = 0;
+              f.a = Math.round(f.a / 15) * 15;   // il se cale, il ne tremble pas
+              f.ecras = Math.max(f.ecras, 0.55);
+            }
+          }
+        }
+        // L'écrasement se résorbe vite : c'est un accent, pas un état.
+        if(f.ecras > 0){ f.ecras = Math.max(0, f.ecras - dt * 4.2); }
+        var e = f.ecras * f.ecras;        // quadratique : ça claque puis ça lâche
+        var sx = 1 + e * 0.30, sy = 1 - e * 0.26;
+
+        f.el.style.transform = 'translate3d(' + f.x.toFixed(1) + 'px,' + f.y.toFixed(1) + 'px,0)'
+          + ' rotate(' + f.a.toFixed(1) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+        if(!f.pose){ vivants++; }
+      }
+
+      if(t - t0 < 2500 && (vivants > 0 || t - t0 < 900)){
+        brut = requestAnimationFrame(image);
+      } else {
+        ciel.classList.add('sortie');
+        setTimeout(function(){ if(ciel.parentNode){ ciel.remove(); } }, 620);
+      }
+    }
+    brut = requestAnimationFrame(image);
+
+    // Si l'onglet passe en arrière-plan, on range plutôt que de laisser tourner.
+    setTimeout(function(){
+      if(brut){ cancelAnimationFrame(brut); }
+      if(ciel.parentNode && !ciel.classList.contains('sortie')){
+        ciel.classList.add('sortie');
+        setTimeout(function(){ if(ciel.parentNode){ ciel.remove(); } }, 620);
+      }
+    }, 3400);
   }
   window.__pluie = pluieDeFruits;
 

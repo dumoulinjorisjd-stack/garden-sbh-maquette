@@ -1651,7 +1651,31 @@ le même dessin, peint. Plus une ombre portée douce, pour le décoller de la pa
 **Cette version a été jugée insuffisante par le client, à raison.** Voir la
 section suivante.
 
-### La vraie aquarelle, et pourquoi il fallait d'abord agrandir (v75)
+### ANNULÉ — la vraie aquarelle, et pourquoi il fallait d'abord agrandir (v75)
+
+> **Ce qui suit a été ANNULÉ à la demande du client (v76). Le site est revenu
+> exactement à la v74 : fruits en aplats, 20 a 54 px, filtre gouache.**
+>
+> Le retour a été fait en reconstruisant la source depuis le `index.html` livré
+> de la v74 (`debuild.py`, l'inverse exact de `build.sh`), et non en rejouant les
+> modifications à l'envers une par une — la meilleure façon d'en oublier une.
+> L'aller-retour est vérifié octet pour octet.
+>
+> **Ce que le client a choisi de perdre, en le sachant** (c'était écrit dans la
+> question) : trois corrections de dessin qui n'avaient AUCUN rapport avec
+> l'aquarelle, et dont une est un vrai défaut, pas un gout —
+>
+> - **la noix de coco a de nouveau un visage.** Ses trois pores sont a (42,39),
+>   (58,39) et (50,49) : deux yeux et une bouche, par construction. À 26 px ça
+>   passe ; des qu'un fruit grossit, ça ne passe plus. Je propose de le recorriger
+>   seul, sans rien d'autre.
+> - le piment est de nouveau un crochet d'épaisseur constante ;
+> - le corossol a de nouveau cinq gros piquants au lieu de quatorze.
+>
+> **Ce qui est gardé de cette session** : `typo.sh`, qui n'a jamais touché au
+> site (voir plus haut), et les planches de comparaison dans `aqua/`. La mesure
+> ci-dessous reste vraie et vaudra encore si le sujet revient un jour.
+
 
 Reproche du client sur la v74 : « ils sont petits et pas esthétiquement très
 travaillés ». Les deux moitiés de la phrase sont justes, et **la première

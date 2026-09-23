@@ -636,19 +636,13 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .hero-map .ci-q.touchee{animation:touche .7s ease both}
 
 .pluie{position:fixed; inset:0; z-index:150; pointer-events:none; overflow:hidden}
-/* Le fruit qui tombe est une IMAGE, pas un SVG filtré : le filtre aquarelle est
-   payé une seule fois, à la rasterisation, au lieu d'être recalculé à chaque
-   image pour chacun des vingt-six fruits. Mesuré : 9 fps contre 59.
-   Le « svg » reste en repli si la rasterisation échoue — sans filtre, donc en
-   aplats, mais fluide : mieux vaut un fruit plat qui tombe bien qu'un beau
-   fruit qui saccade. */
-.pluie img, .pluie svg{
+.pluie svg{
   position:absolute; left:0; top:0; width:var(--t); height:var(--t);
   margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);
   will-change:transform, opacity;
-  filter:drop-shadow(0 3px 4px rgba(60,40,20,.24));
+  filter:url(#gouache) drop-shadow(0 2px 3px rgba(60,40,20,.22));
 }
-.pluie.sortie img, .pluie.sortie svg{transition:opacity .55s ease; opacity:0}
+.pluie.sortie svg{transition:opacity .55s ease; opacity:0}
 
 .fruit-mois{
   width:26px; height:26px; flex:0 0 26px; color:var(--mangue); cursor:default;
@@ -662,7 +656,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 @keyframes rebond{0%{transform:translateY(0)} 40%{transform:translateY(-5px)} 100%{transform:translateY(0)}}
 
 @media (prefers-reduced-motion:reduce){
-  .cachet-donne,.pluie img,.pluie svg,.hero-map .ci-q.has-3:not(.on),.tab[aria-current="page"] svg{animation:none}
+  .cachet-donne,.pluie svg,.hero-map .ci-q.has-3:not(.on),.tab[aria-current="page"] svg{animation:none}
   .pluie{display:none}
 }
 
@@ -1455,75 +1449,16 @@ button{cursor:pointer}
 
 
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <!-- UNE PASSE « AQUARELLE » POUR LES FRUITS QUI TOMBENT.
-       Les dessins du site sont en aplats francs : c'est ce qu'il faut sur une
-       carte de 116 px, où une texture ne serait que du bruit. Mais pendant la
-       pluie, le fruit est le sujet, et un aplat fait plat.
-
-       Ce filtre fait quatre choses, dans cet ordre, et chacune répond à ce qui
-       manquait à la version précédente :
-
-       1. LE BORD MOUILLÉ. Une turbulence déplace le contour. Le vecteur a des
-          bords parfaits ; le pinceau chargé d'eau, non.
-       2. LE VOLUME. C'est ce qui manquait vraiment. On floute la silhouette pour
-          en faire une carte de relief, on l'éclaire (feDiffuseLighting), et on
-          multiplie. Résultat : le fruit est rond, et SANS avoir dessiné un seul
-          dégradé — le relief sort de la forme elle-même, donc les dix-sept
-          fruits en profitent sans être redessinés.
-          Le remappage de la lumière (feComponentTransfer) est le point délicat :
-          une lumière brute va de 0 à 1 et ne peut donc QU'assombrir. Mesuré :
-          la mangue virait à l'ocre brun. On la ramène sur 0,74 → 1,16 : l'ombre
-          descend un peu, la lumière remonte un peu, la couleur d'origine reste
-          au milieu.
-       3. LA GRANULATION. Des auréoles claires, là où l'eau a repoussé le
-          pigment. Réglé bas exprès : à pleine force (essayé, mesuré, jeté) les
-          taches brunes font un fruit MOISI. Sur un site de partage de nourriture,
-          c'est disqualifiant.
-       4. LE LISERÉ. Le dépôt de pigment sur le bord, À L'INTÉRIEUR du contour
-          (feMorphology + feComposite « out »). Une première version le posait à
-          l'extérieur : ça faisait un halo flou, pas une aquarelle.
-
-       Ce filtre n'est JAMAIS appliqué en direct à un élément animé. Mesuré sur
-       26 fruits de 46 à 120 px : 9 fps en filtre direct, 59 fps une fois les
-       fruits rasterisés une bonne fois en PNG. Voir « dessinAquarelle ». -->
-  <filter id="aquarelle" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.02 0.028" numOctaves="3" seed="12" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G" result="lavis"/>
-    <feColorMatrix in="lavis" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="alpha"/>
-
-    <!-- LES ARÊTES INTERNES. Chaque fruit porte un aplat d'ombre au tracé net :
-         c'est juste sur une carte de 116 px, mais à 120 px sous un vrai volume,
-         cette diagonale franche ne lit plus comme une ombre, elle lit comme un
-         PLI. On floute donc la couleur — et on recolle aussitôt l'alpha d'origine
-         par-dessus : les bords internes fondent, la silhouette reste franche. -->
-    <feGaussianBlur in="lavis" stdDeviation="1.8" result="fondu"/>
-    <feComposite in="fondu" in2="alpha" operator="in" result="lavis2"/>
-
-    <feGaussianBlur in="alpha" stdDeviation="7" result="bosse"/>
-    <feDiffuseLighting in="bosse" surfaceScale="4.2" diffuseConstant="1" lighting-color="#ffffff" result="lum0">
-      <feDistantLight azimuth="230" elevation="52"/>
-    </feDiffuseLighting>
-    <feComponentTransfer in="lum0" result="lum">
-      <feFuncR type="linear" slope="0.42" intercept="0.74"/>
-      <feFuncG type="linear" slope="0.42" intercept="0.74"/>
-      <feFuncB type="linear" slope="0.42" intercept="0.74"/>
-    </feComponentTransfer>
-    <feComposite in="lum" in2="alpha" operator="in" result="lumfruit"/>
-    <feBlend in="lavis2" in2="lumfruit" mode="multiply" result="volume"/>
-    <feComposite in="volume" in2="alpha" operator="in" result="peint"/>
-
-    <feTurbulence type="fractalNoise" baseFrequency="0.055" numOctaves="2" seed="9" result="m1"/>
-    <feColorMatrix in="m1" type="matrix"
-      values="0 0 0 0 1  0 0 0 0 0.96  0 0 0 0 0.80  0.28 0 0 0 -0.126" result="clair"/>
-    <feComposite in="clair" in2="alpha" operator="in" result="blooms"/>
-
-    <feMorphology in="alpha" operator="erode" radius="2.4" result="noyau"/>
-    <feGaussianBlur in="noyau" stdDeviation="1.7" result="noyauflou"/>
-    <feComposite in="alpha" in2="noyauflou" operator="out" result="bande"/>
-    <feFlood flood-color="#4A2008" flood-opacity="0.40" result="encre"/>
-    <feComposite in="encre" in2="bande" operator="in" result="lisere"/>
-
-    <feMerge><feMergeNode in="peint"/><feMergeNode in="blooms"/><feMergeNode in="lisere"/></feMerge>
+  <!-- UNE PASSE « GOUACHE » POUR LES FRUITS QUI TOMBENT. Les dessins du site sont
+       en aplats francs : c'est ce qu'il faut sur une carte de 116 px, où une
+       texture ne serait que du bruit. Mais pendant la pluie, le fruit est le
+       sujet et l'aplat fait plat. Une turbulence déplace légèrement les bords et
+       un léger flou casse la netteté vectorielle : le même dessin, peint.
+       Un seul filtre pour les dix-sept fruits, appliqué nulle part ailleurs. -->
+  <filter id="gouache" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.038" numOctaves="2" seed="7" result="grain"/>
+    <feDisplacementMap in="SourceGraphic" in2="grain" scale="4.5" xChannelSelector="R" yChannelSelector="G" result="peint"/>
+    <feGaussianBlur in="peint" stdDeviation="0.35"/>
   </filter>
 
   <symbol id="v-cactus" viewBox="0 0 100 100">
@@ -1630,7 +1565,7 @@ button{cursor:pointer}
   <symbol id="i-corossol" viewBox="0 0 100 100">
     <path d="M52 20c16 2 27 17 27 33 0 18-13 32-29 32S22 71 22 53c0-16 13-31 30-33z" fill="#7FB05A"/>
     <path d="M52 20c16 2 27 17 27 33 0 18-13 32-29 32 14-10 20-26 18-41-1-11-7-19-16-24z" fill="#5F8E3E"/>
-    <g fill="#4A7A32" opacity=".85"><path d="M35 38l3.4 2.8-3.4 2.8z"/><path d="M48 31l3.4 2.8-3.4 2.8z"/><path d="M61 37l3.4 2.8-3.4 2.8z"/><path d="M70 48l3.4 2.8-3.4 2.8z"/><path d="M64 60l3.4 2.8-3.4 2.8z"/><path d="M51 66l3.4 2.8-3.4 2.8z"/><path d="M38 60l3.4 2.8-3.4 2.8z"/><path d="M30 50l3.4 2.8-3.4 2.8z"/><path d="M44 45l3.4 2.8-3.4 2.8z"/><path d="M57 48l3.4 2.8-3.4 2.8z"/><path d="M46 56l3.4 2.8-3.4 2.8z"/><path d="M60 70l3.4 2.8-3.4 2.8z"/><path d="M36 70l3.4 2.8-3.4 2.8z"/><path d="M50 40l3.4 2.8-3.4 2.8z"/></g>
+    <g fill="#4A7A32"><path d="M37 40l5 4-5 4z"/><path d="M52 34l5 4-5 4z"/><path d="M65 46l5 4-5 4z"/><path d="M42 60l5 4-5 4z"/><path d="M58 66l5 4-5 4z"/></g>
     <path d="M49 21c1-8 6-13 14-14-1 8-6 13-14 15z" fill="#2F7D4F"/>
   </symbol>
   <symbol id="i-papaye" viewBox="0 0 100 100">
@@ -1662,9 +1597,9 @@ button{cursor:pointer}
     <path d="M50 42c3-10 11-15 22-15-2 11-10 16-22 17z" fill="#5E9B3C"/>
   </symbol>
   <symbol id="i-piment" viewBox="0 0 100 100">
-    <path d="M31 27c14-2 28 6 37 21 9 16 10 32 3 40-2 3-6 2-6-2 1-11-2-22-9-34-8-13-17-19-27-19-4 0-4-5 2-6z" fill="#D8412E"/>
-    <path d="M68 48c9 16 10 32 3 40-2 3-6 2-6-2 6-12 7-26 3-38z" fill="#A82A1C"/>
-    <path d="M34 34c-3 1-6-1-7-4-3-9-2-17 4-21 6 3 10 11 9 19 0 3-3 5-6 6z" fill="#4A7A32"/><path d="M33 30c-1-6 0-11 3-15" fill="none" stroke="#3B6428" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+    <path d="M34 28c15-4 32 5 40 20 9 17 5 38-10 45-9 4-18-1-19-10-1-9 6-13 5-23-1-13-12-21-21-24-5-2-4-7 5-8z" fill="#D8412E"/>
+    <path d="M74 48c9 17 5 38-10 45 12-13 14-31 10-45z" fill="#A82A1C"/>
+    <path d="M32 26c-6-4-6-13 1-17 6 3 9 10 7 16z" fill="#4A7A32"/>
   </symbol>
   <symbol id="i-prune" viewBox="0 0 100 100">
     <ellipse cx="50" cy="56" rx="27" ry="30" fill="#E8C13A"/>
@@ -1708,7 +1643,7 @@ button{cursor:pointer}
       <path d="M36 34c-4 12-4 26 0 40"/><path d="M50 30c-3 14-3 30 0 44"/><path d="M63 34c3 12 3 26 0 40"/>
     </g>
     <ellipse cx="34" cy="45" rx="7" ry="4.5" fill="#B07C46" transform="rotate(-28 34 45)"/>
-    <g fill="#4B2E15" opacity=".8"><circle cx="45" cy="33" r="2.3"/><circle cx="55" cy="33" r="2.3"/><circle cx="50" cy="38" r="2.3"/></g>
+    <g fill="#3F2712"><circle cx="42" cy="39" r="3.4"/><circle cx="58" cy="39" r="3.4"/><circle cx="50" cy="49" r="3.4"/></g>
   </symbol>
   <symbol id="i-citronnelle" viewBox="0 0 100 100">
     <g stroke-linecap="round" fill="none">
@@ -4253,72 +4188,6 @@ button{cursor:pointer}
     sv.appendChild(g2);
   }
 
-  // ============ L'ATELIER : peindre les fruits UNE fois ============
-  // Le filtre « aquarelle » coûte cher : six passes dont trois turbulences. Tant
-  // qu'il s'applique à un élément qui bouge, le navigateur le recalcule à chaque
-  // image. Mesuré sur 26 fruits de 46 à 120 px, en rendu logiciel :
-  //
-  //      filtre en direct sur le SVG animé ......  9,3 img/s  (150 ms/image)
-  //      fruit peint une fois, puis image PNG ...  58,6 img/s  (16,7 ms/image)
-  //
-  // Six fois plus rapide, et c'est ce qui autorise enfin de GROS fruits : c'est
-  // la taille qui manquait, pas la texture — en dessous de 100 px, l'aquarelle
-  // ne se voit tout simplement pas.
-  //
-  // On sérialise donc le symbole avec son filtre dans un petit document SVG, on
-  // le charge comme une image, on le peint dans un canvas, et on garde le PNG.
-  // Tout se passe dans la page : aucun fichier, aucun réseau, aucun serveur.
-  var ATELIER = {};          // href → data:image/png, ou null si la peinture a raté
-  var TAILLE_PEINTE = 256;   // assez pour le plus gros fruit (120 px en 2×)
-
-  function dessinAquarelle(href, fini){
-    var id = href.charAt(0) === '#' ? href.slice(1) : href;
-    if(ATELIER.hasOwnProperty(id)){ fini(ATELIER[id]); return; }
-    var sym = document.getElementById(id);
-    var filtre = document.getElementById('aquarelle');
-    if(!sym || !filtre || !window.XMLSerializer){ ATELIER[id] = null; fini(null); return; }
-
-    var ser = new XMLSerializer(), dedans = '';
-    for(var i = 0; i < sym.childNodes.length; i++){
-      dedans += ser.serializeToString(sym.childNodes[i]);
-    }
-    var vb = sym.getAttribute('viewBox') || '0 0 100 100';
-    var doc = '<svg xmlns="http://www.w3.org/2000/svg" width="' + TAILLE_PEINTE
-      + '" height="' + TAILLE_PEINTE + '" viewBox="' + vb + '">'
-      + '<defs>' + ser.serializeToString(filtre) + '</defs>'
-      + '<g filter="url(#aquarelle)">' + dedans + '</g></svg>';
-
-    var im = new Image();
-    im.onload = function(){
-      try{
-        var c = document.createElement('canvas');
-        c.width = c.height = TAILLE_PEINTE;
-        c.getContext('2d').drawImage(im, 0, 0, TAILLE_PEINTE, TAILLE_PEINTE);
-        ATELIER[id] = c.toDataURL('image/png');
-      }catch(_){ ATELIER[id] = null; }
-      fini(ATELIER[id]);
-    };
-    im.onerror = function(){ ATELIER[id] = null; fini(null); };
-    try{ im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(doc); }
-    catch(_){ ATELIER[id] = null; fini(null); }
-  }
-
-  // On peint d'avance, un fruit à la fois, quand le navigateur n'a rien d'autre
-  // à faire. Si l'averse part avant que ce soit fini, elle prend les fruits déjà
-  // peints et des aplats pour les autres : personne ne voit la différence en
-  // vol, et surtout rien n'attend.
-  function prechaufferAtelier(){
-    if(doux) return;
-    var i = 0;
-    (function suivant(){
-      if(i >= FRUITS.length) return;
-      dessinAquarelle(FRUITS[i++], function(){
-        if(window.requestIdleCallback){ requestIdleCallback(suivant, {timeout:400}); }
-        else { setTimeout(suivant, 30); }
-      });
-    })();
-  }
-
   function pluieDeFruits(){
     if(doux) return;
     if(document.querySelector('.pluie')) return;   // pas deux averses à la fois
@@ -4336,43 +4205,23 @@ button{cursor:pointer}
       if(rb.height && rb.top > H * 0.5){ solBase = rb.top + 6; }
     }
     // Moins de fruits sur un petit écran : la générosité, ce n'est pas le nombre.
-    // Les fruits ayant plus que doublé de taille, on en met un peu moins : vingt
-    // gros fruits remplissent mieux l'écran que vingt-six petits, et se lisent.
-    var combien = L < 520 ? 14 : 20;
+    var combien = L < 520 ? 18 : 26;
     var g = [];
 
     for(var i = 0; i < combien; i++){
+      var sv = document.createElementNS(ns,'svg');
+      sv.setAttribute('viewBox','0 0 100 100');
       // La taille fait la profondeur : un gros fruit est près de nous, il tombe
       // plus vite et plus droit ; un petit est loin, il traîne et pâlit.
-      // 46 à 120 px, contre 20 à 54 auparavant. Le client avait raison sur ce
-      // point : c'était trop petit. Et la peinture ne se voyait pas non plus —
-      // en dessous de 100 px, une texture d'aquarelle disparaît. Agrandir n'est
-      // donc pas un caprice, c'est ce qui rend le travail visible.
       var prof = Math.random();
-      var taille = 46 + prof * 74;
-      var choix = FRUITS[(Math.random() * FRUITS.length) | 0];
-      var peint = ATELIER[choix.slice(1)];
-
-      var sv;
-      if(peint){
-        sv = document.createElement('img');
-        sv.src = peint; sv.alt = ''; sv.decoding = 'async';
-      } else {
-        // Repli : le dessin en aplats, sans filtre. Les visages, quand ils sont
-        // activés, ne vivent que sur ce chemin-là (on ne peut rien ajouter dans
-        // une image déjà peinte) — ils sont désactivés par défaut, voir VISAGES.
-        sv = document.createElementNS(ns,'svg');
-        sv.setAttribute('viewBox','0 0 100 100');
-        var u = document.createElementNS(ns,'use');
-        u.setAttribute('href', choix);
-        sv.appendChild(u);
-        poserVisage(sv, choix);
-      }
+      var taille = 20 + prof * 34;
       sv.style.setProperty('--t', taille.toFixed(0) + 'px');
-      // La profondeur se dit par la TAILLE et la VITESSE, pas en délavant la
-      // couleur. À 20 px, pâlir les fruits du fond marchait ; à 115 px, ça ne
-      // fait plus un fruit lointain, ça fait un autocollant décoloré.
-      sv.style.opacity = (0.88 + prof * 0.12).toFixed(2);
+      sv.style.opacity = (0.55 + prof * 0.45).toFixed(2);
+      var choix = FRUITS[(Math.random() * FRUITS.length) | 0];
+      var u = document.createElementNS(ns,'use');
+      u.setAttribute('href', choix);
+      sv.appendChild(u);
+      poserVisage(sv, choix);
       ciel.appendChild(sv);
 
       // Tout part d'une bande au-dessus du haut de l'écran, avec un élan latéral
@@ -6310,12 +6159,6 @@ button{cursor:pointer}
   if(ecranCourant === 'accueil'){
     requestAnimationFrame(function(){ setTimeout(ouvertureFruits, 260); });
   }
-
-  // On peint les fruits de la pluie pendant que l'utilisateur lit l'accueil :
-  // l'averse est déclenchée par un don confirmé, jamais dans les deux premières
-  // secondes. Le temps de calcul est donc pris là où il ne coûte rien.
-  if(window.requestIdleCallback){ requestIdleCallback(prechaufferAtelier, {timeout:2500}); }
-  else { setTimeout(prechaufferAtelier, 1200); }
 })();
 </script>
 

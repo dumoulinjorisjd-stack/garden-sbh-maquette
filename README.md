@@ -1567,13 +1567,33 @@ après le glyphe au lieu de passer dessous. En colonne, le chiffre a fallu le
 resserrer avec `align-self:flex-start` — sans ça son cadre occupe toute la largeur
 et le trait semble sortir de dessous lui.
 
-**Une limite qu'il faut écrire** : les requêtes vers Google Fonts échouent depuis
-le conteneur où je travaille. Anton, Faustina et Source Sans ne se chargent jamais,
-et **toutes mes captures montrent une police de repli**. Je n'ai jamais vu la vraie
-typographie de cette maquette ; le client, lui, la voit sur son téléphone. C'est
-pour ça que cette régression m'a échappé, et c'est pour ça que les vérifications
-typographiques d'ici portent sur la GÉOMÉTRIE (le trait croise-t-il un mot,
-l'élément déborde-t-il) et jamais sur le dessin des lettres.
+**Une limite qu'il fallait écrire — et qui est maintenant LEVÉE (v75).**
+
+Le problème : les requêtes vers Google Fonts échouent depuis le conteneur où je
+travaille (`ERR_CERT_AUTHORITY_INVALID`, le certificat du proxy). Anton, Faustina
+et Source Sans ne se chargeaient jamais, et **toutes mes captures montraient une
+police de repli**. Je n'avais jamais vu la vraie typographie de cette maquette ;
+le client, lui, la voit sur son téléphone.
+
+Ça a coûté deux fois : une régression typographique qui m'a échappé, puis un
+aller-retour où le client a cru, en voyant mes captures de la v75, qu'on avait
+encore changé la typo — alors que le diff des déclarations de police entre v74 et
+v75 est **vide**.
+
+Le correctif : `typo.sh`. Il rapatrie les trois polices à travers le certificat du
+proxy (`curl --cacert /root/.ccr/ca-bundle.crt`), ne garde que le sous-ensemble
+latin — le vietnamien et le cyrillique n'apparaissent nulle part ici et
+tripleraient le poids — et les embarque en base64 dans `index-typo.html`, une
+copie **de test uniquement**.
+
+`index.html`, le fichier livré, garde son `<link>` : 241 Ko de polices dans la
+page serait absurde en production. Le script vérifie d'ailleurs que le lien Google
+Fonts est toujours exactement celui attendu, et s'arrête sinon.
+
+Mesuré sur la copie : Anton 400, Faustina 500/600/700, Source Sans 3 400/600/700,
+toutes `loaded`. La marque et les titres d'affiche sont en Anton, les titres de
+carte en Faustina 700, le texte en Source Sans 3. **Je peux enfin vérifier le
+dessin des lettres et pas seulement la géométrie.**
 
 ## La pluie de fruits : quatre erreurs de physique dans une ligne (v74)
 

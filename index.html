@@ -343,6 +343,22 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   transform:none; opacity:1; color:inherit;
 }
 #s-annonce .thumb.cover.sans-image .kind{display:none}
+
+/* L'OUVERTURE D'UNE NOTE. Même règle que le fil : pas de photo, pas de bandeau
+   qui en promet une. Le dessin du thème, en grand, sur l'aplat de sa rubrique —
+   et un filet de la même couleur, comme la carte dont elle vient. */
+.ouverture-note{
+  height:176px; align-items:center; justify-content:center;
+  background:var(--t-rub-doux, var(--surface-2));
+  border-bottom:4px solid var(--t-rub, var(--line));
+}
+.ouverture-note.sans-image .motif{
+  position:static; width:88px; height:88px; right:auto; bottom:auto;
+  transform:none; opacity:.9; color:var(--t-rub, var(--ink-soft));
+}
+.ouverture-note.sans-image .kind{display:none}
+#s-article.astuce .ouverture-note{border-bottom-style:dashed}
+#s-article .kicker.k-conseil{background:var(--t-rub-doux, var(--surface-2)); color:var(--t-rub, var(--ink-soft))}
 /* La demande garde sa loupe sur la fiche comme sur la carte : même dessin, à la
    taille de la couverture. */
 #s-annonce.demande .thumb.cover{align-items:center; justify-content:center}
@@ -1015,6 +1031,29 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
    dans son jardin, et la page publique suit dans la seconde. C'est le seul chemin
    vers un calendrier juste — les listes trouvées ailleurs parlent d'îles plus
    humides, à deux cent cinquante kilomètres d'ici. */
+/* ---------- les réglages du site, dans la console ---------- */
+.reglages-site{
+  display:flex; flex-direction:column; gap:0;
+  border:1px solid var(--line); border-radius:13px; background:var(--surface);
+  padding:18px 16px 20px;
+}
+.reglages-site .field.section:first-of-type{padding-top:20px; border-top:1px solid var(--line)}
+.reglages-site .mesure input{width:96px}
+.reglages-site .euro{font-size:17px; color:var(--ink-soft)}
+/* Trois accords composés d'avance : on choisit une ambiance, pas des couleurs. */
+.ambiances{display:flex; flex-wrap:wrap; gap:10px}
+.ambiance{
+  flex:1 1 150px; min-width:140px; text-align:left; cursor:pointer;
+  border:1px solid var(--line); border-radius:12px; background:var(--surface-2);
+  padding:10px 11px 12px; display:flex; flex-direction:column; gap:3px;
+}
+.ambiance:hover{border-color:var(--leaf)}
+.ambiance[aria-pressed="true"]{border-color:var(--btn-bg); box-shadow:0 0 0 2px var(--btn-bg) inset}
+.ambiance-bandes{display:flex; height:26px; border-radius:7px; overflow:hidden; margin-bottom:5px}
+.ambiance-bandes i{flex:1}
+.ambiance-nom{font-family:var(--serif); font-weight:700; font-size:17px}
+.ambiance-sous{font-size:13.5px; color:var(--ink-soft)}
+
 .saison-ligne{align-items:flex-start}
 .mois-cases{display:flex; flex-wrap:wrap; gap:4px}
 .case-mois{
@@ -1659,7 +1698,7 @@ button{cursor:pointer}
         <circle cx="112" cy="74" r="70" class="cachet-ring"/>
         <g transform="translate(12,10) scale(1.0)"><path class="cachet-terre" d="M3.6 3.6L4.1 5.0L10.7 5.8L13.8 9.4L13.5 12.7L10.5 17.9L0.0 18.7L0.6 21.2L3.3 20.6L8.5 22.8L10.2 32.2L17.9 35.8L18.2 38.5L20.6 39.1L21.5 41.5L31.4 51.4L40.7 50.3L42.9 52.5L42.9 55.6L50.1 60.5L51.2 63.0L48.7 65.7L54.5 72.1L59.7 80.9L56.7 83.1L53.4 78.4L53.9 76.5L49.5 74.3L46.8 77.0L48.7 82.0L55.6 88.6L58.9 88.0L62.4 90.5L61.6 93.8L68.0 102.9L72.9 105.9L75.4 111.7L79.8 115.5L80.1 121.0L85.0 124.1L88.3 124.1L93.8 109.5L100.1 107.6L108.9 119.7L110.6 116.9L110.9 112.0L112.5 110.9L114.4 113.1L117.2 113.3L118.3 104.3L126.8 100.1L130.7 100.7L132.9 105.9L137.0 104.5L138.1 110.6L142.8 115.3L148.8 112.5L150.8 108.9L150.8 94.4L153.5 91.1L171.7 83.4L175.5 79.0L182.9 76.5L188.2 80.6L189.0 84.2L192.3 84.7L193.9 82.5L192.3 68.5L197.0 64.6L199.2 59.1L197.8 55.3L200.0 47.6L198.3 44.3L192.3 51.7L187.9 53.1L187.6 57.2L183.5 57.5L180.5 54.5L183.2 48.7L181.0 41.5L176.6 42.1L176.1 47.0L171.9 50.3L168.4 49.2L165.3 45.7L166.4 39.3L169.2 38.5L168.1 36.9L163.1 39.6L161.8 38.8L158.7 41.5L157.4 45.9L153.2 45.7L151.0 42.4L157.4 34.9L154.6 32.2L154.6 27.2L153.0 30.8L150.5 30.8L148.0 33.3L144.2 33.0L143.9 30.8L141.1 29.4L141.1 24.5L139.5 23.1L133.1 28.6L133.7 37.1L126.8 45.4L124.6 51.2L119.1 54.2L112.2 54.2L108.7 51.4L110.0 47.9L106.7 47.3L95.5 55.8L94.9 57.5L97.1 60.2L95.5 62.7L91.9 64.4L89.7 62.7L85.6 63.5L81.2 60.8L77.6 56.1L77.3 53.6L80.6 50.6L79.2 45.4L76.8 44.8L73.5 46.5L69.1 40.7L68.5 36.0L71.0 34.7L70.2 29.7L68.2 28.6L63.5 30.3L60.8 29.4L58.9 27.5L58.0 20.1L55.3 16.2L47.0 18.7L45.1 22.6L39.1 23.9L32.7 22.6L29.2 17.1L28.6 20.4L24.5 22.3L20.6 17.9L19.5 11.8L14.9 9.6L17.3 5.5L14.6 1.1L15.1 0.0L7.4 0.8Z"/></g>
       </svg>
-      Lakou
+      <span id="site-nom">Lakou</span>
     </span>
     <svg class="fruit-mois" id="fruit-mois" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#i-mangue"/></svg>
     <nav class="topnav" aria-label="Sections">
@@ -1681,8 +1720,8 @@ button{cursor:pointer}
     <section class="hero">
       <div class="hero-txt">
         <span class="eyebrow">Saint-Barthélemy</span>
-        <h1>Ce qui pousse ici se partage.</h1>
-        <p class="lede">L'arbre a donné d'un coup, le voisin cherche des boutures. Déposez ce que vous avez en trop, prenez ce dont vous avez besoin. La plupart du temps, ça ne coûte rien.</p>
+        <h1 id="site-accroche">Ce qui pousse ici se partage.</h1>
+        <p class="lede" id="site-lede">L'arbre a donné d'un coup, le voisin cherche des boutures. Déposez ce que vous avez en trop, prenez ce dont vous avez besoin. La plupart du temps, ça ne coûte rien.</p>
         <div class="hero-acts">
           <button class="btn btn-primary" data-go="echanges">Faire le tour des jardins</button>
           <button class="btn btn-ghost" data-go="publier">Mon jardin déborde</button>
@@ -2164,7 +2203,7 @@ button{cursor:pointer}
       <input id="p-combien" type="text" hidden aria-hidden="true" tabindex="-1">
     </div>
 
-    <div class="field section">
+    <div class="field section" id="p-don-bloc">
       <span class="titre-section">À donner, ou avec une participation&nbsp;?</span>
       <div class="don-vente">
         <div class="seg bascule" id="p-don">
@@ -2232,7 +2271,7 @@ button{cursor:pointer}
       <button class="chip" aria-pressed="false">Ravageurs</button>
     </div>
     <div class="feed">
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="Sur cette villa de Saint-Jean, quatre splits tournent toute la journée. L'eau qui goutte le long du mur, c'est entre dix et vingt litres par unité.|Je rallonge le tuyau jusqu'à un bidon. Fermé — sinon vous élevez des moustiques. Un bout de moustiquaire tendu sur l'ouverture, un élastique, terminé.|Deux précautions : ça ne se conserve pas, on vide tous les deux jours. Et c'est de l'eau distillée, sans aucun minéral. Pour les massifs et les pots, parfait. Pour un potager qu'on mange en salade, je coupe à moitié avec de l'eau de pluie.">
         <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
         <span class="body">
           <span class="kicker k-conseil">Arrosage</span>
@@ -2241,7 +2280,7 @@ button{cursor:pointer}
           <span class="byline">Le jardinier · 8 septembre</span>
         </span>
       </button>
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="Un sol nu au soleil de midi rend son eau en quelques heures. Sous cinq centimètres de paillage, il la garde jusqu'au lendemain.|Feuilles de cocotier sèches, tontes de gazon, carton brun sans encre : ce qu'on a sous la main suffit. On étale sans tasser, on laisse respirer le pied.|On n'arrose pas par-dessus le paillage : on écarte, on arrose au pied, on remet.">
         <span class="thumb t-terre"><span class="kind">Photo prise sur un chantier</span></span>
         <span class="body">
           <span class="kicker k-conseil">Arrosage</span>
@@ -2250,7 +2289,7 @@ button{cursor:pointer}
           <span class="byline">Le jardinier · 2 septembre</span>
         </span>
       </button>
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="Une cuillère à soupe de savon noir liquide dans un litre d'eau tiède. On pulvérise le soir, sous les feuilles, là où elles se tiennent.|Trois passages à cinq jours d'intervalle : le premier tue ce qui est là, les deux autres ce qui éclot après.|Jamais en plein soleil, la feuille brûle. Et on rince les fruits avant de les manger.">
         <span class="thumb t-agrume"><span class="kind">Photo prise sur un chantier</span></span>
         <span class="body">
           <span class="kicker k-conseil">Ravageurs</span>
@@ -2259,7 +2298,7 @@ button{cursor:pointer}
           <span class="byline">Le jardinier · 26 août</span>
         </span>
       </button>
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="On sort la motte entière, on la pose à plat, et on sépare à la main en suivant les tiges. Trois ou quatre éclats par pied bien fourni.|Chaque éclat doit garder des racines. Ceux qui n'en ont pas finissent dans un verre d'eau une semaine, ça repart tout seul.|Le matin, jamais en plein soleil. On arrose bien le soir même, et on ne touche plus pendant trois jours.">
         <span class="thumb t-vert"><span class="kind">Photo prise sur un chantier</span></span>
         <span class="body">
           <span class="kicker k-conseil">Boutures</span>
@@ -2269,7 +2308,7 @@ button{cursor:pointer}
         </span>
       </button>
 
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="On rince, on laisse sécher deux jours, on écrase grossièrement — pas en poudre, il faut que ça coupe.|On fait un anneau large de deux doigts autour du pied. La limace n'aime pas traverser.|À refaire après une grosse pluie : ça s'enfonce et ça ne sert plus à rien.">
         <span class="body">
           <span class="kicker k-astuce">Astuce · Sol et compost</span>
           <h3>Les coquilles d'œuf écrasées autour des jeunes plants</h3>
@@ -2278,7 +2317,7 @@ button{cursor:pointer}
         </span>
       </button>
 
-      <button class="card" data-go="article">
+      <button class="card" data-go="article" data-corps="Une bouteille de cinq litres, une dizaine de trous d'aiguille dans le fond et le bas des flancs, enterrée aux trois quarts à cinquante centimètres du tronc.|On remplit une fois par semaine. L'eau descend lentement aux racines profondes au lieu de s'évaporer en surface.|On garde le bouchon vissé sans serrer : sinon ça fait le vide et ça ne coule plus.">
         <span class="thumb t-terre"><span class="kind">Photo d'un membre</span></span>
         <span class="body">
           <span class="kicker k-astuce">Astuce · Arrosage</span>
@@ -2298,17 +2337,15 @@ button{cursor:pointer}
 
   <!-- 7 ARTICLE -->
   <section class="screen pad0" id="s-article" hidden>
-    <div class="thumb cover t-vert"><span class="kind">Photo prise sur un chantier</span></div>
+    <div class="thumb cover ouverture-note" id="art-tete"><span class="kind" hidden></span></div>
     <div style="padding:0 16px; display:flex; flex-direction:column; gap:18px">
       <div class="page-h">
-        <span class="kicker k-conseil" style="align-self:flex-start">Arrosage</span>
-        <h1>L'eau de la clim, c'est un arrosoir toutes les deux heures</h1>
-        <span class="sub">Le jardinier · 8 septembre</span>
+        <span class="kicker k-conseil" id="art-rubrique" style="align-self:flex-start">Arrosage</span>
+        <h1 id="art-titre">L'eau de la clim, c'est un arrosoir toutes les deux heures</h1>
+        <span class="sub" id="art-signe">Le jardinier · 8 septembre</span>
       </div>
-      <div class="prose">
+      <div class="prose" id="art-corps">
         <p>Sur cette villa de Saint-Jean, quatre splits tournent toute la journée. L'eau qui goutte le long du mur, c'est entre dix et vingt litres par unité.</p>
-        <p>Je rallonge le tuyau jusqu'à un bidon. <strong>Fermé</strong> — sinon vous élevez des moustiques. Un bout de moustiquaire tendu sur l'ouverture, un élastique, terminé.</p>
-        <p>Deux précautions : ça ne se conserve pas, on vide tous les deux jours. Et c'est de l'eau distillée, sans aucun minéral. Pour les massifs et les pots, parfait. Pour un potager qu'on mange en salade, je coupe à moitié avec de l'eau de pluie.</p>
       </div>
       <button class="btn btn-ghost partage" style="align-self:flex-start" data-titre="L'eau de la clim, c'est un arrosoir toutes les deux heures — une note du jardin">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
@@ -2513,26 +2550,56 @@ button{cursor:pointer}
     </div>
 
     <div class="apanel" data-panel="site" hidden>
-      <div class="stack">
+      <div class="callout">
+        <h3>Ce que vous pouvez changer vous-même</h3>
+        <p>Les mots du site, les chiffres qui le règlent, et l'ambiance. Tout s'applique
+           immédiatement — descendez voir l'accueil pour juger.</p>
+      </div>
+
+      <div class="reglages-site">
+        <div class="field">
+          <label class="titre-section" for="cfg-nom">Le nom du site</label>
+          <input id="cfg-nom" type="text" maxlength="24" value="Lakou">
+          <span class="hint">Il paraît en haut de chaque écran et sur les images partagées.</span>
+        </div>
+
+        <div class="field section">
+          <label class="titre-section" for="cfg-accroche">La phrase d'accueil</label>
+          <input id="cfg-accroche" type="text" maxlength="64" value="Ce qui pousse ici se partage.">
+          <span class="hint">La première chose qu'on lit. Courte, elle porte mieux.</span>
+        </div>
+
+        <div class="field">
+          <label for="cfg-lede">Les deux lignes en dessous</label>
+          <textarea id="cfg-lede" maxlength="260">L'arbre a donné d'un coup, le voisin cherche des boutures. Déposez ce que vous avez en trop, prenez ce dont vous avez besoin. La plupart du temps, ça ne coûte rien.</textarea>
+        </div>
+
+        <div class="field section">
+          <label class="titre-section" for="cfg-plafond">La participation maximale</label>
+          <div class="mesure">
+            <input id="cfg-plafond" type="number" min="0" max="200" step="1" value="20">
+            <span class="euro">€</span>
+          </div>
+          <span class="hint" id="cfg-plafond-hint">Au-delà, ce n'est plus une participation, c'est une vente. Zéro interdit complètement de demander de l'argent.</span>
+        </div>
+
+        <div class="field section">
+          <span class="titre-section">L'ambiance</span>
+          <span class="hint">Trois accords composés d'avance. Il n'y a pas de choix libre des couleurs, et c'est volontaire : une palette se règle à trois valeurs près, et le site y perd plus qu'il n'y gagne.</span>
+          <div class="ambiances" id="cfg-ambiances" role="group" aria-label="Ambiance du site"></div>
+        </div>
+      </div>
+
+      <div class="stack" style="margin-top:18px">
+        <div class="row">
+          <span class="main"><span class="t">Les quartiers</span>
+          <span class="s">Seize quartiers, dessinés un par un sur la carte de l'île — on peut les renommer, pas en ajouter.</span></span>
+          <span class="acts"><button class="mini" id="cfg-quartiers">Renommer</button></span>
+        </div>
         <div class="row">
           <span class="main"><span class="t">Page « À propos »</span>
           <span class="s">Qui anime le site, les règles, et ce que le site ne fait pas</span></span>
           <span class="acts"><button class="mini">Modifier le texte</button></span>
-        </div>
-        <div class="row">
-          <span class="main"><span class="t">Les quartiers</span>
-          <span class="s">16 quartiers proposés à la publication</span></span>
-          <span class="acts"><button class="mini">Ajouter</button><button class="mini">Réordonner</button></span>
-        </div>
-        <div class="row">
-          <span class="main"><span class="t">Les catégories</span>
-          <span class="s">Fruits pays · Légumes pays · Plants et boutures · Aromates pays · Graines</span></span>
-          <span class="acts"><button class="mini">Ajouter</button><button class="mini">Renommer</button></span>
-        </div>
-        <div class="row">
-          <span class="main"><span class="t">Les thèmes des notes</span>
-          <span class="s">Arrosage · Sol et compost · Boutures · Ravageurs</span></span>
-          <span class="acts"><button class="mini">Ajouter</button></span>
         </div>
       </div>
     </div>
@@ -3007,6 +3074,10 @@ button{cursor:pointer}
       if(cible === 'annonce' && el.classList.contains('card') && window.__ouvrirAnnonce){
         window.__ouvrirAnnonce(el);
       }
+      // Même règle pour les notes : toutes ouvraient « l'eau de la clim ».
+      if(cible === 'article' && el.classList.contains('card') && window.__ouvrirNote){
+        window.__ouvrirNote(el);
+      }
       allerA(cible); return;
     }
     var chip = e.target.closest ? e.target.closest('.chip, .atab') : null;
@@ -3307,6 +3378,111 @@ button{cursor:pointer}
     rendreSaison();
     dire(f.nom + ' : ' + (k === -1 ? 'ajouté en ' : 'retiré de ') + MOIS_NOMS[m-1].toLowerCase() + '.');
   });
+
+  // ================== CE QUE LE JARDINIER PEUT CHANGER ==================
+  // Les MOTS, les CHIFFRES et l'AMBIANCE. Pas les couleurs une par une.
+  //
+  // Un sélecteur de couleur libre dans une console, c'est une arme chargée pointée
+  // sur la seule chose qui fait tenir ce site : son allure. Une palette se règle à
+  // trois valeurs près — la teinte du papier, le contraste de l'encre, la
+  // saturation de l'accent — et celui qui la déplace sans mesurer le contraste
+  // casse la lisibilité avant d'avoir fini de choisir. On propose donc trois
+  // accords composés et vérifiés, et on assume de dire non au reste.
+  var AMBIANCES = [
+    {cle:'sable', nom:'Sable', sous:'L\u2019accord d\u2019origine',
+     coul:['#D2E0C3','#F6EDDE','#1F5D3C','#B23A16'], vars:{}},
+    {cle:'lagon', nom:'Lagon', sous:'Plus frais, plus clair',
+     coul:['#CBDDDA','#F2F6F3','#14614F','#C4571E'],
+     vars:{'--ground':'#CBDDDA','--page':'#F2F6F3','--surface':'#FFFFFF','--surface-2':'#DDE9E4',
+           '--line':'#BFD2CC','--leaf':'#14614F','--leaf-soft':'#D7E8E1','--btn-bg':'#14614F',
+           '--btn-hover':'#0D463A','--surf-hover':'#E7F0EC','--flam':'#C4571E','--flam-soft':'#F7DECD',
+           '--voile':'rgba(203,221,218,.62)'}},
+    {cle:'terre', nom:'Terre cuite', sous:'Plus chaud, plus dense',
+     coul:['#C8B49A','#F4E7D7','#7A4A1E','#A8341B'],
+     vars:{'--ground':'#C8B49A','--page':'#F4E7D7','--surface':'#FFFAF2','--surface-2':'#EAD6BE',
+           '--line':'#CDB294','--leaf':'#7A4A1E','--leaf-soft':'#EFE0CC','--btn-bg':'#7A4A1E',
+           '--btn-hover':'#5B3413','--surf-hover':'#F0E1CE','--flam':'#A8341B','--flam-soft':'#F5D9CD',
+           '--voile':'rgba(200,180,154,.62)'}}
+  ];
+  var ambianceCourante = 'sable';
+  function poserAmbiance(cle){
+    var a = null;
+    AMBIANCES.forEach(function(x){ if(x.cle === cle){ a = x; } });
+    if(!a) return;
+    var r = document.documentElement;
+    // On remet à zéro ce que la précédente avait posé, sinon deux ambiances se
+    // mélangent et donnent une troisième que personne n'a dessinée.
+    AMBIANCES.forEach(function(x){
+      Object.keys(x.vars).forEach(function(k){ r.style.removeProperty(k); });
+    });
+    Object.keys(a.vars).forEach(function(k){ r.style.setProperty(k, a.vars[k]); });
+    ambianceCourante = cle;
+    Array.prototype.forEach.call(document.querySelectorAll('#cfg-ambiances .ambiance'), function(btn){
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-cle') === cle ? 'true' : 'false');
+    });
+  }
+  function rendreAmbiances(){
+    var z = document.getElementById('cfg-ambiances');
+    if(!z) return;
+    z.innerHTML = AMBIANCES.map(function(a){
+      return '<button class="ambiance" data-cle="' + a.cle + '" type="button"'
+        + ' aria-pressed="' + (a.cle === ambianceCourante) + '">'
+        + '<span class="ambiance-bandes">' + a.coul.map(function(c){
+            return '<i style="background:' + c + '"></i>';
+          }).join('') + '</span>'
+        + '<span class="ambiance-nom">' + a.nom + '</span>'
+        + '<span class="ambiance-sous">' + a.sous + '</span></button>';
+    }).join('');
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('#cfg-ambiances .ambiance') : null;
+    if(!b) return;
+    poserAmbiance(b.getAttribute('data-cle'));
+    dire('Ambiance « ' + b.querySelector('.ambiance-nom').textContent + ' ».');
+  });
+
+  // Les mots : ils s'appliquent à la frappe, sans bouton « enregistrer ». Le
+  // jardinier voit ce qu'il écrit là où ça paraît.
+  function brancherMot(idChamp, idCible, defaut){
+    var c = document.getElementById(idChamp), t = document.getElementById(idCible);
+    if(!c || !t) return;
+    c.addEventListener('input', function(){
+      t.textContent = c.value.trim() || defaut;
+    });
+  }
+  brancherMot('cfg-nom', 'site-nom', 'Lakou');
+  brancherMot('cfg-accroche', 'site-accroche', 'Ce qui pousse ici se partage.');
+  brancherMot('cfg-lede', 'site-lede',
+    'L\u2019arbre a donné d\u2019un coup, le voisin cherche des boutures.');
+
+  // Le plafond : un chiffre qui commande le formulaire ET les phrases qui
+  // l'expliquent. Zéro ferme la porte à l'argent, ce qui est un vrai choix pour
+  // un site dont la promesse est que ça se partage.
+  var cfgPlafond = document.getElementById('cfg-plafond');
+  if(cfgPlafond){
+    cfgPlafond.addEventListener('input', function(){
+      var v = parseInt(cfgPlafond.value, 10);
+      if(!isFinite(v) || v < 0){ return; }
+      PARTICIPATION_MAX = v;
+      var h = document.getElementById('cfg-plafond-hint');
+      if(h){
+        h.textContent = v === 0
+          ? 'À zéro, la participation disparaît du formulaire : tout se donne, sans exception.'
+          : 'Au-delà de ' + v + ' €, ce n\u2019est plus une participation, c\u2019est une vente. Zéro interdit complètement de demander de l\u2019argent.';
+      }
+      if(typeof majDon === 'function'){ majDon(); }
+      // À zéro, la question ne se pose plus : on retire la section entière du
+      // formulaire plutôt que de laisser un choix qui n'en est pas un.
+      var bloc = document.getElementById('p-don-bloc');
+      if(bloc){ bloc.hidden = (v === 0); }
+      if(v === 0){
+        var aDonner = document.querySelector('#p-don .chip');
+        if(aDonner && aDonner.getAttribute('aria-pressed') !== 'true'){ aDonner.click(); }
+      }
+      var maxi = document.getElementById('p-prix');
+      if(maxi){ maxi.max = v; }
+    });
+  }
 
   var STOCK = {'Mangue':1,'Citron vert':1,'Fruit à pain':1};
   var suivis = [];
@@ -5294,6 +5470,64 @@ button{cursor:pointer}
     return '0690 ' + s6.slice(0, 2) + ' ' + s6.slice(2, 4) + ' ' + s6.slice(4, 6);
   }
 
+  // ========= L'OUVERTURE D'UNE NOTE =========
+  // Un écran unique figé sur un exemple : le même défaut que les annonces, trouvé
+  // trois fois déjà. La note se remplit désormais depuis la carte cliquée, et son
+  // ouverture suit la même règle que le fil : pas de photo, pas de bandeau qui en
+  // promet une — le dessin du thème sur l'aplat de sa rubrique.
+  window.__ouvrirNote = function(carte){
+    var k = carte.querySelector('.kicker.k-conseil, .kicker.k-astuce');
+    var rubComplete = k ? k.textContent.trim() : '';
+    var astuce = /^astuce/i.test(rubComplete);
+    var rub = rubComplete.replace(/^astuce\s*·\s*/i, '').trim();
+    var th = THEMES[rub.toLowerCase()];
+
+    var p = function(id, v){ var n = document.getElementById(id); if(n){ n.textContent = v; } };
+    p('art-titre', texteDe(carte, 'h3'));
+    p('art-rubrique', rubComplete || 'Le jardin');
+    // La signature de la carte est composée de deux morceaux (le cachet du
+    // jardinier ou la pastille du membre, puis la date) : les concaténer sans
+    // séparateur donnait « Le jardinier26 août ».
+    var by = carte.querySelector('.byline');
+    var bouts = by ? Array.prototype.map.call(by.children, function(x){ return x.textContent.trim(); })
+                       .filter(function(x){ return x.length > 1; })   // pas la pastille à l'initiale
+                   : [];
+    p('art-signe', bouts.length ? bouts.join(' \u00b7 ') : (by ? by.textContent.trim() : ''));
+
+    var kk = document.getElementById('art-rubrique');
+    if(kk){ kk.className = 'kicker ' + (astuce ? 'k-astuce' : 'k-conseil'); }
+
+    var ecr = document.getElementById('s-article');
+    Object.keys(THEMES).forEach(function(r){ ecr.classList.remove(THEMES[r].classe); });
+    if(th){ ecr.classList.add(th.classe); }
+    ecr.classList.toggle('astuce', astuce);
+
+    var tete = document.getElementById('art-tete');
+    var vign = carte.querySelector('.thumb');
+    var img = vign && vign.style.backgroundImage && vign.style.backgroundImage !== 'none'
+      ? vign.style.backgroundImage : '';
+    var marque = tete.querySelector('.motif');
+    if(img){
+      tete.style.backgroundImage = img;
+      tete.style.backgroundSize = 'cover';
+      tete.style.backgroundPosition = vign.style.backgroundPosition || 'center';
+      tete.classList.remove('sans-image');
+      if(marque){ marque.remove(); }
+    } else {
+      tete.style.backgroundImage = '';
+      tete.classList.add('sans-image');
+      marqueDans(tete, th ? th.marque : 'f-feuille', true);
+    }
+
+    var corps = document.getElementById('art-corps');
+    var txt = carte.getAttribute('data-corps') || texteDe(carte, '.excerpt');
+    if(corps){
+      corps.innerHTML = txt.split('|').map(function(par){
+        return '<p>' + par.trim() + '</p>';
+      }).join('');
+    }
+  };
+
   window.__ouvrirAnnonce = function(carte){
     var demande = carte.classList.contains('demande');
     var titre = texteDe(carte, 'h3');
@@ -5551,6 +5785,7 @@ button{cursor:pointer}
     if(new URLSearchParams(location.search).has('presentation')){ presentation(true, true); }
   } catch(_){}
 
+  rendreAmbiances();
   rendreSaison();
   rendreConsoleSaison();
   rendreAccueilMesi();

@@ -1468,3 +1468,54 @@ navigateur piloté, même avec une fenêtre courte de téléphone et une photo q
 arrive en retard (`haut3.mjs`, trois tours). J'ai corrigé la faute que j'ai pu
 mesurer — le fil qui perd sa place — et les deux causes plausibles du symptôme
 décrit. À revérifier sur le vrai téléphone.
+
+## La dernière tromperie, et ce que le jardinier peut changer (v71)
+
+### L'écran d'une note mentait encore, et les six ouvraient la même
+
+Le fil des notes avait été refait ; l'écran qui s'ouvre quand on en lit une,
+non. Il gardait 330 px de dégradé vert légendés « photo prise sur un chantier »
+alors qu'aucune photo n'existe. C'était le dernier endroit de l'application qui
+promettait une image qu'il n'a pas.
+
+Pire : **les six notes ouvraient toutes le même article** — « l'eau de la clim ».
+Le même défaut que les annonces, trouvé trois fois déjà : un écran unique figé sur
+un exemple. Chaque carte porte maintenant son texte, et l'écran se remplit depuis
+la carte cliquée : titre, rubrique, signature, corps, et une ouverture qui suit la
+règle du fil — le dessin du thème sur l'aplat de sa rubrique, avec le filet de la
+même couleur, en pointillé si c'est l'astuce d'un membre.
+
+Au passage : la signature était composée de deux morceaux (le cachet ou la
+pastille, puis la date) et les concaténer donnait « Le jardinier26 août ».
+
+### La personnalisation : oui aux mots et aux chiffres, non aux couleurs
+
+Le panneau « Le site » de la console était décoratif — des lignes avec des boutons
+qui ne modifiaient rien. Il fait maintenant quelque chose :
+
+- **Le nom du site**, qui paraît en haut de chaque écran.
+- **La phrase d'accueil et les deux lignes en dessous.**
+- **La participation maximale**, qui commande le formulaire ET les phrases qui
+  l'expliquent. **À zéro, la section entière disparaît du formulaire** : tout se
+  donne, sans exception. C'est un vrai choix pour un site dont la promesse est que
+  ça se partage, et il tenait en un chiffre.
+
+Tout s'applique à la frappe, sans bouton « enregistrer » : le jardinier voit ce
+qu'il écrit là où ça paraît.
+
+**Et un refus, assumé : pas de sélecteur de couleur libre.** Un sélecteur de
+couleur dans une console, c'est une arme chargée pointée sur la seule chose qui
+fait tenir ce site — son allure. Une palette se règle à trois valeurs près (la
+teinte du papier, le contraste de l'encre, la saturation de l'accent), et celui qui
+la déplace sans mesurer le contraste casse la lisibilité avant d'avoir fini de
+choisir.
+
+À la place, **trois accords composés et vérifiés** : Sable (l'origine), Lagon (plus
+frais), Terre cuite (plus chaud). `contrastes.mjs` mesure cinq rapports dans chacun
+— texte, titre, bouton principal, étiquette, créneau — et les trois passent le seuil
+AA (pire cas 4,66). Une ambiance qu'on propose doit tenir le contraste, sinon c'est
+un piège tendu au client.
+
+**Les quartiers ne sont pas librement modifiables**, et la console le dit : les
+seize sont dessinés un par un sur la carte de l'île. On peut les renommer, pas en
+ajouter. Mieux vaut l'écrire que laisser découvrir la limite.

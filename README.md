@@ -1439,3 +1439,32 @@ La couverture nettoie maintenant ce qu'elle portait avant de porter autre chose,
 et une demande reçoit la loupe, le même tracé que sur sa carte, à la taille d'une
 couverture. `demande.mjs` alterne offre et demande sept fois de suite pour piéger
 la marque résiduelle.
+
+### Où l'on atterrit en changeant d'écran (v70)
+
+Trois fautes qui se combinaient.
+
+**1. La position était enregistrée trop tard.** `show()` enregistrait la position
+de l'écran qu'on quittait — mais `show()` s'exécute APRÈS le changement de hash,
+et changer le hash sans cible correspondante fait remonter le navigateur en haut
+du document. On enregistrait donc zéro à chaque fois. Mesuré : le fil revenait à 0
+au lieu de la position où on l'avait laissé. La position se retient maintenant
+AVANT de toucher au hash.
+
+**2. Les écrans de détail restauraient une position.** Une annonce, une note, un
+formulaire, c'est du contenu neuf : **ça s'ouvre en haut, toujours**. Seuls les
+quatre écrans de base — accueil, échanges, le jardin, la saison — retrouvent leur
+place, parce qu'on y revient au lieu de les découvrir.
+
+**3. Le navigateur faisait sa propre restauration** par entrée d'historique
+(`history.scrollRestoration` vaut « auto » par défaut). Sur un téléphone, la
+couverture d'une fiche arrive après coup, la page grandit, et le navigateur
+réapplique son ancien offset : on se retrouve en bas d'un écran qu'on vient
+d'ouvrir. La page lui retire la main (`manual`) et redit sa cible à la frame
+suivante.
+
+Honnêtement : **je n'ai pas réussi à reproduire l'atterrissage en bas** dans un
+navigateur piloté, même avec une fenêtre courte de téléphone et une photo qui
+arrive en retard (`haut3.mjs`, trois tours). J'ai corrigé la faute que j'ai pu
+mesurer — le fil qui perd sa place — et les deux causes plausibles du symptôme
+décrit. À revérifier sur le vrai téléphone.

@@ -2914,9 +2914,28 @@ button{cursor:pointer}
   var RACINES = ['accueil','echanges','conseils','saison'];
   var btnRetour = document.getElementById('btn-retour');
 
+  // ========= OÙ L'ON ATTERRIT EN CHANGEANT D'ÉCRAN =========
+  // Trois fautes qui se combinaient.
+  //
+  // 1. La position était enregistrée DANS show(), c'est-à-dire APRÈS que le hash a
+  //    changé. Or changer le hash sans cible correspondante fait remonter le
+  //    navigateur en haut du document : on enregistrait donc 0 à chaque fois, et
+  //    le fil perdait sa place au retour. Mesuré : retour au fil à 0 au lieu de
+  //    sa position réelle.
+  // 2. Les écrans de détail restauraient eux aussi une position. Une annonce, une
+  //    note, c'est du contenu NEUF : ça s'ouvre en haut, toujours.
+  // 3. Le navigateur fait sa propre restauration par entrée d'historique. Sur un
+  //    téléphone, la couverture d'une fiche arrive après coup, la page grandit, et
+  //    le navigateur réapplique son offset : on se retrouve en bas d'un écran
+  //    qu'on vient d'ouvrir. On lui retire la main.
+  try { if('scrollRestoration' in history){ history.scrollRestoration = 'manual'; } } catch(_){}
+
+  function retenirDefilement(){
+    if(ecranCourant){ defilements[ecranCourant] = window.scrollY || 0; }
+  }
+
   function show(name){
     if(ids.indexOf(name) === -1){ name = 'accueil'; }
-    if(ecranCourant){ defilements[ecranCourant] = window.scrollY || 0; }
     ecranCourant = name;
     ids.forEach(function(id){
       var el = document.getElementById('s-' + id);
@@ -2939,13 +2958,24 @@ button{cursor:pointer}
         btnRetour.setAttribute('aria-label', 'Revenir à ' + (NOMS[parent] || 'Accueil'));
       }
     }
-    window.scrollTo({top: defilements[name] || 0, behavior:'auto'});
+    // Seuls les quatre écrans de base retrouvent leur place : on y revient, on ne
+    // les découvre pas. Une annonce, une note, un formulaire s'ouvrent en haut.
+    var cible = (RACINES.indexOf(name) !== -1) ? (defilements[name] || 0) : 0;
+    window.scrollTo({top: cible, behavior:'auto'});
+    // Et on le redit à la frame suivante : sur un téléphone, une image qui arrive
+    // agrandit la page et peut rendre la main à un ancien défilement.
+    requestAnimationFrame(function(){
+      if(ecranCourant === name){ window.scrollTo({top: cible, behavior:'auto'}); }
+    });
     surEcran(name);
   }
 
   // --- le bouton « retour » du téléphone revient à l'écran précédent
   function allerA(nom){
     if(ids.indexOf(nom) === -1){ nom = 'accueil'; }
+    // AVANT de toucher au hash : sinon on enregistre la position du navigateur
+    // déjà remonté en haut, et le fil perd sa place au retour.
+    retenirDefilement();
     if((location.hash || '').slice(1) === nom){ show(nom); return; }
     try { location.hash = nom; } catch(e){ show(nom); }
   }

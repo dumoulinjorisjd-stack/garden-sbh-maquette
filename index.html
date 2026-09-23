@@ -640,6 +640,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   position:absolute; left:0; top:0; width:var(--t); height:var(--t);
   margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);
   will-change:transform, opacity;
+  filter:url(#gouache) drop-shadow(0 2px 3px rgba(60,40,20,.22));
 }
 .pluie.sortie svg{transition:opacity .55s ease; opacity:0}
 
@@ -1448,6 +1449,17 @@ button{cursor:pointer}
 
 
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <!-- UNE PASSE « GOUACHE » POUR LES FRUITS QUI TOMBENT. Les dessins du site sont
+       en aplats francs : c'est ce qu'il faut sur une carte de 116 px, où une
+       texture ne serait que du bruit. Mais pendant la pluie, le fruit est le
+       sujet et l'aplat fait plat. Une turbulence déplace légèrement les bords et
+       un léger flou casse la netteté vectorielle : le même dessin, peint.
+       Un seul filtre pour les dix-sept fruits, appliqué nulle part ailleurs. -->
+  <filter id="gouache" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.038" numOctaves="2" seed="7" result="grain"/>
+    <feDisplacementMap in="SourceGraphic" in2="grain" scale="4.5" xChannelSelector="R" yChannelSelector="G" result="peint"/>
+    <feGaussianBlur in="peint" stdDeviation="0.35"/>
+  </filter>
 
   <symbol id="v-cactus" viewBox="0 0 100 100">
     <rect x="45" y="84" width="10" height="16" rx="2"/>
@@ -4138,6 +4150,44 @@ button{cursor:pointer}
   var FRUITS = ['#i-mangue','#i-citron','#i-avocat','#i-piment','#i-cerise','#i-papaye',
                 '#i-quenette','#i-corossol','#i-tomate','#i-coco'];
 
+  // LES VISAGES. Le client a montré une planche de fruits à frimousses et voulait
+  // ce registre. Mon avis est dans le README : un visage sur un fruit fait « appli
+  // pour enfants », et ce site parle à des adultes qui donnent des mangues — la
+  // typographie, la carte et le ton des mentions légales disent tous autre chose.
+  // Le code est là, à un mot près, pour qu'on puisse trancher sur pièce plutôt
+  // qu'en discutant : les visages n'apparaissent QUE dans la pluie, jamais sur une
+  // carte ni sur une fiche. Un moment de fête a le droit d'être plus léger que le
+  // reste ; un catalogue, non.
+  var VISAGES = false;
+  // Les fruits en grappe (quenettes, cerises) n'ont pas de corps unique : un
+  // visage posé au centre tomberait entre deux boules.
+  var SANS_VISAGE = {'#i-quenette':1, '#i-cerise':1, '#i-tomate':1, '#i-basilic':1, '#i-citronnelle':1};
+  function poserVisage(sv, href){
+    if(!VISAGES || SANS_VISAGE[href]) return;
+    var ns2 = 'http://www.w3.org/2000/svg';
+    var g2 = document.createElementNS(ns2,'g');
+    g2.setAttribute('fill','#2A1D12');
+    [[40,56],[60,56]].forEach(function(p){
+      var o = document.createElementNS(ns2,'ellipse');
+      o.setAttribute('cx',p[0]); o.setAttribute('cy',p[1]);
+      o.setAttribute('rx','3.6'); o.setAttribute('ry','4.4');
+      g2.appendChild(o);
+    });
+    var bouche = document.createElementNS(ns2,'path');
+    bouche.setAttribute('d','M43 66q7 6 14 0');
+    bouche.setAttribute('fill','none'); bouche.setAttribute('stroke','#2A1D12');
+    bouche.setAttribute('stroke-width','3'); bouche.setAttribute('stroke-linecap','round');
+    g2.appendChild(bouche);
+    [[33,64],[67,64]].forEach(function(p){
+      var j = document.createElementNS(ns2,'ellipse');
+      j.setAttribute('cx',p[0]); j.setAttribute('cy',p[1]);
+      j.setAttribute('rx','5'); j.setAttribute('ry','3');
+      j.setAttribute('fill','#E8705A'); j.setAttribute('opacity','.4');
+      g2.appendChild(j);
+    });
+    sv.appendChild(g2);
+  }
+
   function pluieDeFruits(){
     if(doux) return;
     if(document.querySelector('.pluie')) return;   // pas deux averses à la fois
@@ -4167,9 +4217,11 @@ button{cursor:pointer}
       var taille = 20 + prof * 34;
       sv.style.setProperty('--t', taille.toFixed(0) + 'px');
       sv.style.opacity = (0.55 + prof * 0.45).toFixed(2);
+      var choix = FRUITS[(Math.random() * FRUITS.length) | 0];
       var u = document.createElementNS(ns,'use');
-      u.setAttribute('href', FRUITS[(Math.random() * FRUITS.length) | 0]);
+      u.setAttribute('href', choix);
       sv.appendChild(u);
+      poserVisage(sv, choix);
       ciel.appendChild(sv);
 
       // Tout part d'une bande au-dessus du haut de l'écran, avec un élan latéral

@@ -1619,3 +1619,36 @@ puis la moyenne qui REMONTE de 784 à 695 (ils rebondissent), puis se repose.
 `perf.mjs` compte les images : **60 par seconde sur téléphone comme sur
 ordinateur, pire image à 17 ms**, avec 18 et 26 fruits. Une animation qui rame est
 pire que pas d'animation.
+
+### La passe « gouache », et les visages (v74)
+
+Les dessins du site sont en aplats francs : c'est ce qu'il faut sur une vignette
+de 116 px, où une texture ne serait que du bruit. Mais **pendant la pluie, le
+fruit est le sujet**, et l'aplat fait plat. Un filtre SVG déplace légèrement les
+bords par turbulence et casse la netteté vectorielle d'un quart de pixel de flou :
+le même dessin, peint. Plus une ombre portée douce, pour le décoller de la page.
+
+Un seul filtre pour les dix-sept fruits, appliqué **uniquement à la pluie**, et
+gratuit à l'usage : `perf.mjs` mesure toujours 60 images par seconde, pire image à
+17 ms, avec 26 fruits.
+
+**Sur les visages.** Le client a montré une planche de fruits à frimousses et
+voulait ce registre. Trois objections, dans l'ordre où elles comptent :
+
+1. **La planche montrée est sous licence, filigranée « DESIGN HART CLIPART ».**
+   Elle ne peut pas être utilisée telle quelle. Si le pack est acheté, les PNG
+   peuvent remplacer les dessins ; sinon, non.
+2. **Ça ne lit pas à cette taille.** Les fruits tombent entre 20 et 54 px. Un œil
+   y fait trois pixels et demi : les visages deviennent des salissures sombres qui
+   embrouillent chaque fruit. Comparaison rendue à l'identique dans
+   `rev/vis-avec-visage.png` et `rev/vis-sans-visage.png` — ce n'est pas un
+   désaccord de goût, c'est lisible sur les deux images.
+3. **Ce n'est pas le registre du site.** Anton, Faustina, une carte de quartiers,
+   un ton qui parle de mentions légales et de participation aux frais : ce site
+   s'adresse à des adultes qui donnent des mangues. Une frimousse sur un fruit dit
+   « application pour enfants », et elle le dirait contre tout le reste.
+
+Le code des visages est écrit et désactivé (`VISAGES = false`), pour qu'on tranche
+sur pièce plutôt qu'en discutant. S'ils sont retenus, ils resteront **dans la pluie
+seule** — jamais sur une carte ni sur une fiche : un moment de fête a le droit
+d'être plus léger que le reste, un catalogue non.

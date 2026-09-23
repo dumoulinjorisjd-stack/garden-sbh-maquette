@@ -1423,3 +1423,19 @@ déjà écrit deux lignes plus haut dans le mot de l'annonce.
 
 Retirée sur la fiche et sur sa propre annonce ; l'horloge se recentre sur la ligne
 unique. La fiche tient désormais sur un écran de téléphone jusqu'aux boutons.
+
+### Une demande montrait un fruit sur sa fiche — et le mauvais (v69)
+
+La carte d'une demande est la mieux dessinée du fil : pointillé, hachures, loupe.
+Sa fiche, elle, affichait **le dessin du fruit de l'annonce consultée juste avant**
+— une grappe de quenettes sur une demande de ti-basilic.
+
+Deux fautes superposées. La couverture de la fiche est un élément **unique**,
+réutilisé d'une annonce à l'autre : on lui posait une marque sans jamais retirer
+la précédente. Et sur une demande, un fruit dit en plus l'inverse de l'annonce —
+on montrait une récolte à quelqu'un qui écrit justement qu'il n'en a pas.
+
+La couverture nettoie maintenant ce qu'elle portait avant de porter autre chose,
+et une demande reçoit la loupe, le même tracé que sur sa carte, à la taille d'une
+couverture. `demande.mjs` alterne offre et demande sept fois de suite pour piéger
+la marque résiduelle.

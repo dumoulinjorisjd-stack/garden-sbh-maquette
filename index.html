@@ -343,6 +343,12 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   transform:none; opacity:1; color:inherit;
 }
 #s-annonce .thumb.cover.sans-image .kind{display:none}
+/* La demande garde sa loupe sur la fiche comme sur la carte : même dessin, à la
+   taille de la couverture. */
+#s-annonce.demande .thumb.cover{align-items:center; justify-content:center}
+#s-annonce .thumb.cover .loupe{
+  width:104px; height:104px; color:var(--flam); opacity:.62; position:static;
+}
 .card.sans-photo .card-motif{display:none}
 .card.sans-photo .body{padding:12px 14px; justify-content:center; gap:5px; min-width:0}
 .card.sans-photo h3{font-size:18px}
@@ -4363,6 +4369,20 @@ button{cursor:pointer}
     return 'f-feuille';
   }
 
+  // La loupe de la fiche est la même que celle des cartes : même tracé, même sens.
+  function loupeDessin(){
+    var ns2 = 'http://www.w3.org/2000/svg';
+    var lp = document.createElementNS(ns2,'svg');
+    lp.setAttribute('class','loupe'); lp.setAttribute('viewBox','0 0 24 24');
+    lp.setAttribute('fill','none'); lp.setAttribute('stroke','currentColor');
+    lp.setAttribute('stroke-width','1.7'); lp.setAttribute('stroke-linecap','round');
+    lp.setAttribute('aria-hidden','true'); lp.setAttribute('focusable','false');
+    var pd = document.createElementNS(ns2,'path');
+    pd.setAttribute('d', 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 17-4.5-4.5');
+    lp.appendChild(pd);
+    return lp;
+  }
+
   function marqueDans(vignette, id, taille){
     var svg = vignette.querySelector('.motif');
     if(!svg){
@@ -4387,7 +4407,18 @@ button{cursor:pointer}
       if(!g) return;
       var img = !!(g.style.backgroundImage && g.style.backgroundImage !== 'none');
       g.classList.toggle('sans-image', !img);
-      if(!img && !g.classList.contains('thumb-vide')){
+      var cherche = g.classList.contains('thumb-vide');
+      var vieuxFruit = g.querySelector('.motif');
+      var vieilleLoupe = g.querySelector('.loupe');
+      if(img){
+        if(vieuxFruit){ vieuxFruit.remove(); }
+        if(vieilleLoupe){ vieilleLoupe.remove(); }
+      } else if(cherche){
+        // On cherche, on n'a pas : la loupe, comme sur la carte.
+        if(vieuxFruit){ vieuxFruit.remove(); }
+        if(!vieilleLoupe){ g.insertBefore(loupeDessin(), g.firstChild); }
+      } else {
+        if(vieilleLoupe){ vieilleLoupe.remove(); }
         var fr = fruitParNom(g.getAttribute('data-fruit'));
         marqueDans(g, fr ? fr.icone.replace('#','') : marqueParTeinte(g), true);
       }

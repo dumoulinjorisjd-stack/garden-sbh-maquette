@@ -47,6 +47,42 @@ img{max-width:100%}
   --btn-bg:#1F5D3C; --btn-ink:#FDF6EF; --btn-hover:#154028; --surf-hover:#F3E3D4;
   --chrome:#2A2E27; --chrome-ink:#E6E3D7; --chrome-line:#464B41;
   --shadow:0 1px 2px rgba(74,48,28,.08), 0 10px 30px rgba(74,48,28,.10);
+  /* ============ LES QUATRE COURBES DU MOUVEMENT ============
+     Avant : vingt-neuf declarations sur trente et une utilisaient « ease », la
+     courbe d'usine du navigateur — celle qu'on obtient quand on ne choisit pas.
+     Mesure dans « kowalski3.mjs ». Ca bougeait, mais ca ne disait rien.
+
+     Quatre courbes, pas trente. Chacune repond a UNE question : a quoi sert ce
+     mouvement-la ? C'est la seule question qui fait la difference entre une
+     interface qui bouge et une interface qui repond.
+
+     --c-vif      LA REPONSE AU DOIGT. Survol, etat, couleur qui change. Demarre
+                  a pleine vitesse et freine fort : la reaction parait immediate
+                  meme quand elle prend 120 ms. « ease » demarre doucement, ce
+                  qui fait exactement l'inverse — un decalage percu.
+     --c-pose     CA ARRIVE ET CA SE POSE. Entrees, apparitions. Vient vite, puis
+                  s'installe au lieu de s'arreter net. Courbe exponentielle
+                  sortante : la fin est tres longue et tres douce.
+     --c-retrait  CA S'EN VA. Attend un peu, puis part vite — l'inverse. Une
+                  sortie ne doit pas retenir le regard sur ce qui disparait.
+     --c-souffle  LE VA-ET-VIENT. Ce qui monte puis redescend, ou respire en
+                  boucle. Symetrique, sinon l'aller et le retour n'ont pas le
+                  meme poids et ca boite.
+
+     UNE EXCEPTION ASSUMEE : le cachet « DONNE » garde sa courbe a lui,
+     cubic-bezier(.3,1.2,.4,1), qui depasse puis revient. C'est le seul moment du
+     site ou quelque chose a le droit de claquer. Une cinquieme courbe utilisee
+     une seule fois n'est pas une incoherence, c'est un accent.
+
+     ATTENTION, piege rencontre : « epingle » et « rebond » font DEJA leur
+     depassement dans leurs images-cles. Leur poser une courbe a depassement
+     par-dessus donnerait un double rebond qui tremble. Elles recoivent donc une
+     courbe franche, pas rebondissante. */
+  --c-vif:cubic-bezier(.32,.72,0,1);
+  --c-pose:cubic-bezier(.16,1,.3,1);
+  --c-retrait:cubic-bezier(.7,0,.84,0);
+  --c-souffle:cubic-bezier(.45,.05,.55,.95);
+
   --display:"Anton","Archivo Black",Impact,"Haettenschweiler",sans-serif;
   --serif:"Faustina",Georgia,"Times New Roman",serif;
   --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -93,7 +129,7 @@ body.presentation .stage{padding-block:0 0}
   bottom:calc(76px + 12px + env(safe-area-inset-bottom,0px));
   border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
   border-radius:999px; padding:5px 11px; font-size:12px; cursor:pointer;
-  opacity:.28; transition:opacity .15s ease;
+  opacity:.28; transition:opacity .15s var(--c-vif);
 }
 body.presentation .sortie-presentation{display:block}
 #device[data-view="desktop"] ~ .sortie-presentation,
@@ -250,7 +286,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 }
 .card.demande .loupe{
   width:74px; height:74px; color:var(--flam); opacity:.62;
-  transition:transform .25s ease, opacity .2s ease;
+  transition:transform .25s var(--c-vif), opacity .2s var(--c-vif);
 }
 .card.demande:hover .loupe{opacity:.85; transform:rotate(-8deg) scale(1.06)}
 .card.demande .thumb-vide .kind{
@@ -502,7 +538,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .ci-land{fill:currentColor; opacity:.14}
 .ci-q{
   fill:currentColor; fill-opacity:0; stroke:var(--surface); stroke-width:.55;
-  stroke-opacity:.9; cursor:pointer; transition:fill-opacity .12s ease;
+  stroke-opacity:.9; cursor:pointer; transition:fill-opacity .12s var(--c-vif);
 }
 .ci-q:hover{fill-opacity:.24}
 .ci-q.on{fill-opacity:.65}
@@ -546,7 +582,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .geo-lu{
   display:flex; align-items:center; gap:9px; flex-wrap:wrap;
   padding:11px 13px; border:1px solid var(--line); border-radius:10px; background:var(--surface);
-  font-size:15.5px; transition:background-color .15s ease, border-color .15s ease;
+  font-size:15.5px; transition:background-color .15s var(--c-vif), border-color .15s var(--c-vif);
 }
 .geo-lu.posé{background:var(--leaf-soft); border-color:var(--leaf)}
 .geo-lu .coche{width:19px; height:19px; flex:0 0 19px; color:var(--leaf); display:none}
@@ -556,7 +592,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .geo-lu .coord{font-size:13px; color:var(--ink-soft); font-variant-numeric:tabular-nums; margin-left:auto}
 #geo-poser.fait{background:var(--leaf-soft); border-color:var(--leaf); color:var(--leaf)}
 @keyframes epingle{0%{transform:translateY(-10px) scale(.86)} 60%{transform:translateY(3px) scale(1.06)} 100%{transform:none}}
-.geo-pin.tombe{animation:epingle .42s ease both}
+.geo-pin.tombe{animation:epingle .42s var(--c-pose) both}
 @media (prefers-reduced-motion: reduce){ .geo-pin.tombe{animation:none} }
 .geo-raté{
   position:absolute; inset:0; display:none; align-items:center; justify-content:center;
@@ -614,7 +650,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   position:absolute; width:var(--t); height:var(--t);
   left:var(--x); top:var(--y);
   margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);
-  animation:tombe-pose var(--d) cubic-bezier(.45,.05,.55,.95) var(--r) both;
+  animation:tombe-pose var(--d) var(--c-souffle) var(--r) both;
 }
 @keyframes tombe-pose{
   0%{opacity:0; transform:translateY(-62vh) rotate(var(--tour)) scale(.86)}
@@ -625,7 +661,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   92%{transform:translateY(0) rotate(0deg) scale(1.04, .96)}
   100%{opacity:1; transform:translateY(0) rotate(0deg) scale(1)}
 }
-.chute svg.partie{animation:pose-fond .45s ease forwards}
+.chute svg.partie{animation:pose-fond .45s var(--c-retrait) forwards}
 @keyframes pose-fond{to{opacity:0; transform:translateY(0) scale(.7)}}
 /* Le quartier touché s'allume d'un coup, puis revient à son intensité. */
 @keyframes touche{
@@ -633,7 +669,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   30%{fill-opacity:.95}
   100%{fill-opacity:var(--fo,.42)}
 }
-.hero-map .ci-q.touchee{animation:touche .7s ease both}
+.hero-map .ci-q.touchee{animation:touche .7s var(--c-souffle) both}
 
 .pluie{position:fixed; inset:0; z-index:150; pointer-events:none; overflow:hidden}
 .pluie svg{
@@ -642,7 +678,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   will-change:transform, opacity;
   filter:url(#gouache) drop-shadow(0 2px 3px rgba(60,40,20,.22));
 }
-.pluie.sortie svg{transition:opacity .55s ease; opacity:0}
+.pluie.sortie svg{transition:opacity .55s var(--c-retrait); opacity:0}
 
 .fruit-mois{
   width:26px; height:26px; flex:0 0 26px; color:var(--mangue); cursor:default;
@@ -650,9 +686,9 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 @keyframes respire{0%,100%{fill-opacity:var(--fo,.42)} 50%{fill-opacity:calc(var(--fo,.42) + .13)}}
 /* Seul le quartier le plus actif respire. Neuf formes qui palpitent en même temps,
    c'est un sapin de Noël ; une seule, c'est un regard qu'on dirige. */
-.hero-map .ci-q.has-3:not(.on){animation:allume .7s both, respire 4.2s ease-in-out 1.4s infinite}
+.hero-map .ci-q.has-3:not(.on){animation:allume .7s var(--c-pose) both, respire 4.2s var(--c-souffle) 1.4s infinite}
 
-.tab[aria-current="page"] svg{animation:rebond .34s ease}
+.tab[aria-current="page"] svg{animation:rebond .34s var(--c-souffle)}
 @keyframes rebond{0%{transform:translateY(0)} 40%{transform:translateY(-5px)} 100%{transform:translateY(0)}}
 
 @media (prefers-reduced-motion:reduce){
@@ -717,7 +753,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   position:relative; overflow:hidden; cursor:pointer; text-align:left;
   border:1px solid var(--line); border-radius:14px; background:var(--surface);
   padding:18px 84px 20px 18px; display:flex; align-items:flex-start; gap:12px;
-  transition:border-color .15s ease, transform .12s ease, box-shadow .15s ease;
+  transition:border-color .15s var(--c-vif), transform .12s var(--c-vif), box-shadow .15s var(--c-vif);
 }
 .porte:hover{border-color:var(--leaf); transform:translateY(-2px); box-shadow:var(--shadow)}
 .porte:active{transform:translateY(0)}
@@ -725,7 +761,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .porte b{font-family:var(--display); font-weight:400; font-size:26px; letter-spacing:.01em; line-height:1.05}
 .porte-sous{font-size:16.5px; color:var(--ink)}
 .porte-gout{font-size:14.5px; color:var(--ink-soft)}
-.porte-motif{position:absolute; right:-16px; top:-14px; width:108px; height:108px; opacity:.15; transform:rotate(12deg); transition:transform .25s ease, opacity .2s ease}
+.porte-motif{position:absolute; right:-16px; top:-14px; width:108px; height:108px; opacity:.15; transform:rotate(12deg); transition:transform .25s var(--c-vif), opacity .2s var(--c-vif)}
 .porte:hover .porte-motif{opacity:.22; transform:rotate(4deg) scale(1.05)}
 .porte-fleche{
   position:absolute; right:20px; top:20px;
@@ -747,7 +783,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   opacity:.16; transform:rotate(12deg); pointer-events:none; z-index:0;
 }
 .card .body{position:relative; z-index:1}
-.card-motif{transition:opacity .2s ease, transform .25s ease}
+.card-motif{transition:opacity .2s var(--c-vif), transform .25s var(--c-vif)}
 
 /* une annonce sans photo garde la même tête de carte */
 .thumb-vide{
@@ -757,7 +793,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 }
 .thumb-vide .thumb-motif{
   width:76px; height:76px; opacity:.32; color:var(--t-teint, var(--ink-soft));
-  transition:transform .25s ease, opacity .2s ease;
+  transition:transform .25s var(--c-vif), opacity .2s var(--c-vif);
 }
 .card:hover .thumb-vide .thumb-motif{opacity:.44; transform:rotate(-7deg) scale(1.06)}
 .thumb-vide .kind{
@@ -968,7 +1004,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .pre-rempli b{color:var(--ink)}
 .pret{
   display:flex; align-items:center; gap:9px; font-size:16px; color:var(--leaf);
-  font-weight:600; opacity:0; transform:translateY(4px); transition:opacity .25s ease, transform .25s ease;
+  font-weight:600; opacity:0; transform:translateY(4px); transition:opacity .25s var(--c-pose), transform .25s var(--c-pose);
 }
 .pret.vu{opacity:1; transform:none}
 .pret svg{width:20px; height:20px; flex:0 0 20px}
@@ -1009,7 +1045,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   border:1px solid var(--line); border-left:4px solid var(--mangue);
   border-radius:11px; background:var(--surface);
 }
-.merci.neuf{animation:arrive .5s both}
+.merci.neuf{animation:arrive .5s var(--c-pose) both}
 /* La teinte colore le filet et la pastille, plus un rectangle de fausse photo. */
 .merci.t-vert{border-left-color:var(--leaf)}
 .merci.t-vert .pastille{background:var(--leaf-soft); color:var(--leaf)}
@@ -1199,13 +1235,13 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 @keyframes monte{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
 @keyframes eclot{from{opacity:0; transform:scale(.965)} to{opacity:1; transform:none}}
 @keyframes allume{from{fill-opacity:0} to{fill-opacity:var(--fo,.42)}}
-.hero .eyebrow{animation:monte .5s .05s both}
-.hero h1{animation:monte .62s .12s both}
-.hero .lede{animation:monte .62s .22s both}
-.hero-acts{animation:monte .62s .32s both}
-.hero-map{animation:eclot .8s .18s both}
-.hero-stat{animation:monte .6s .5s both}
-.hero-map .ci-q.has{animation:allume .7s both}
+.hero .eyebrow{animation:monte .5s var(--c-pose) .05s both}
+.hero h1{animation:monte .62s var(--c-pose) .12s both}
+.hero .lede{animation:monte .62s var(--c-pose) .22s both}
+.hero-acts{animation:monte .62s var(--c-pose) .32s both}
+.hero-map{animation:eclot .8s var(--c-pose) .18s both}
+.hero-stat{animation:monte .6s var(--c-pose) .5s both}
+.hero-map .ci-q.has{animation:allume .7s var(--c-pose) both}
 .hero-map .ci-q.has:nth-of-type(3n){animation-delay:.62s}
 .hero-map .ci-q.has:nth-of-type(3n+1){animation-delay:.74s}
 .hero-map .ci-q.has:nth-of-type(3n+2){animation-delay:.86s}
@@ -1213,7 +1249,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   .hero .eyebrow,.hero h1,.hero .lede,.hero-acts,.hero-map,.hero-stat,.hero-map .ci-q.has{animation:none}
 }
 .hero-map .ci-land{opacity:.13}
-.hero-map .ci-q{fill-opacity:0; stroke:var(--ground); stroke-width:.5; cursor:pointer; pointer-events:auto; transition:fill-opacity .12s ease}
+.hero-map .ci-q{fill-opacity:0; stroke:var(--ground); stroke-width:.5; cursor:pointer; pointer-events:auto; transition:fill-opacity .12s var(--c-vif)}
 .hero-map .ci-q:hover{fill-opacity:.7}
 #heromap .ci-q:focus, #heromap .ci-q:focus-visible{outline:none}
 #heromap .ci-q:focus-visible{fill-opacity:.8; stroke:var(--ink); stroke-width:1.4}
@@ -1233,7 +1269,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 .hero-hint{
   font-size:14.5px; color:var(--ink-soft); text-align:center; margin-top:-4px;
   min-height:2.9em; display:flex; align-items:center; justify-content:center;
-  transition:color .12s ease;
+  transition:color .12s var(--c-vif);
 }
 .hero-hint.lu{color:var(--ink); font-weight:600}
 .hero-hint b{color:var(--leaf)}
@@ -1364,7 +1400,7 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   transform:translateX(-50%); z-index:200; max-width:min(92vw,520px);
   background:var(--ink); color:var(--ground); border-radius:11px;
   padding:13px 17px; font-size:16px; box-shadow:0 8px 28px rgba(0,0,0,.28);
-  opacity:0; transition:opacity .18s ease; pointer-events:none; word-break:break-word;
+  opacity:0; transition:opacity .18s var(--c-pose); pointer-events:none; word-break:break-word;
 }
 .toast.vu{opacity:1}
 #mienne-photo.donne{filter:grayscale(.75) brightness(.9)}
@@ -1394,13 +1430,13 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
   position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
   font-size:13px; color:#fff; background:rgba(17,21,14,.55);
   padding:4px 11px; border-radius:999px; pointer-events:none;
-  transition:opacity .18s ease;
+  transition:opacity .18s var(--c-pose);
 }
 .cadre-bande.prise .cadre-prise, .cadre-bande.bouge .cadre-prise{opacity:0}
 /* Les tiers : deux filets discrets pendant qu'on déplace, pour poser le sujet. */
 .cadre-bande::after{
   content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
-  transition:opacity .18s ease;
+  transition:opacity .18s var(--c-pose);
   background:
     linear-gradient(to bottom, transparent calc(33.33% - 1px), rgba(255,255,255,.55) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)),
     linear-gradient(to bottom, transparent calc(66.66% - 1px), rgba(255,255,255,.55) calc(66.66% - 1px) calc(66.66% + 1px), transparent calc(66.66% + 1px));
@@ -1421,8 +1457,8 @@ body:has(#device[data-view="desktop"]) .sortie-presentation{bottom:12px}
 /* ---------- savoir où est la souris ---------- */
 button{cursor:pointer}
 .btn,.mini,.chip,.tab,.atab,.navlink,.linkish,.card,.fruit,.drop,.accord{
-  transition:background-color .12s ease, border-color .12s ease, color .12s ease,
-             box-shadow .12s ease, transform .1s ease;
+  transition:background-color .12s var(--c-vif), border-color .12s var(--c-vif), color .12s var(--c-vif),
+             box-shadow .12s var(--c-vif), transform .1s var(--c-vif);
 }
 .btn-primary:hover,.mini.solid:hover{background:var(--btn-hover); border-color:var(--btn-hover)}
 .btn-ghost:hover,.mini:hover,.chip:hover{background:var(--surf-hover); border-color:var(--leaf)}

@@ -1651,6 +1651,93 @@ le même dessin, peint. Plus une ombre portée douce, pour le décoller de la pa
 **Cette version a été jugée insuffisante par le client, à raison.** Voir la
 section suivante.
 
+## Les quatre courbes du mouvement (v77)
+
+Le client m'a envoye une video qui recommande d'ajouter a Claude des « skills de
+design » (Emil Kowalski, Taste Skill) pour que les sites cessent d'avoir l'air
+génériques. Plutôt que d'en discuter, j'ai passé les règles de Kowalski sur le
+site — elles sont concrètes, donc mesurables.
+
+| Règle | Résultat |
+|---|---|
+| Corps de texte plafonné vers 65-70 caractères par ligne | **0 infraction** |
+| Capitales avec interlettrage | **0 infraction** |
+| Réponse d'interface sous 300 ms | **0 infraction** — tout est entre 120 et 250 ms |
+| Courbe d'assouplissement dessinée, pas celle d'usine | **29 déclarations sur 31 sur `ease`** |
+
+Trois règles sur quatre passaient déjà. **La quatrieme était un vrai constat.**
+Tout le mouvement du site — survols, portes, filtres, entrée de l'accueil,
+quartiers qui s'allument — tournait sur `ease`, la courbe qu'on obtient quand on
+ne choisit pas. Seul le cachet « DONNE » avait une courbe dessinée.
+
+### Quatre courbes, pas trente
+
+Une par intention. C'est la question de Kowalski — a quoi sert ce mouvement ? —
+transformée en jetons CSS :
+
+- **`--c-vif`** `cubic-bezier(.32,.72,0,1)` — LA REPONSE AU DOIGT. Démarre à
+  pleine vitesse et freine fort. `ease` fait l'inverse : il demarre doucement,
+  ce qui se perçoit comme un retard même sur 120 ms.
+- **`--c-pose`** `cubic-bezier(.16,1,.3,1)` — CA ARRIVE ET CA SE POSE. Vient
+  vite puis s'installe, au lieu de s'arrêter net.
+- **`--c-retrait`** `cubic-bezier(.7,0,.84,0)` — CA S'EN VA. Attend, puis part
+  vite : une sortie ne doit pas retenir le regard sur ce qui disparaît.
+- **`--c-souffle`** `cubic-bezier(.45,.05,.55,.95)` — LE VA-ET-VIENT. Symetrique,
+  sinon l'aller et le retour n'ont pas le même poids et ça boite.
+
+**Une exception assumee** : le cachet « DONNE » garde `cubic-bezier(.3,1.2,.4,1)`,
+qui dépasse puis revient. C'est le seul moment du site où quelque chose a le
+droit de claquer. Une cinquieme courbe utilisee une fois n'est pas une
+incohérence, c'est un accent.
+
+**Un piège évité** : `epingle` et `rebond` font DÉJÀ leur dépassement dans leurs
+images-clés. Leur poser une courbe à dépassement par-dessus aurait donne un
+double rebond qui tremble. Elles reçoivent une courbe franche.
+
+### Est-ce que ça se voit ? Mesure, pas opinion
+
+Sur une transition de couleur de 120 ms, non — et il faut le dire. Là où ça se
+voit, c'est sur l'entrée de l'accueil, où le titre monte de 14 px en 620 ms.
+Horloge d'animation pilotee, donc les deux versions échantillonnées aux mêmes
+instants :
+
+| temps | avant (`ease`) | après (`--c-pose`) | écart |
+|---|---|---|---|
+| 160 ms | 13,6 px | 10,2 px | 3,4 px |
+| **240 ms** | **10,4 px** | **3,9 px** | **6,5 px** |
+| 320 ms | 6,3 px | 1,8 px | 4,5 px |
+| 500 ms | 1,5 px | 0,2 px | 1,3 px |
+
+6,5 px d'écart sur un trajet de 14 px : près de la moitié du mouvement. Planche
+avant/après dans `aqua/bande.png`.
+
+Mesure finale sur le style CALCULÉ des éléments réels : **0 % de courbe d'usine,
+contre 100 % avant.** 31 déclarations CSS, appliquees a 1344 elements.
+
+### Trois fois où mon instrument m'a menti, sur cette seule tâche
+
+À noter, parce que c'est ce qui rend les chiffres ci-dessus dignes de confiance :
+
+1. **Quatre zéros parfaits au premier passage.** Faux. En Chromium, une règle CSS
+   ordinaire expose un `cssRules` **vide** (support de l'imbrication CSS) — et une
+   liste vide est un objet, donc *truthy*. Le `if(r.cssRules)` avalait les 608
+   règles sans jamais en lire une. Garde-fou ajouté : le script refuse de conclure
+   s'il a lu moins de 100 regles.
+2. **18 transitions déclarées « sur mesure ».** Faux. **Omettre la courbe, c'est
+   demander `ease`.** Le détecteur cherchait le mot, pas l'absence.
+3. **Après correction, toujours 29 sur la courbe d'usine.** Faux aussi : le CSSOM
+   rend le texte brut `var(--c-vif)` sans le resoudre. D'où la mesure finale sur
+   le **style calculé d'éléments réels**, la seule qui dise ce que le navigateur
+   applique vraiment.
+
+### Ce que la video ne réglait pas
+
+Son cadrage vise le site sorti d'un prompt, sans identité. Celui-ci en a une, et
+le vrai manque — la qualité des DESSINS — ne se corrige par aucune skill de
+typographie, d'espacement ou d'animation. Une skill qui connaît le 65ch ne
+dessinera pas une mangue. Ça se règle en achetant des illustrations ou avec les
+vraies photos du jardinier.
+
 ### ANNULÉ — la vraie aquarelle, et pourquoi il fallait d'abord agrandir (v75)
 
 > **Ce qui suit a été ANNULÉ à la demande du client (v76). Le site est revenu
